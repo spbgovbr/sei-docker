@@ -65,4 +65,4 @@ Além disso iremos publicar aqui a nossa esteira de testes em jenkins, que além
 [Clique aqui](Instrucoes.md) para as instruções iniciais de como rodar o projeto
 
 ## Informações Adicionais
-Caso esteja procurando o projeto antigo para o SEI3 que havia aqui pule para a branch [SEI3x-Docker-Antigo](https://github.com/spbgovbr/sei-docker/tree/SEI3x-Docker-Antigo)
+Caso esteja procurando o projeto antigo para o SEI3 que havia aqui pule para a branch [SEI3x-Docker-Antigo](https://github.com/spbgovbr/sei-docker-antigo)
