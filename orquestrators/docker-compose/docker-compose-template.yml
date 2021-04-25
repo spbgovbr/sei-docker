@@ -1,0 +1,134 @@
+version: '2'
+volumes:
+    ${VOLUME_DB}:
+        external: true
+    ${VOLUME_ARQUIVOSEXTERNOS}:
+        external: true
+    ${VOLUME_SOLR}:
+        external: true
+    ${VOLUME_FONTES}:
+        external: true
+        
+services:
+    storage-arquivosexternos:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - ${VOLUME_ARQUIVOSEXTERNOS_MOUNT}:/dados:rw
+    
+    storage-fontes:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - ${VOLUME_FONTES_MOUNT}:/opt:rw
+                
+    jod:
+        image: ${DOCKER_IMAGE_JOD}
+
+    memcached:
+        image: ${DOCKER_IMAGE_MEMCACHED}
+
+    db:
+        image: ${DOCKER_IMAGE_BD}
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-db
+        volumes:
+            - ${VOLUME_DB}:${DB_DATA_DIRECTORY}
+            
+  
+    solr:
+        image: ${DOCKER_IMAGE_SOLR}
+        volumes:
+            - ${VOLUME_SOLR}:${SOLR_DATA_DIRECTORY}
+        
+    
+    app-atualizador:
+        image: ${DOCKER_IMAGE_APP}
+        entrypoint: "/entrypoint-atualizador.sh"
+        volumes_from:
+            - storage-arquivosexternos
+            - storage-fontes
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.container.start_once: 'true'
+        environment:
+        - APP_PROTOCOLO=${APP_PROTOCOLO}
+        - APP_HOST=${APP_HOST}
+        - APP_ORGAO=${APP_ORGAO}
+        - APP_ORGAO_DESCRICAO=${APP_ORGAO_DESCRICAO}
+        - APP_NOMECOMPLEMENTO=${APP_NOMECOMPLEMENTO}
+        - APP_DB_TIPO=${APP_DB_TIPO}
+        - APP_DB_PORTA=${APP_DB_PORTA}
+        - APP_DB_SIP_BASE=${APP_DB_SIP_BASE}
+        - APP_DB_SIP_USERNAME=${APP_DB_SIP_USERNAME}
+        - APP_DB_SIP_PASSWORD=${APP_DB_SIP_PASSWORD}
+        - APP_DB_SEI_BASE=${APP_DB_SEI_BASE}
+        - APP_DB_SEI_USERNAME=${APP_DB_SEI_USERNAME}
+        - APP_DB_SEI_PASSWORD=${APP_DB_SEI_PASSWORD}
+        - APP_DB_ROOT_USERNAME=${APP_DB_ROOT_USERNAME}
+        - APP_DB_ROOT_PASSWORD=${APP_DB_ROOT_PASSWORD}
+        - APP_SIP_CHAVE_ACESSO=${APP_SIP_CHAVE_ACESSO}
+        - APP_SEI_CHAVE_ACESSO=${APP_SEI_CHAVE_ACESSO}
+        - MODULO_ESTATISTICAS_INSTALAR=${MODULO_ESTATISTICAS_INSTALAR}
+        - MODULO_ESTATISTICAS_VERSAO=${MODULO_ESTATISTICAS_VERSAO}
+        - MODULO_ESTATISTICAS_URL=${MODULO_ESTATISTICAS_URL}
+        - MODULO_ESTATISTICAS_SIGLA=${MODULO_ESTATISTICAS_SIGLA}
+        - MODULO_ESTATISTICAS_CHAVE=${MODULO_ESTATISTICAS_CHAVE}
+        - MODULO_WSSEI_INSTALAR=${MODULO_WSSEI_INSTALAR}
+        - MODULO_WSSEI_VERSAO=${MODULO_WSSEI_VERSAO}
+        - MODULO_WSSEI_URL_NOTIFICACAO=${MODULO_WSSEI_URL_NOTIFICACAO}
+        - MODULO_WSSEI_ID_APP=${MODULO_WSSEI_ID_APP}
+        - MODULO_WSSEI_CHAVE=${MODULO_WSSEI_CHAVE}
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr
+        - jod:jod    
+    app:
+        image: ${DOCKER_IMAGE_APP}
+        entrypoint: "/entrypoint.sh"
+        ports:
+            - "80:80"
+        volumes_from:
+            - storage-arquivosexternos
+            - storage-fontes
+            - app-atualizador
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador    
+        environment:
+        - APP_PROTOCOLO=${APP_PROTOCOLO}
+        - APP_HOST=${APP_HOST}
+        - APP_ORGAO=${APP_ORGAO}
+        - APP_ORGAO_DESCRICAO=${APP_ORGAO_DESCRICAO}
+        - APP_NOMECOMPLEMENTO=${APP_NOMECOMPLEMENTO}
+        - APP_DB_TIPO=${APP_DB_TIPO}
+        - APP_DB_PORTA=${APP_DB_PORTA}
+        - APP_DB_SIP_BASE=${APP_DB_SIP_BASE}
+        - APP_DB_SIP_USERNAME=${APP_DB_SIP_USERNAME}
+        - APP_DB_SIP_PASSWORD=${APP_DB_SIP_PASSWORD}
+        - APP_DB_SEI_BASE=${APP_DB_SEI_BASE}
+        - APP_DB_SEI_USERNAME=${APP_DB_SEI_USERNAME}
+        - APP_DB_SEI_PASSWORD=${APP_DB_SEI_PASSWORD}
+        - APP_DB_ROOT_USERNAME=${APP_DB_ROOT_USERNAME}
+        - APP_DB_ROOT_PASSWORD=${APP_DB_ROOT_PASSWORD}
+        - APP_SIP_CHAVE_ACESSO=${APP_SIP_CHAVE_ACESSO}
+        - APP_SEI_CHAVE_ACESSO=${APP_SEI_CHAVE_ACESSO}
+        - MODULO_ESTATISTICAS_INSTALAR=${MODULO_ESTATISTICAS_INSTALAR}
+        - MODULO_ESTATISTICAS_VERSAO=${MODULO_ESTATISTICAS_VERSAO}
+        - MODULO_ESTATISTICAS_URL=${MODULO_ESTATISTICAS_URL}
+        - MODULO_ESTATISTICAS_SIGLA=${MODULO_ESTATISTICAS_SIGLA}
+        - MODULO_ESTATISTICAS_CHAVE=${MODULO_ESTATISTICAS_CHAVE}
+        - MODULO_WSSEI_INSTALAR=${MODULO_WSSEI_INSTALAR}
+        - MODULO_WSSEI_VERSAO=${MODULO_WSSEI_VERSAO}
+        - MODULO_WSSEI_URL_NOTIFICACAO=${MODULO_WSSEI_URL_NOTIFICACAO}
+        - MODULO_WSSEI_ID_APP=${MODULO_WSSEI_ID_APP}
+        - MODULO_WSSEI_CHAVE=${MODULO_WSSEI_CHAVE}
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr
+        - jod:jod

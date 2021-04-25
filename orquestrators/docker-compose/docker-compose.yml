@@ -1,0 +1,124 @@
+version: '2'
+volumes:
+    local-storage-db:
+        external: true
+    local-arquivosexternos-storage:
+        external: true
+    local-volume-solr:
+        external: true
+    local-fontes-storage:
+        external: true
+        
+services:
+    storage-arquivosexternos:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - local-arquivosexternos-storage:/dados:rw
+    
+    storage-fontes:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - local-fontes-storage:/opt:rw
+                
+    jod:
+        image: linhares/jod:1.0.0
+
+    memcached:
+        image: memcached
+
+    db:
+        image: processoeletronico/sei4-mysql5.7:1.0
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-db
+        volumes:
+            - local-storage-db:/var/lib/mysql
+            
+  
+    solr:
+        image: processoeletronico/sei4-solr8.2.0:1.0
+        volumes:
+            - local-volume-solr:/dados
+        
+    
+    app-atualizador:
+        image: processoeletronico/sei4-app:1.0.0
+        entrypoint: "/entrypoint-atualizador.sh"
+        volumes_from:
+            - storage-arquivosexternos
+            - storage-fontes
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes    
+        environment:
+        - APP_PROTOCOLO=http
+        - APP_HOST=localhost
+        - APP_ORGAO=ABC
+        - APP_ORGAO_DESCRICAO="Orgao Processo Eletronico - MySql"
+        - APP_NOMECOMPLEMENTO="SEI - PEN - DTH"
+        - APP_DB_TIPO=MySql
+        - APP_DB_PORTA=3306
+        - APP_DB_SIP_BASE=sip
+        - APP_DB_SIP_USERNAME=sip_user
+        - APP_DB_SIP_PASSWORD=sip_user
+        - APP_DB_SEI_BASE=sei
+        - APP_DB_SEI_USERNAME=sei_user
+        - APP_DB_SEI_PASSWORD=sei_user
+        - APP_DB_ROOT_USERNAME=root
+        - APP_DB_ROOT_PASSWORD=root
+        - APP_SIP_CHAVE_ACESSO=d27791b8b33226ca19662539e9eb77edf604bd61d7f51c28f1f6387bb8413d1d9f0960d5
+        - APP_SEI_CHAVE_ACESSO=7babf862dd3c172174e8e81ae7559e81a11ba933a3ddbb979eb9e56bc7d424603179ff17
+        - MODULO_ESTATISTICAS_INSTALAR=true
+        - MODULO_ESTATISTICAS_VERSAO=CompatibilidadeSEI4.0.0
+        - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
+        - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
+        - MODULO_ESTATISTICAS_CHAVE=seipublico
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr
+        - jod:jod    
+    app:
+        image: processoeletronico/sei4-app:1.0.0
+        entrypoint: "/entrypoint.sh"
+        ports:
+            - "80:80"
+        volumes_from:
+            - storage-arquivosexternos
+            - storage-fontes
+            - app-atualizador
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador    
+        environment:
+        - APP_PROTOCOLO=http
+        - APP_HOST=localhost
+        - APP_ORGAO=ABC
+        - APP_ORGAO_DESCRICAO="Orgao Processo Eletronico - MySql"
+        - APP_NOMECOMPLEMENTO="SEI - PEN - DTH"
+        - APP_DB_TIPO=MySql
+        - APP_DB_PORTA=3306
+        - APP_DB_SIP_BASE=sip
+        - APP_DB_SIP_USERNAME=sip_user
+        - APP_DB_SIP_PASSWORD=sip_user
+        - APP_DB_SEI_BASE=sei
+        - APP_DB_SEI_USERNAME=sei_user
+        - APP_DB_SEI_PASSWORD=sei_user
+        - APP_DB_ROOT_USERNAME=root
+        - APP_DB_ROOT_PASSWORD=root
+        - APP_SIP_CHAVE_ACESSO=d27791b8b33226ca19662539e9eb77edf604bd61d7f51c28f1f6387bb8413d1d9f0960d5
+        - APP_SEI_CHAVE_ACESSO=7babf862dd3c172174e8e81ae7559e81a11ba933a3ddbb979eb9e56bc7d424603179ff17
+        - MODULO_ESTATISTICAS_INSTALAR=true
+        - MODULO_ESTATISTICAS_VERSAO=CompatibilidadeSEI4.0.0
+        - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
+        - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
+        - MODULO_ESTATISTICAS_CHAVE=seipublico
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr
+        - jod:jod
