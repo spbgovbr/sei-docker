@@ -25,7 +25,7 @@ services:
             - local-fontes-storage:/opt:rw
                 
     jod:
-        image: linhares/jod:1.0.0
+        image: processoeletronico/vagrant-sei4_jod
 
     memcached:
         image: memcached
@@ -53,7 +53,7 @@ services:
             - storage-fontes
         labels:
             io.rancher.container.pull_image: always
-            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes    
+            io.rancher.container.start_once: 'true'
         environment:
         - APP_PROTOCOLO=http
         - APP_HOST=localhost
@@ -77,6 +77,11 @@ services:
         - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
         - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
         - MODULO_ESTATISTICAS_CHAVE=seipublico
+        - MODULO_WSSEI_INSTALAR=true
+        - MODULO_WSSEI_VERSAO=compatsei4.0.0
+        - MODULO_WSSEI_URL_NOTIFICACAO=https://app-push-gestao-api.dev.nuvem.gov.br/mba-mmmessage/message
+        - MODULO_WSSEI_ID_APP=4
+        - MODULO_WSSEI_CHAVE=pegueachavenacentraldesservicospen
         links:
         - db:db
         - memcached:memcached
@@ -117,6 +122,11 @@ services:
         - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
         - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
         - MODULO_ESTATISTICAS_CHAVE=seipublico
+        - MODULO_WSSEI_INSTALAR=true
+        - MODULO_WSSEI_VERSAO=compatsei4.0.0
+        - MODULO_WSSEI_URL_NOTIFICACAO=https://app-push-gestao-api.dev.nuvem.gov.br/mba-mmmessage/message
+        - MODULO_WSSEI_ID_APP=4
+        - MODULO_WSSEI_CHAVE=pegueachavenacentraldesservicospen
         links:
         - db:db
         - memcached:memcached
