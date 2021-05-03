@@ -161,6 +161,72 @@ fi
 
 
 
+# Gera certificados caso necessário para desenvolvimento    
+if [ ! -d "/certs/seiapp" ]; then
+    echo "Diretorio /certs nao encontrado, criando ..."
+    mkdir -p /certs/seiapp
+fi
+
+echo "Verificando se certificados existem no diretorio /certs...."
+if [ ! -f /certs/seiapp/sei-ca.pem ] || [ ! -f /certs/seiapp/sei.crt ]; then
+    echo "Arquivos de cert nao encontrados criando auto assinados ..."
+    
+    cd /certs/seiapp
+
+    echo "Criando CA"  
+    openssl genrsa -out sei-ca-key.pem 2048
+    openssl req -x509 -new -nodes -key sei-ca-key.pem \
+        -days 10000 -out sei-ca.pem -subj "/CN=sei-dev"
+    
+    echo "Criando certificados para o dominio: $APP_HOST"
+    openssl genrsa -out sei.key 2048
+    openssl req -new -nodes -key sei.key \
+        -days 10000 -out sei.csr -subj "/CN=$APP_HOST"
+    openssl x509 -req -in sei.csr -CA sei-ca.pem \
+        -CAkey sei-ca-key.pem -CAcreateserial \
+        -out sei.crt -days 10000 -extensions v3_req
+
+    cat /certs/seiapp/sei-ca.pem >> /etc/ssl/certs/cacert.pem
+    echo "Adicionada nova CA ao TrustStore\n"
+else
+    echo "Arquivos de cert encontrados vamos tentar utilizá-los..."
+fi
+
+cd /certs/seiapp
+cp sei.crt /etc/pki/tls/certs/sei.crt
+cp sei-ca.pem /etc/pki/tls/certs/sei-ca.pem
+cp sei.key /etc/pki/tls/private/sei.key 
+cat sei.crt sei.key >> /etc/pki/tls/certs/sei.pem
+
+echo "Incluindo TrustStore no sistema"
+#cp /icpbrasil/*.crt /etc/pki/ca-trust/source/anchors/
+cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+update-ca-trust enable
+
+echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+# copiado do sei-vagrant do guilhermao
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sip/web/Sip.php';    
+    \$conexao = BancoSip::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();    
+" || exit 1
+
+echo "atualizar sequences do SEI"
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sei/web/SEI.php';
+    \$conexao = BancoSEI::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();
+" 
+echo "Finalizacao de atualizacao de sequences"
+
+
 #atualizar
 #/usr/sbin/httpd -DFOREGROUND &
 #sleep 3

@@ -6,6 +6,8 @@ volumes:
         external: true
     ${VOLUME_SOLR}:
         external: true
+    ${VOLUME_CERTS}:
+        external: true
     ${VOLUME_FONTES}:
         external: true
         
@@ -23,9 +25,16 @@ services:
             io.rancher.container.start_once: "true"
         volumes:
             - ${VOLUME_FONTES_MOUNT}:/opt:rw
+    
+    storage-certs:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - ${VOLUME_CERTS_MOUNT}:/certs:rw
                 
-    jod:
-        image: ${DOCKER_IMAGE_JOD}
+    #jod: #servicejod
+    #    image: ${DOCKER_IMAGE_JOD} #servicejod
 
     memcached:
         image: ${DOCKER_IMAGE_MEMCACHED}
@@ -41,6 +50,9 @@ services:
   
     solr:
         image: ${DOCKER_IMAGE_SOLR}
+        environment:
+            - VIRTUAL_HOST=http://${APP_HOST}/solr*,https://${APP_HOST}/solr*
+            - FORCE_SSL=true
         volumes:
             - ${VOLUME_SOLR}:${SOLR_DATA_DIRECTORY}
         
@@ -51,6 +63,7 @@ services:
         volumes_from:
             - storage-arquivosexternos
             - storage-fontes
+            - storage-certs
         labels:
             io.rancher.container.pull_image: always
             io.rancher.container.start_once: 'true'
@@ -86,16 +99,18 @@ services:
         - db:db
         - memcached:memcached
         - solr:solr
-        - jod:jod    
+        #- jod:jod #servicejod
     app:
         image: ${DOCKER_IMAGE_APP}
         entrypoint: "/entrypoint.sh"
-        ports:
-            - "80:80"
+        #ports:
+        #    - ${APP_PORTA_80_MAP}
+        #    - ${APP_PORTA_443_MAP}
         volumes_from:
             - storage-arquivosexternos
             - storage-fontes
             - app-atualizador
+            - storage-certs
         labels:
             io.rancher.container.pull_image: always
             io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador    
@@ -127,8 +142,29 @@ services:
         - MODULO_WSSEI_URL_NOTIFICACAO=${MODULO_WSSEI_URL_NOTIFICACAO}
         - MODULO_WSSEI_ID_APP=${MODULO_WSSEI_ID_APP}
         - MODULO_WSSEI_CHAVE=${MODULO_WSSEI_CHAVE}
+        - VIRTUAL_HOST=https://${APP_HOST}/sei*,https://${APP_HOST}/sip*,https://${APP_HOST}/infra*,http://${APP_HOST}/sei*,http://${APP_HOST}/sip*,http://${APP_HOST}/infra*
+        #- EXCLUDE_PORTS=443
+        #- EXCLUDE_PORTS=80
+        #- EXTRA_ROUTE_SETTINGS=ssl verify none
+        - COOKIE=SRV insert indirect nocache
         links:
         - db:db
         - memcached:memcached
         - solr:solr
-        - jod:jod
+        #- jod:jod #servicejod
+    #balanceador:
+    #    image: dockercloud/haproxy
+    #    links:
+    #        - app
+    #        - solr
+    #    environment:
+    #        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root
+    #        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root
+    #        - CERT_FOLDER=/certs
+    #    volumes_from:
+    #        - storage-certs
+    #    volumes:
+    #        - /var/run/docker.sock:/var/run/docker.sock
+    #    ports:
+    #        - ${BALANCEADOR_PORTA_80_MAP}
+    #        - ${BALANCEADOR_PORTA_443_MAP}

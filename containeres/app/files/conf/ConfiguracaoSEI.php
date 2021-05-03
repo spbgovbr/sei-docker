@@ -34,7 +34,7 @@ class ConfiguracaoSEI extends InfraConfiguracao  {
  	          'PaginaLogin' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/login.php',
  	          'SipWsdl' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/controlador_ws.php?servico=sip',
  	          'ChaveAcesso' => getenv('APP_SEI_CHAVE_ACESSO'), 
- 	          'https' => false),
+ 	          'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
 
  	      'BancoSEI'  => array(
  	          'Servidor' => 'db',

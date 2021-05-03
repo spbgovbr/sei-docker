@@ -25,7 +25,7 @@ class ConfiguracaoSip extends InfraConfiguracao  {
  	          'PaginaLogin' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/login.php',
  	          'SipWsdl' => getenv('APP_PROTOCOLO').'://'.getenv('APP_HOST').'/sip/controlador_ws.php?servico=sip',
  	          'ChaveAcesso' => getenv('APP_SIP_CHAVE_ACESSO'), //ATEN��O: gerar uma nova chave para o SIP ap�s a instala��o (ver documento de instala��o)
- 	          'https' => false),
+ 	          'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
 
  	      'BancoSip'  => array(
  	          'Servidor' => 'db',
