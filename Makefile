@@ -91,6 +91,7 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	sed -i'' -e "s|#    links:|    links:|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#        - app|        - app|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#        - solr|        - solr|" orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - mail|        - mail|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#    environment:|    environment:|" orquestrators/docker-compose/docker-compose.yml	
 	sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root|        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root|" orquestrators/docker-compose/docker-compose.yml	
 	sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root|        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root|" orquestrators/docker-compose/docker-compose.yml	
@@ -100,12 +101,29 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	sed -i'' -e "s|#    volumes:|    volumes:|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#        - /var/run/docker.sock:/var/run/docker.sock|        - /var/run/docker.sock:/var/run/docker.sock|g" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|nada|nada|" orquestrators/docker-compose/docker-compose.yml
+	
+	
 endif
 
 ifeq ("$(JOD_PRESENTE)",  "true")
 	sed -i'' -e "s|#jod: #servicejod|jod: #servicejod|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#    image: ${DOCKER_IMAGE_JOD} #servicejod|    image: ${DOCKER_IMAGE_JOD} #servicejod|" orquestrators/docker-compose/docker-compose.yml
 	sed -i'' -e "s|#- jod:jod #servicejod|- jod:jod #servicejod|g" orquestrators/docker-compose/docker-compose.yml
+endif
+
+ifeq ("$(MAIL_CATCHER_PRESENTE)",  "true")
+	sed -i'' -e "s|#mail: #servicemail|mail: #servicemail|" orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#    image: ${DOCKER_IMAGE_MAIL} #servicemail|    image: ${DOCKER_IMAGE_MAIL} #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e 's|#    command: \["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"\] #servicemail|    command: ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"] #servicemail|'	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#    expose: #servicemail|    expose: #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - 25 #servicemail|        - 25 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - 80 #servicemail|        - 80 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml	
+	sed -i'' -e "s|#    environment: #servicemail|    environment: #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - VIRTUAL_HOST=http://${APP_HOST}/mail\*,https://${APP_HOST}/mail\*,http://${APP_HOST}/assets\*,https://${APP_HOST}/assets\*,http://${APP_HOST}/messages\*,https://${APP_HOST}/messages\* #servicemail|        - VIRTUAL_HOST=http://${APP_HOST}/mail*,https://${APP_HOST}/mail*,http://${APP_HOST}/assets*,https://${APP_HOST}/assets*,http://${APP_HOST}/messages*,https://${APP_HOST}/messages* #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - FORCE_SSL=true #servicemail|        - FORCE_SSL=true #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e "s|#        - EXCLUDE_PORTS=25,1080,1025 #servicemail|        - EXCLUDE_PORTS=25,1080,1025 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
+	sed -i'' -e 's|#        - EXTRA_SETTINGS=http-request set-path "%\[path\\,regsub(^/mail\\,/)\]" #servicemail|        - EXTRA_SETTINGS=http-request set-path "%[path\\,regsub(^/mail\\,/)]" #servicemail|'	 orquestrators/docker-compose/docker-compose.yml
+
 endif
 
 ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
@@ -129,6 +147,7 @@ endif
 endif
 
 endif
+
 
 
 run: ## roda na sequencia build_docker_compose e up -d
