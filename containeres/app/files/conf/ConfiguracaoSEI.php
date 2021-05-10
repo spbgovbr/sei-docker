@@ -37,7 +37,7 @@ class ConfiguracaoSEI extends InfraConfiguracao  {
  	          'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
 
  	      'BancoSEI'  => array(
- 	          'Servidor' => 'db',
+ 	          'Servidor' => getenv('APP_DB_HOST'),
  	          'Porta' => getenv('APP_DB_PORTA'),
  	          'Banco' => getenv('APP_DB_SEI_BASE'),
  	          'Usuario' => getenv('APP_DB_SEI_USERNAME'),
@@ -56,7 +56,7 @@ class ConfiguracaoSEI extends InfraConfiguracao  {
  	          'Tipo' => ''), //MySql, SqlServer, Oracle ou PostgreSql
         */
 
-  			'CacheSEI' => array('Servidor' => 'memcached',
+  			'CacheSEI' => array('Servidor' => getenv('APP_MEMCACHED_HOST'),
 					                	'Porta' => '11211'),
 
         'Federacao' => array(
@@ -66,10 +66,15 @@ class ConfiguracaoSEI extends InfraConfiguracao  {
  	      'JODConverter' => array('Servidor' => 'http://jod:8080/converter/service'),
 
  	      'Solr' => array(
- 	          'Servidor' => 'http://solr:8983/solr',
- 	          'CoreProtocolos' => 'sei-protocolos',
- 	          'CoreBasesConhecimento' => 'sei-bases-conhecimento',
- 	          'CorePublicacoes' => 'sei-publicacoes'),
+ 	          'Servidor' => getenv('APP_SOLR_URL'),
+ 	          'CoreProtocolos' => getenv('APP_SOLR_CORE_PROTOCOLOS'),
+              'TempoCommitProtocolos' => getenv('APP_SOLR_TEMPO_COMMIT_PROTOCOLOS'),
+ 	          'CoreBasesConhecimento' => getenv('APP_SOLR_CORE_BASECONHECIMENTO'),
+              'TempoCommitBasesConhecimento' => getenv('APP_SOLR_TEMPO_COMMIT_BASECONHECIMENTO'),
+ 	          'CorePublicacoes' => getenv('APP_SOLR_CORE_PUBLICACOES'),
+              'TempoCommitPublicacoes' => getenv('APP_SOLR_TEMPO_COMMIT_PUBLICACOES')),
+
+
 
  	      'InfraMail' => array(
 						'Tipo' => getenv('APP_MAIL_TIPO'), //1 = sendmail (neste caso n�o � necess�rio configurar os atributos abaixo), 2 = SMTP

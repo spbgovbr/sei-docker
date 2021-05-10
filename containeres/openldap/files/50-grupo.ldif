@@ -1,0 +1,4 @@
+dn: cn=grupo1,dc=pen,dc=gov,dc=br
+objectClass: top
+objectClass: posixGroup
+gidNumber: 678

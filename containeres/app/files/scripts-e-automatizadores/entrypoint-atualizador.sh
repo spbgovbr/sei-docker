@@ -53,6 +53,12 @@ if [ -z "$APP_PROTOCOLO" ] || \
 fi
 
 
+echo "***************************************************"
+echo "***************************************************"
+echo "**INICIANDO CONFIGURACOES BASICAS DO APACHE E SEI**"
+echo "***************************************************"
+echo "***************************************************"
+
 APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
 echo "127.0.0.1 $APP_HOST" >> /etc/hosts
@@ -64,12 +70,6 @@ ln -sf /dev/stdout /var/log/httpd/ssl_request_log
 ln -sf /dev/stderr /var/log/httpd/error_log
 ln -sf /dev/stderr /var/log/httpd/ssl_error_log
 
-# baixar os fontes do sei
-cd /opt
-#rm *
-#git checkout $APP_SEI_VERSAO
-touch putsourcefileshere.empty
-
 
 # Atribuição dos parâmetros de configuração do SEI
 if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/ConfiguracaoSEI.php~ ]; then
@@ -77,7 +77,7 @@ if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/Configur
 fi
 
 if [ ! -f /opt/sei/config/ConfiguracaoSEI.php ]; then
-    cp /files/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php
+    cp /sei/files/conf/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php
 fi
 
 # Atribuição dos parâmetros de configuração do SIP
@@ -86,26 +86,43 @@ if [ -f /opt/sip/config/ConfiguracaoSip.php ] && [ ! -f /opt/sip/config/Configur
 fi
 
 if [ ! -f /opt/sip/config/ConfiguracaoSip.php ]; then
-    cp /files/ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php
+    cp /sei/files/conf/ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php
 fi
 
 # Ajustes de permissões diversos para desenvolvimento do SEI
-#chmod +x /opt/sei/bin/wkhtmltopdf-amd64
 chmod +x /opt/sei/bin/pdfboxmerge.jar
 mkdir -p /opt/sei/temp
 mkdir -p /opt/sip/temp
 chmod -R 777 /opt/sei/temp
 chmod -R 777 /opt/sip/temp
-chmod -R 777 /dados
 
-echo "Testing for Atualizador..."
-#/sei-ci/docker/files/sei/wait-for-it.sh -s -t 600 http-atualizador:8181 -- echo "Atualizador Finalizado. Procedendo..."
 
-echo "Testing for available DB..."
-/files/wait-for-it.sh -s -t 60 db:$APP_DB_PORTA -- echo "Database Port Online... Teste novamente em 5 segs..."
+set +e
 
-sleep 5
-/files/wait-for-it.sh -s -t 60 db:$APP_DB_PORTA -- echo "Database Port Online... Procedendo..."
+RET=1
+while [ ! "$RET" == "0" ]
+do
+    echo ""
+    echo "Esperando a base de dados ficar disponivel... Vamos tentar chama-la ...."
+    sleep 3
+    
+    php -r "
+    require_once '/opt/sip/web/Sip.php';    
+    \$conexao = BancoSip::getInstance();
+    \$conexao->abrirConexao();
+    \$conexao->executarSql('select sigla from sistema');"
+    
+    RET=$?   
+    
+done  
+
+set -e
+
+echo "***************************************************"
+echo "***************************************************"
+echo "UPDATE NA BASE DE DADOS - ORGAO E SISTEMA**********"
+echo "***************************************************"
+echo "***************************************************"
 
 # Atualização do endereço de host da aplicação
 echo "Atualizando Banco de Dados com as Configuracoes Iniciais..."
@@ -120,8 +137,6 @@ fi
 
 if [ "$APP_DB_TIPO" == "Oracle" ]; then
     echo "Atualizando Oracle..."
-    echo "Aguardando Oracle ficar pronto..."
-    sleep 30
     echo "alter user sip identified by sip_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@db
     echo "alter user sei identified by sei_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@db
     echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@db
@@ -132,7 +147,6 @@ fi
 
 if [ "$APP_DB_TIPO" == "SqlServer" ]; then
     echo "Atualizando SqlServer..."
-    sleep 10
     echo "use sip" > /tmp/update.tmp
     echo "go" >> /tmp/update.tmp
     echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'" >> /tmp/update.tmp
@@ -159,19 +173,23 @@ if [ "$APP_DB_TIPO" == "SqlServer" ]; then
     cat /tmp/update.tmp | tsql -S db -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
 fi
 
-
+echo "***************************************************"
+echo "***************************************************"
+echo "**GERACAO DE CERTIFICADO PARA O APACHE*************"
+echo "***************************************************"
+echo "***************************************************"
 
 # Gera certificados caso necessário para desenvolvimento    
-if [ ! -d "/certs/seiapp" ]; then
-    echo "Diretorio /certs nao encontrado, criando ..."
-    mkdir -p /certs/seiapp
+if [ ! -d "/sei/certs/seiapp" ]; then
+    echo "Diretorio /sei/certs/seiapp nao encontrado, criando ..."
+    mkdir -p /sei/certs/seiapp
 fi
 
 echo "Verificando se certificados existem no diretorio /certs...."
-if [ ! -f /certs/seiapp/sei-ca.pem ] || [ ! -f /certs/seiapp/sei.crt ]; then
+if [ ! -f /sei/certs/seiapp/sei-ca.pem ] || [ ! -f /sei/certs/seiapp/sei.crt ]; then
     echo "Arquivos de cert nao encontrados criando auto assinados ..."
     
-    cd /certs/seiapp
+    cd /sei/certs/seiapp
 
     echo "Criando CA"  
     openssl genrsa -out sei-ca-key.pem 2048
@@ -186,13 +204,13 @@ if [ ! -f /certs/seiapp/sei-ca.pem ] || [ ! -f /certs/seiapp/sei.crt ]; then
         -CAkey sei-ca-key.pem -CAcreateserial \
         -out sei.crt -days 10000 -extensions v3_req
 
-    cat /certs/seiapp/sei-ca.pem >> /etc/ssl/certs/cacert.pem
+    cat /sei/certs/seiapp/sei-ca.pem >> /etc/ssl/certs/cacert.pem
     echo "Adicionada nova CA ao TrustStore\n"
 else
     echo "Arquivos de cert encontrados vamos tentar utilizá-los..."
 fi
 
-cd /certs/seiapp
+cd /sei/certs/seiapp
 cp sei.crt /etc/pki/tls/certs/sei.crt
 cp sei-ca.pem /etc/pki/tls/certs/sei-ca.pem
 cp sei.key /etc/pki/tls/private/sei.key 
@@ -204,52 +222,94 @@ cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
 update-ca-trust extract
 update-ca-trust enable
 
-echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
-# copiado do sei-vagrant do guilhermao
-# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-php -r "
-    require_once '/opt/sip/web/Sip.php';    
-    \$conexao = BancoSip::getInstance();
-    \$conexao->setBolScript(true);
-    \$objScriptRN = new ScriptRN();
-    \$objScriptRN->atualizarSequencias();    
-" || exit 1
+echo "***************************************************"
+echo "***************************************************"
+echo "**ATUALIZACAO DE SEQUENCES*************************"
+echo "***************************************************"
+echo "***************************************************"
 
-echo "atualizar sequences do SEI"
-# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-php -r "
-    require_once '/opt/sei/web/SEI.php';
-    \$conexao = BancoSEI::getInstance();
-    \$conexao->setBolScript(true);
-    \$objScriptRN = new ScriptRN();
-    \$objScriptRN->atualizarSequencias();
-" 
-echo "Finalizacao de atualizacao de sequences"
-
-
-#atualizar
-#/usr/sbin/httpd -DFOREGROUND &
-#sleep 3
-
-#copia modulos se houver
-#mkdir -p /opt/sei/web/modulos
-#rm -rf /opt/sei/web/modulos/*
-#cp -a /opt/sei-fontes-modulos/* /opt/sei/web/modulos/
-
-#***************************************************************************************
-# install Estatistica
-#***************************************************************************************
-if [ ! -z "$MODULO_ESTATISTICAS_INSTALAR" ]; then
+if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
     
-    echo "Vamos iniciar o tratamento de instalacao do modulo de estatisticas"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    
-    if [ "$MODULO_ESTATISTICAS_INSTALAR" = "true" ]; then
+    echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
+    chown -R apache:apache /sei/arquivos_externos_sei/
 
+
+    echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+    # copiado do sei-vagrant do guilhermao
+    # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+    php -r "
+        require_once '/opt/sip/web/Sip.php';    
+        \$conexao = BancoSip::getInstance();
+        \$conexao->setBolScript(true);
+        \$objScriptRN = new ScriptRN();
+        \$objScriptRN->atualizarSequencias();    
+    "
+
+    echo "atualizar sequences do SEI"
+    # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+    php -r "
+        require_once '/opt/sei/web/SEI.php';
+        \$conexao = BancoSEI::getInstance();
+        \$conexao->setBolScript(true);
+        \$objScriptRN = new ScriptRN();
+        \$objScriptRN->atualizarSequencias();
+    " 
+    echo "Finalizacao de atualizacao de sequences"
+fi
+
+echo "***************************************************"
+echo "***************************************************"
+echo "**CONFIGURANDO LDAP********************************"
+echo "***************************************************"
+echo "***************************************************"
+if [ "$OPENLDAP_PRESENTE" == "true" ]; then
+    
+    if [ ! -f /sei/controlador-instalacoes/openldap.ok ]; then
+    
+        echo "Vamos tentar criar a conexao ao Ldap no SIP..."
+    
+        php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap.php
+    
+        echo ""
+    else
+    
+        echo "Arquivo de controle do Ldap encontrado pulando configuracao do Ldap"
+        echo "Caso tenha problema ao logar, como esquecimento de senha, sete a VAR OPENLDAP_DESLIGAR_NO_ORGAO_0=true e OPENLDAP_PRESENTE=false"
+        echo "Isso vai forcar o instalador a desligar o Ldap no Orgao 0"
+    
+    fi
+
+else
+    
+    echo "Variavel OPENLDAP_PRESENTE nao setada para true, pulando configuracao..."
+    
+    echo "Verificando se eh para desligar a autenticacao via openldap no orgao 0"
+    if [ "$OPENLDAP_DESLIGAR_NO_ORGAO_0" == "true" ]; then
+        echo "Variavel OPENLDAP_DESLIGAR_NO_ORGAO_0 igual a true, vamos desligar o OpenLdap no Orgao 0, "
+        echo "ATENCAO: USUARIO E SENHA TERAO O MESMO VALOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        echo "ATENCAO: USUARIO E SENHA TERAO O MESMO VALOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+        
+        php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap-desligar.php
+    else
+        echo "Variavel OPENLDAP_DESLIGAR_NO_ORGAO_0 diferente de true. Sendo assim nao vamos desligar o OpenLdap no Orgao 0. "
+        echo "Caso tenha problema ao logar, como esquecimento de senha, sete a VAR OPENLDAP_DESLIGAR_NO_ORGAO_0=true e OPENLDAP_PRESENTE=false"
+        echo "Isso vai forcar o instalador a desligar o Ldap no Orgao 0"
+    fi
+    
+    
+fi
+
+
+echo "***************************************************"
+echo "***************************************************"
+echo "*INICIANDO CONFIGURACOES DO MODULO DE ESTATISTICAS*"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_ESTATISTICAS_INSTALAR" == "true" ]; then
+    
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-estatisticas.ok ]; then
+    
         if [ -z "$MODULO_ESTATISTICAS_VERSAO" ] || \
            [ -z "$MODULO_ESTATISTICAS_URL" ] || \
 	       [ -z "$MODULO_ESTATISTICAS_SIGLA" ] || \
@@ -257,59 +317,56 @@ if [ ! -z "$MODULO_ESTATISTICAS_INSTALAR" ]; then
             echo "Informe as seguinte variaveis de ambiente no container:"
             echo "MODULO_ESTATISTICAS_VERSAO, MODULO_ESTATISTICAS_URL, MODULO_ESTATISTICAS_SIGLA, MODULO_ESTATISTICAS_CHAVE"
 
-            exit 1
-        fi
-        
-        echo "Verificando existencia do modulo de estatisticas"
-        if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
-            echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
-        
         else
-            echo "Copiando o módulo de estatísticas"
-            cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
+            
+            echo "Verificando existencia do modulo de estatisticas"
+            if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
+                echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
+        
+            else
+                echo "Copiando o módulo de estatísticas"
+                cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
+            fi
+        
+
+            cd /opt/sei/web/modulos/mod-sei-estatisticas
+            git checkout $MODULO_ESTATISTICAS_VERSAO
+            echo "Versao do Governanca é agora: $MODULO_ESTATISTICAS_VERSAO"
+
+            cd /opt/sei/
+        
+            sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+            sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+        
+            cp /sei/files/scripts-e-automatizadores/modulos/mod-sei-estatisticas/sei_gov_configurar_ambiente.php /opt/sei/scripts
+            php -c /etc/php.ini /opt/sei/scripts/sei_gov_configurar_ambiente.php
+        
+            touch /sei/controlador-instalacoes/instalado-modulo-estatisticas.ok
+            
         fi
         
-
-        cd /opt/sei/web/modulos/mod-sei-estatisticas
-        git checkout $MODULO_ESTATISTICAS_VERSAO
-        echo "Versao do Governanca é agora: $MODULO_ESTATISTICAS_VERSAO"
-
-        cd /opt/sei/
-        
-        sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-        sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
-        
-        cp /files/sei_gov_configurar_ambiente.php /opt/sei/scripts
-        php -c /etc/php.ini /opt/sei/scripts/sei_gov_configurar_ambiente.php
-
     else
-        echo "Pulando instalacao do modulo de estatisticas, valor existe mas esta diferente de true"
-    fi
     
-    echo "Fim do tratamento de instalacao do modulo de estatisticas"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
+        echo "Arquivo de controle do Modulo de Estatisticas encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+    
+    fi
 
+else
+    
+    echo "Variavel MODULO_ESTATISTICAS_INSTALAR nao setada para true, pulando configuracao..."
+    
 fi
 
 
-#***************************************************************************************
-# install WSSEI
-#***************************************************************************************
-if [ ! -z "$MODULO_WSSEI_INSTALAR" ]; then
+echo "***************************************************"
+echo "***************************************************"
+echo "**CONFIGURANDO MODULO WSSEI************************"
+echo "***************************************************"
+echo "***************************************************"
+if [ "$MODULO_WSSEI_INSTALAR" == "true" ]; then
     
-    echo "Vamos iniciar o tratamento de instalacao do modulo wssei"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    
-    if [ "$MODULO_WSSEI_INSTALAR" = "true" ]; then
-
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-wssei.ok ]; then
+        
         if [ -z "$MODULO_WSSEI_VERSAO" ] || \
            [ -z "$MODULO_WSSEI_URL_NOTIFICACAO" ] || \
 	       [ -z "$MODULO_WSSEI_ID_APP" ] || \
@@ -317,55 +374,60 @@ if [ ! -z "$MODULO_WSSEI_INSTALAR" ]; then
             echo "Informe as seguinte variaveis de ambiente no container:"
             echo "MODULO_WSSEI_VERSAO, MODULO_WSSEI_URL_NOTIFICACAO, MODULO_WSSEI_ID_APP, MODULO_WSSEI_CHAVE"
 
-            exit 1
-        fi
-        
-        echo "Verificando existencia do modulo wssei"
-        if [ -d "/opt/sei/web/modulos/mod-wssei" ]; then
-            echo "Ja existe um diretorio para o modulo wssei. Vamos assumir que o codigo la esteja integro"
-        
         else
-            echo "Copiando o módulo wssei"
-            cp -Rf /sei-modulos/mod-wssei /opt/sei/web/modulos/
+            
+            echo "Verificando existencia do modulo wssei"
+            if [ -d "/opt/sei/web/modulos/mod-wssei" ]; then
+                echo "Ja existe um diretorio para o modulo wssei. Vamos assumir que o codigo la esteja integro"
+        
+            else
+                echo "Copiando o módulo wssei"
+                cp -Rf /sei-modulos/mod-wssei /opt/sei/web/modulos/
+            fi
+        
+
+            cd /opt/sei/web/modulos/mod-wssei
+            git checkout $MODULO_WSSEI_VERSAO
+            echo "Versao do WSSEI é agora: $MODULO_WSSEI_VERSAO" 
+
+            cd /opt/sei/
+            sed -i "s#/\*novomodulo\*/#'MdWsSeiRest' => 'mod-wssei/', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+            sed -i "s#/\*extramodulesconfig\*/#'WSSEI' => array('UrlServicoNotificacao' => '$MODULO_WSSEI_URL_NOTIFICACAO', 'IdApp' => '$MODULO_WSSEI_ID_APP', 'ChaveAutorizacao' => '$MODULO_WSSEI_CHAVE', 'TokenSecret' => '504CE1E9-8913-488F-AB3E-EDDABC065B0B'  ), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+
+        
+            TMPFILE=/opt/sei/web/modulos/mod-wssei/scripts/sei_atualizar_versao_modulo_wssei.php
+            if test -f "$TMPFILE"; then
+        
+                # mover os scripts e executar
+                cp /opt/sei/web/modulos/mod-wssei/scripts/sei_atualizar_versao_modulo_wssei.php /opt/sei/scripts
+        
+                echo "Vou rodar o script de atualizacao do modulo"
+                php -c /etc/php.ini /opt/sei/scripts/sei_atualizar_versao_modulo_wssei.php
+            fi
+        
+            touch /sei/controlador-instalacoes/instalado-modulo-wssei.ok  
+            
         fi
         
-
-        cd /opt/sei/web/modulos/mod-wssei
-        git checkout $MODULO_WSSEI_VERSAO
-        echo "Versao do WSSEI é agora: $MODULO_WSSEI_VERSAO" 
-
-        cd /opt/sei/
-        sed -i "s#/\*novomodulo\*/#'MdWsSeiRest' => 'mod-wssei/', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-        sed -i "s#/\*extramodulesconfig\*/#'WSSEI' => array('UrlServicoNotificacao' => '$MODULO_WSSEI_URL_NOTIFICACAO', 'IdApp' => '$MODULO_WSSEI_ID_APP', 'ChaveAutorizacao' => '$MODULO_WSSEI_CHAVE', 'TokenSecret' => '504CE1E9-8913-488F-AB3E-EDDABC065B0B'  ), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
-
-        
-        TMPFILE=/opt/sei/web/modulos/mod-wssei/scripts/sei_atualizar_versao_modulo_wssei.php
-        if test -f "$TMPFILE"; then
-        
-            # mover os scripts e executar
-            cp /opt/sei/web/modulos/mod-wssei/scripts/sei_atualizar_versao_modulo_wssei.php /opt/sei/scripts
-        
-            echo "Vou rodar o script de atualizacao do modulo"
-            php -c /etc/php.ini /opt/sei/scripts/sei_atualizar_versao_modulo_wssei.php
-        fi
-        
-
     else
-        echo "Pulando instalacao do modulo wssei, valor existe mas esta diferente de true"
-    fi
     
-    echo "Fim do tratamento de instalacao do modulo wssei"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"
-    echo "------------------------------------------------------------------"    
+        echo "Arquivo de controle do Modulo WSSEI encontrado pulando configuracao do modulo"
+    
+    fi
+
+else
+    
+    echo "Variavel MODULO_WSSEI_INSTALAR nao setada para true, pulando configuracao..."
     
 fi
 
 
-touch /controlador/instalado.ok
+touch /sei/controlador-instalacoes/instalado.ok
 
-echo "Atualizador chegou ao final... Fechando e liberando para o modulo de aplicacao"
-
+echo "***************************************************"
+echo "Atualizador chegou ao final..."
+echo "Verifique nas mensagens acima se ocorreu tudo certo."
+echo "Talvez haja alguma observacao importante"
+echo "Fechando e liberando para o modulo de aplicacao"
+echo "***************************************************"
 

@@ -27,7 +27,7 @@ localedef pt_BR -i pt_BR -f ISO-8859-1
 
 # Instalação do componentes UploadProgress
 
-cd /files
+cd /sei/instaladores
 tar -zxvf uploadprogress.tgz
 cd uploadprogress
 phpize
@@ -37,22 +37,21 @@ make install
 echo "extension=uploadprogress.so" > /etc/php.d/uploadprogress.ini
 cd -
 
-cp /files/sei.ini /etc/php.d/
-cp /files/sei.conf /etc/httpd/conf.d/ 
+cp /sei/files/conf/sei.ini /etc/php.d/
+cp /sei/files/conf/sei.conf /etc/httpd/conf.d/ 
 
 # Configuração das bibliotecas de fontes utilizadas pelo SEI
-cd /files
+cd /sei/instaladores
 rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
 rm -f msttcore-fonts-2.0-3.noarch.rpm
 
-#bash /files/install_oracle.sh
 # ORACLE oci
 mkdir -p /opt/oracle \
 cd /opt/oracle
 
-cp /files/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /opt/oracle
-cp /files/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /opt/oracle
-cp /files/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /opt/oracle
+cp /sei/instaladores/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm /opt/oracle
+cp /sei/instaladores/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm /opt/oracle
+cp /sei/instaladores/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm /opt/oracle
 
 yum install -y oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
 
@@ -66,14 +65,15 @@ yum install -y php-dev php-pear build-essential systemtap-sdt-devel
 pecl channel-update pecl.php.net 
 export PHP_DTRACE=yes && pecl install oci8-2.2.0 && unset PHP_DTRACE
 
-#echo 'instantclient,/opt/oracle/instantclient_12_1/' | pecl install oci8-2.2.0
-
 echo "extension=oci8.so" > /etc/php.d/oci8.ini 
 
-rm -rf /files
+rm -rf  /files/instaladores \
+        /opt/oracle/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
+        /opt/oracle/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm \
+        /opt/oracle/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
 
-mkdir -p /dados
-mkdir -p /controlador
+
+mkdir -p /sei/controlador-instalacoes/ /sei/arquivos_externos_sei/ /sei/certs
 
 yum -y clean all
 

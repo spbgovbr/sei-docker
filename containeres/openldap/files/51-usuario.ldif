@@ -1,0 +1,17 @@
+dn: cn=teste,dc=pen,dc=gov,dc=br
+objectClass: top
+objectClass: account
+objectClass: posixAccount
+objectClass: shadowAccount
+cn: teste
+uid: teste
+uidNumber: 16859
+gidNumber: 100
+homeDirectory: /home/adam
+loginShell: /bin/bash
+gecos: adam
+userPassword: 123456
+shadowLastChange: 0
+shadowMax: 0
+shadowWarning: 0
+
