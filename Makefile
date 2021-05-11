@@ -108,7 +108,7 @@ build_docker_compose: ## Construa o docker-compose.yml baseado no arquivo envloc
 	envsubst < orquestrators/docker-compose/docker-compose-template.yml > orquestrators/docker-compose/docker-compose.yml
 	@echo "Agora vamos iniciar uma serie de substituicoes de variaveis para montar o docker-compose.yml"
 	@echo "O comandos sed nao aparecem aqui na tela."
-	@echo "Caso deseje que eles aparecam ative no envlocal.env o modo Debug ou desligue aqui no Makefile o arrroba na frente dos comandos sed"
+	@echo "Caso deseje que eles aparecam ative no envlocal.env o modo Debug"
 	@sleep 3
 
 
