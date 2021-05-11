@@ -188,7 +188,7 @@ ifeq ("$(OPENLDAP_PRESENTE)",  "true")
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap|        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_HTTPS=false #serviceldap|        - PHPLDAPADMIN_HTTPS=false #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        - VIRTUAL_HOST=http://localhost/phpldapadmin\*,https://localhost/phpldapadmin\* #serviceldap|        - VIRTUAL_HOST=http://localhost/ldapadmin*,https://localhost/ldapadmin* #serviceldap|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        - VIRTUAL_HOST=http://localhost/phpldapadmin\*,https://localhost/phpldapadmin\* #serviceldap|        - VIRTUAL_HOST=http://localhost/phpldapadmin*,https://localhost/phpldapadmin* #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - EXCLUDE_PORTS=443 #serviceldap|        - EXCLUDE_PORTS=443 #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - FORCE_SSL=true #serviceldap|        - FORCE_SSL=true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    links: #serviceldap|    links: #serviceldap|" orquestrators/docker-compose/docker-compose.yml
@@ -307,7 +307,7 @@ else
 endif
 
 
-setup: 
+setup: ## executa criar_volumes e run na sequencia
 	make criar_volumes 
 	make run
 
@@ -345,7 +345,7 @@ logs_openldap: ## docker-compose logs -f openldap pressione ctrol+c para sair
 logs_solr: ## docker-compose logs -f solr pressione ctrol+c para sair
 	$(COMMMADCOMPOSE) logs -f solr
 
-clear: ## para o projeto e remove tds os volumes criados
+clear: ## pahra o projeto e remove tds os conteineres, redes criados. Nao remove os volumes
 	make stop
 	$(COMMMADCOMPOSE) down -v
 
