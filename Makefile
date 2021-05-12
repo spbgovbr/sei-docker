@@ -51,7 +51,7 @@ else
 	
 endif
 
-criar_volume_banco: ## Cria o volume docker com os fontes que serao consumidos pelo projeto
+criar_volume_banco: ## Cria o volume docker para o banco de dados que serao consumidos pelo projeto
 	
 ifneq ("$(EXISTE_LOCAL_DB)",  "")
 	@echo "Ja existe um volume de banco de dados. Voce pode apaga-lo com o comando make apagar_volume_banco"
@@ -188,7 +188,7 @@ ifeq ("$(OPENLDAP_PRESENTE)",  "true")
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap|        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_HTTPS=false #serviceldap|        - PHPLDAPADMIN_HTTPS=false #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        - VIRTUAL_HOST=http://localhost/phpldapadmin\*,https://localhost/phpldapadmin\* #serviceldap|        - VIRTUAL_HOST=http://localhost/phpldapadmin*,https://localhost/phpldapadmin* #serviceldap|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        - VIRTUAL_HOST=http://${APP_HOST}/phpldapadmin\*,https://${APP_HOST}/phpldapadmin\* #serviceldap|        - VIRTUAL_HOST=http://${APP_HOST}/phpldapadmin*,https://${APP_HOST}/phpldapadmin* #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - EXCLUDE_PORTS=443 #serviceldap|        - EXCLUDE_PORTS=443 #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - FORCE_SSL=true #serviceldap|        - FORCE_SSL=true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    links: #serviceldap|    links: #serviceldap|" orquestrators/docker-compose/docker-compose.yml
@@ -359,10 +359,10 @@ apagar_volumes: ## Apaga todos os volumes do projeto ATENCAO TODOS OS DADOS DE B
 	make apagar_volume_controlador_instalacao
 
 
-apagar_volume_fontes: ## Monte o volume docker com os fontes que serao consumidos pelo projeto
+apagar_volume_fontes: ## Apaga o volume docker com os fontes que serao consumidos pelo projeto
 	docker volume rm $(VOLUME_FONTES) || true
 
-apagar_volume_certs: ## Monte o volume docker com os fontes que serao consumidos pelo projeto
+apagar_volume_certs: ## Apaga o volume docker com os certs que serao consumidos pelo projeto
 	docker volume rm $(VOLUME_CERTS) || true
 	
 apagar_volume_banco: ## Apagar volume do banco
