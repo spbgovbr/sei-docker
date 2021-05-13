@@ -269,7 +269,29 @@ if [ "$OPENLDAP_PRESENTE" == "true" ]; then
         echo "Vamos tentar criar a conexao ao Ldap no SIP..."
     
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap.php
-    
+        
+        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+        # copiado do sei-vagrant do guilhermao
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sip/web/Sip.php';    
+            \$conexao = BancoSip::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();    
+        "
+
+        echo "atualizar sequences do SEI"
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sei/web/SEI.php';
+            \$conexao = BancoSEI::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        " 
+        echo "Finalizacao de atualizacao de sequences"
+        
         echo ""
     else
     
@@ -290,6 +312,30 @@ else
         echo "ATENCAO: USUARIO E SENHA TERAO O MESMO VALOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
         
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap-desligar.php
+        
+        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+        # copiado do sei-vagrant do guilhermao
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sip/web/Sip.php';    
+            \$conexao = BancoSip::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();    
+        "
+
+        echo "atualizar sequences do SEI"
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sei/web/SEI.php';
+            \$conexao = BancoSEI::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        " 
+        echo "Finalizacao de atualizacao de sequences"
+        
+        
     else
         echo "Variavel OPENLDAP_DESLIGAR_NO_ORGAO_0 diferente de true. Sendo assim nao vamos desligar o OpenLdap no Orgao 0. "
         echo "Caso tenha problema ao logar, como esquecimento de senha, sete a VAR OPENLDAP_DESLIGAR_NO_ORGAO_0=true e OPENLDAP_PRESENTE=false"
