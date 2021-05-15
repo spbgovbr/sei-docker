@@ -233,29 +233,30 @@ if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
     echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
     chown -R apache:apache /sei/arquivos_externos_sei/
 
-
-    echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
-    # copiado do sei-vagrant do guilhermao
-    # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-    php -r "
-        require_once '/opt/sip/web/Sip.php';    
-        \$conexao = BancoSip::getInstance();
-        \$conexao->setBolScript(true);
-        \$objScriptRN = new ScriptRN();
-        \$objScriptRN->atualizarSequencias();    
-    "
-
-    echo "atualizar sequences do SEI"
-    # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-    php -r "
-        require_once '/opt/sei/web/SEI.php';
-        \$conexao = BancoSEI::getInstance();
-        \$conexao->setBolScript(true);
-        \$objScriptRN = new ScriptRN();
-        \$objScriptRN->atualizarSequencias();
-    " 
-    echo "Finalizacao de atualizacao de sequences"
 fi
+
+echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+# copiado do sei-vagrant do guilhermao
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sip/web/Sip.php';    
+    \$conexao = BancoSip::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();    
+"
+
+echo "atualizar sequences do SEI"
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sei/web/SEI.php';
+    \$conexao = BancoSEI::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();
+" 
+echo "Finalizacao de atualizacao de sequences"
+
 
 echo "***************************************************"
 echo "***************************************************"

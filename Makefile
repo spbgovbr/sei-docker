@@ -347,7 +347,7 @@ logs_solr: ## docker-compose logs -f solr pressione ctrol+c para sair
 
 clear: ## pahra o projeto e remove tds os conteineres, redes criados. Nao remove os volumes
 	make stop
-	$(COMMMADCOMPOSE) down -v
+	$(COMMMADCOMPOSE) down -v --remove-orphans
 
 apagar_volumes: ## Apaga todos os volumes do projeto ATENCAO TODOS OS DADOS DE BASE E ARQUIVOS SERAO DELETADOS
 	make apagar_volume_fontes 
