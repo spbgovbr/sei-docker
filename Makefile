@@ -303,7 +303,7 @@ else ifeq ("$(EXISTE_LOCAL_OPENLDAP_DB)",  "")
 
 else
 	make build_docker_compose
-	$(COMMMADCOMPOSE) up -d
+	$(COMMMADCOMPOSE) up -d --remove-orphans
 endif
 
 
