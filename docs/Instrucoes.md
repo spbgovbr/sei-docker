@@ -133,6 +133,8 @@ apagar_volume_controlador_instalacao:  Apagar volume controlador da instalacao
 
 ## Vídeo Tutoriais
 
-- Estrutura do Projeto (under construction)
-- Subir ambiente default com localhost  (under construction)
-- Subir ambiente com URL customizada e completo (under construction)
+- [Clique aqui](VideoTutoriais.md) para abrir a ajuda com os vídeos tutoriais
+
+---
+
+Voltar para [Readme Principal](../README.md)

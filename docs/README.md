@@ -1,15 +1,17 @@
-# Documentação Geral do SEI-Docker
+# DocumentaÃ§Ã£o Geral do SEI-Docker
 
-## Apresentação
+## ApresentaÃ§Ã£o
 
 - [Comece aqui com a leitura do README inicial](../README.md)
 
-## Instruções Iniciais
+## InstruÃ§Ãµes Iniciais
 
-- [Clique aqui](Instrucoes.md) para abrir as instruções iniciais
+- [Clique aqui](Instrucoes.md) para abrir as instruÃ§Ãµes iniciais
 
-## Vídeo Tutoriais
+## VÃ­deo Tutoriais
 
-- Estrutura do Projeto (under construction)
-- Subir ambiente default com localhost  (under construction)
-- Subir ambiente com URL customizada e completo (under construction)
+- [Clique aqui](VideoTutoriais.md) para abrir a ajuda com os vÃ­deos tutoriais
+
+---
+
+Voltar para [Readme Principal](../README.md)
