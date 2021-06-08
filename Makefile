@@ -5,14 +5,14 @@ ifeq ("$(MAKEFILE_MODO_VERBOSE)",  "true")
 SHELL = sh -xv
 endif
 
-EXISTE_LOCAL_DB := $(shell docker volume ls | grep $(VOLUME_DB) )
-EXISTE_LOCAL_FONTES := $(shell docker volume ls | grep $(VOLUME_FONTES) )
-EXISTE_LOCAL_ARQUIVOS_EXTERNOS := $(shell docker volume ls | grep $(VOLUME_ARQUIVOSEXTERNOS) )
-EXISTE_LOCAL_SOLR := $(shell docker volume ls | grep $(VOLUME_SOLR) )
-EXISTE_LOCAL_OPENLDAP_SLAPD := $(shell docker volume ls | grep $(VOLUME_OPENLDAP_SLAPD) )
-EXISTE_LOCAL_OPENLDAP_DB := $(shell docker volume ls | grep $(VOLUME_OPENLDAP_DB) )
-EXISTE_LOCAL_CONTROLADOR_INSTALACAO := $(shell docker volume ls | grep $(VOLUME_CONTROLADOR_INSTALACAO) )
-EXISTE_LOCAL_CERTS := $(shell docker volume ls | grep $(VOLUME_CERTS) )
+EXISTE_LOCAL_DB := $(shell docker volume ls | grep $(VOLUME_DB)$$ )
+EXISTE_LOCAL_FONTES := $(shell docker volume ls | grep $(VOLUME_FONTES)$$ )
+EXISTE_LOCAL_ARQUIVOS_EXTERNOS := $(shell docker volume ls | grep $(VOLUME_ARQUIVOSEXTERNOS)$$ )
+EXISTE_LOCAL_SOLR := $(shell docker volume ls | grep $(VOLUME_SOLR)$$ )
+EXISTE_LOCAL_OPENLDAP_SLAPD := $(shell docker volume ls | grep $(VOLUME_OPENLDAP_SLAPD)$$ )
+EXISTE_LOCAL_OPENLDAP_DB := $(shell docker volume ls | grep $(VOLUME_OPENLDAP_DB)$$ )
+EXISTE_LOCAL_CONTROLADOR_INSTALACAO := $(shell docker volume ls | grep $(VOLUME_CONTROLADOR_INSTALACAO)$$ )
+EXISTE_LOCAL_CERTS := $(shell docker volume ls | grep $(VOLUME_CERTS)$$ )
 
 
 qtd := "2"
