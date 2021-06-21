@@ -24,6 +24,11 @@ help:   ## Lista de comandos disponiveis e descricao. Voce pode usar TAB para co
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 
+test_ambiente_localhost_mysql:
+	make apagar_volumes
+	make setup
+	echo "Terminei eeeee"
+
 criar_volumes: ## Cria todos os volumes necessarios ao projeto. As vezes eh necessario apagar os volumes antes, para apagar make apagar_volumes
 	make criar_volume_fontes 
 	make criar_volume_certs 
