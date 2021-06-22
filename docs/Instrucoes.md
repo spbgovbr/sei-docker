@@ -35,7 +35,7 @@ Inicialmente sugerimos que vc verifique a variável:
 LOCALIZACAO_FONTES_SEI
 leia a orientação que ali aparece e posicione o código fonte no local adequado.
 
-**IMPORTANTE: A recomendação inicial é que você não seja um doido e já saia modificando o arquivo envlocal.env a revelia.**
+**IMPORTANTE: A recomendação inicial é que seja estudado o código antes de modificar o arquivo envlocal.env.**
 
 Suba primeiro com a sugestão ofertada. Depois usando o make, desligue o projeto e remova os volumes. Altere um parâmetro no envlocal.env e suba novamente. Teste as alterações e o resto do ambiente. Desligue e limpe os volumes novamente, altere os parâmetros e suba até compreender todo o ecossistema e definir o que você vai deixar rodando.
 

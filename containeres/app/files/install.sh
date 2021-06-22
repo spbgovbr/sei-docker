@@ -12,6 +12,7 @@ yum -y install httpd memcached openssl wget curl unzip gcc java-1.8.0-openjdk li
 yum install -y epel-release yum-utils
 yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
 yum-config-manager --enable remi-php73
+yum install -y zip
 yum -y update
 
 # Instalação do PHP e demais extenções necessárias para o projeto

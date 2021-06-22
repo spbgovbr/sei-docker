@@ -296,6 +296,65 @@ fi
 
 echo "***************************************************"
 echo "***************************************************"
+echo "*INICIANDO CONFIGURACOES DO MODULO DO PEN*"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_PEN_INSTALAR" == "true" ]; then
+
+    cd /opt/sei/web/modulos
+    cp -R /sei-modulos/mod-sei-pen ./mod-sei-pen
+    cd mod-sei-pen
+    git checkout $MODULO_PEN_VERSAO
+    echo "Versao do PEN agora: $MODULO_PEN_VERSAO"
+    
+    # adiciona config
+    cd /opt/sei
+    sed -i "s#/\*novomodulo\*/#'PENIntegracao' => 'pen', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+    
+    cd /opt/sei/web/modulos/mod-sei-pen
+    make build
+    cd dist
+    files=( *.zip )
+    f="${files[0]}"
+    
+    yes | unzip $f
+    cp -Rf sei/* /opt/sei/
+    cp -Rf sip/* /opt/sip/
+
+    cd /opt/sei/web/modulos
+    mv mod-sei-pen mod-sei-pen.old
+    
+    cd /opt/sei/config/mod-pen/
+    mv ./ConfiguracaoModPEN.exemplo.php ./ConfiguracaoModPEN.php
+    sed -i "s#\"SenhaCertificado\" => \"\"#'SenhaCertificado' => $MODULO_PEN_CERTIFICADO_SENHA#g" ConfiguracaoModPEN.php
+    sed -i "s#\"WebService\" => \"\"#'WebService' => $MODULO_PEN_WEBSERVICE#g" ConfiguracaoModPEN.php
+    
+    # adiciona o certificado
+    cd /opt/sei/config/mod-pen
+    echo $MODULO_PEN_CERTIFICADO > /certificado.pem
+    sed -i "s/ | //1" /certificado.pem
+    sed -i "s/BEGIN CERTIFICATE/BEGINCERTIFICATE/g" /certificado.pem
+    sed -i "s/END CERTIFICATE/ENDCERTIFICATE/g" /certificado.pem
+    sed -i "s/BEGIN PRIVATE KEY/BEGINPRIVATEKEY/g" /certificado.pem
+    sed -i "s/END PRIVATE KEY/ENDPRIVATEKEY/g" /certificado.pem
+    cat /certificado.pem | tr ' ' '\n' > /certificado2.pem
+    rm -f /certificado.pem
+    mv /certificado2.pem /certificado.pem
+    sed -i "s/BEGINCERTIFICATE/BEGIN CERTIFICATE/g" /certificado.pem
+    sed -i "s/ENDCERTIFICATE/END CERTIFICATE/g" /certificado.pem
+    sed -i "s/BEGINPRIVATEKEY/BEGIN PRIVATE KEY/g" /certificado.pem
+    sed -i "s/ENDPRIVATEKEY/END PRIVATE KEY/g" /certificado.pem
+    sleep 2
+    echo "copiar certificado"
+    yes | cp -f /certificado.pem certificado.pem
+    echo "certificado copiado"
+    cat certificado.pem
+
+fi
+
+echo "***************************************************"
+echo "***************************************************"
 echo "**CONFIGURANDO MODULO WSSEI************************"
 echo "***************************************************"
 echo "***************************************************"
