@@ -381,3 +381,11 @@ apagar_volume_openldap: ## Apagar volumes OpenLDAP
 apagar_volume_controlador_instalacao: ## Apagar volume controlador da instalacao
 	docker volume rm $(VOLUME_CONTROLADOR_INSTALACAO) || true
 
+clear_all: #Apaga tanto os containers quanto os volumes, iniciando do zero o ambiente
+	make clear
+	make apagar_volumes
+
+bash_app: #Acessa o container de app, caso for diferente do app_1, passar id=X
+	@[ "${id}" ] && docker exec -it docker-compose_app_$(id) bash || ( docker exec -it docker-compose_app_1 bash ;exit 1 )
+
+	

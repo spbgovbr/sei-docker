@@ -6,3 +6,4 @@ cd /sei-modulos
 
 git clone https://github.com/spbgovbr/mod-sei-estatisticas.git
 git clone https://github.com/spbgovbr/mod-wssei.git
+git clone https://github.com/spbgovbr/mod-sei-pen
