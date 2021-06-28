@@ -124,5 +124,11 @@ Caso você queira, pode fazer **pull requests** observando o seguinte:
 - altamente desejável que possa ser aproveitado por toda a comunidade
 - se achar necessário, discuta antes na parte de issues as melhorias a serem implementadas
 
+## Testes para o Desenvolvedor
+
+Caso desenvolva algo, não esqueça de rodar os testes para saber se não quebrou algo já existente.
+Maiores informações do teste: 
+[tests/README.md](tests/README.md)
+
 ## Informações Adicionais
 Caso esteja procurando o projeto antigo para o SEI3 que havia aqui pule para a branch [SEI3x-Docker-Antigo](https://github.com/spbgovbr/sei-docker-antigo)

@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="b2949bdb43b1" name="pytest" skipped="0" tests="1" time="33.636" timestamp="2021-06-26T12:14:55.492720"><testcase classname="test_suiteBasics-executar.TestSuiteBasics" name="test_loginBasico" time="33.466"></testcase></testsuite></testsuites>

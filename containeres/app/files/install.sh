@@ -19,7 +19,7 @@ yum -y install php php-common php-cli php-pear php-bcmath php-gd php-gmp php-ima
     php-odbc php-pdo php-pecl-apcu php-pspell php-zlib php-snmp php-soap php-xml php-xmlrpc php-zts php-devel \
     php-pecl-apcu-devel php-pecl-memcache php-calendar php-shmop php-intl php-mcrypt \
     gearmand libgearman libgearman-devel php-pecl-gearman vixie-cron \
-    freetds freetds-devel php-mssql \
+    freetds freetds-devel php-mssql php-sodium \
     git nc gearmand libgearman-dev libgearman-devel mysql
 
 # Configuração do pacote de línguas pt_BR
@@ -71,6 +71,19 @@ rm -rf  /files/instaladores \
         /opt/oracle/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
         /opt/oracle/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm \
         /opt/oracle/oracle-instantclient12.2-sqlplus-12.2.0.1.0-1.x86_64.rpm
+
+
+# install sodium
+#cd /sei/instaladores
+#tar -xvzf libsodium-1.0.18-stable.tar.gz 
+#cd libsodium-stable/
+#./configure
+#make
+#make install
+#ldconfig
+#pecl install -f libsodium
+#echo "extension=sodium.so" > /etc/php.d/uploadprogress.ini
+#cd -
 
 
 mkdir -p /sei/controlador-instalacoes/ /sei/arquivos_externos_sei/ /sei/certs

@@ -28,7 +28,7 @@ class ConfiguracaoSip extends InfraConfiguracao  {
  	          'https' => (getenv('APP_PROTOCOLO') == 'https' ? true : false)),
 
  	      'BancoSip'  => array(
- 	          'Servidor' => 'db',
+ 	          'Servidor' => getenv('APP_DB_HOST'),
  	          'Porta' => getenv('APP_DB_PORTA'),
  	          'Banco' => getenv('APP_DB_SIP_BASE'),
  	          'Usuario' => getenv('APP_DB_SIP_USERNAME'),

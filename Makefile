@@ -14,8 +14,8 @@ EXISTE_LOCAL_OPENLDAP_DB := $(shell docker volume ls | grep $(VOLUME_OPENLDAP_DB
 EXISTE_LOCAL_CONTROLADOR_INSTALACAO := $(shell docker volume ls | grep $(VOLUME_CONTROLADOR_INSTALACAO)$$ )
 EXISTE_LOCAL_CERTS := $(shell docker volume ls | grep $(VOLUME_CERTS)$$ )
 
-
 qtd := "2"
+LOGS_SEGUIR=true
 
 DIR := ${CURDIR}
 COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.yml 
@@ -112,7 +112,7 @@ build_docker_compose: ## Construa o docker-compose.yml baseado no arquivo envloc
 	
 	envsubst < orquestrators/docker-compose/docker-compose-template.yml > orquestrators/docker-compose/docker-compose.yml
 	@echo "Agora vamos iniciar uma serie de substituicoes de variaveis para montar o docker-compose.yml"
-	@echo "O comandos sed nao aparecem aqui na tela."
+	@echo "Os comandos sed nao aparecem aqui na tela."
 	@echo "Caso deseje que eles aparecam ative no envlocal.env o modo Debug"
 	@sleep 3
 
@@ -333,22 +333,27 @@ stop: ## docker-compose stop e docker-compose rm -f
 	$(COMMMADCOMPOSE) rm -f
 
 logs: ## docker-compose logs -f pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f
+ifeq ("$(LOGS_SEGUIR)",  "true")
+	$(COMMMADCOMPOSE) logs -f $(LOGS_COMPONENTE)
+else
+	$(COMMMADCOMPOSE) logs $(LOGS_COMPONENTE)
+endif
+	
 
 logs_app: ## docker-compose logs -f app pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f app
+	make LOGS_COMPONENTE=app logs
 
 logs_app-atualizador: ## docker-compose logs -f app-atualizador pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f app-atualizador
+	make LOGS_COMPONENTE=app-atualizador logs
 
 logs_balanceador: ## docker-compose logs -f balanceador pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f balanceador
+	make LOGS_COMPONENTE=balanceador logs
 	
 logs_openldap: ## docker-compose logs -f openldap pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f openldap
+	make LOGS_COMPONENTE=openldap logs
 
 logs_solr: ## docker-compose logs -f solr pressione ctrol+c para sair
-	$(COMMMADCOMPOSE) logs -f solr
+	make LOGS_COMPONENTE=solr logs
 
 clear: ## pahra o projeto e remove tds os conteineres, redes criados. Nao remove os volumes
 	make stop

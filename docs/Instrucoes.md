@@ -137,4 +137,14 @@ apagar_volume_controlador_instalacao:  Apagar volume controlador da instalacao
 
 ---
 
+## Como subir 2 instâncias (2 SEIs diferentes) na mesma vm
+
+Siga esse [tutorial aqui](duploSEI/duplosei.md)
+
+
+## Testes do Desenvolvedor
+
+Leia [isso](../tests/README.md)
+
+---
 Voltar para [Readme Principal](../README.md)

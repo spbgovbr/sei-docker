@@ -1,3 +1,5 @@
+SHELL := /bin/bash
+
 include ../envlocal.env
 
 define MENSAGEM_CONFIRMACAO
@@ -8,6 +10,10 @@ Verifique tb se vc fez backup do seu envlocal.env pois o mesmo sera substituido 
 
 Verifique se os dados estao salvos pois os volumes atuais serao apagados.
 Verifique se o codigo fonte esta posicionado no local correto pois o volume de fontes sera reconstruido
+
+Dentre os inumeros testes vamos rodar tb um teste em selenium. Por conta de limitacoes tecnicas o teste
+selenium para o caso de ambiente com url localhost sera pulado caso vc nao esteja em linux. As outras urls
+serao testadas normalmente
 
 Pressione y para continuar [y/n]...
 endef
@@ -32,14 +38,21 @@ ifndef MODALIDADE
 MODALIDADE = default
 endif
 
+ifeq ("$(APP_PROTOCOLO)",  "https")
+PORTA_URL=443
+else
+PORTA_URL=80
+endif
 
-CURLCMD = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" $(APP_PROTOCOLO)://$(APP_HOST)/sei
-CURLCMD_SIP = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" $(APP_PROTOCOLO)://$(APP_HOST)/sip
+
+CURLCMD = curl -s -k -L --resolve "$(APP_HOST):$(PORTA_URL):127.0.0.1" $(APP_PROTOCOLO)://$(APP_HOST)/sei
+CURLCMD_SIP = curl -s -k -L --resolve "$(APP_HOST):$(PORTA_URL):127.0.0.1" $(APP_PROTOCOLO)://$(APP_HOST)/sip
 CURLCMD_301 = $(CURLCMD) | grep 301
 CURLCMDSEI_LOGIN = $(CURLCMD) | grep txtUsuario
 CURLCMDSIP_LOGIN = $(CURLCMD_SIP) | grep txtUsuario
 
 CURLHAPROXY = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy | grep Statistics
+CURLHAPROXYFULL = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy
 CURLSOLR = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/solr | grep Dashboard
 CURLDBADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/dbadmin | grep Adminer
 CURLMEMCACHEDADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/memcachedadmin/ | grep phpMemcachedAdmin
@@ -51,6 +64,23 @@ ifndef COMPONENTE_PRESENCA
 COMPONENTE_PRESENCA = jod
 COMPONENTE_PRESENCA_VAR = JOD_PRESENTE
 endif
+
+
+ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
+LINK_SEI=balanceador
+else
+LINK_SEI=app
+endif
+
+ifndef TESTE_SELENIUM_USER_SENHA
+TESTE_SELENIUM_USER_SENHA=teste
+endif
+
+ISLINUX:=$(shell echo $$(uname | grep -i linux | wc -l))
+CMDSELENIUMCHROME=docker run -d --rm --name seleniumchrome  -p 4444:4444 --network=docker-compose_default --link $(LINK_SEI):$(APP_HOST) -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
+CMDSELENIUMCHROMELOCAL=docker run -d --rm --name seleniumchrome  -p 4444:4444 --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
+CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=docker-compose_default --link seleniumchrome linhares/pytestseleniumdocker:latest bash -c "pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
+CMDSELENIUMTESTLOCAL=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=host linhares/pytestseleniumdocker:latest bash -c "echo '127.0.0.1 seleniumchrome' >> /etc/hosts && pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
 
 
 
@@ -78,7 +108,11 @@ test_lineup_completa: test_confirmation ## Roda todos os testes na sequencia
 	make CONFIRMACAO=y test_ambientes_reduzida
 	make CONFIRMACAO=y test_ambientes_default
 	make CONFIRMACAO=y test_ambientes_full
-
+	
+	make CONFIRMACAO=y  test_ambientes_http
+	
+	cp -f ../envlocal-example-mysql.env ../envlocal.env
+	
 
 test_ambientes_default: test_confirmation ## Roda o teste subindo ambiente default em localhost nas 3 bases
 	@echo "*****************************************************"
@@ -103,7 +137,21 @@ test_ambientes_reduzida: test_confirmation ## Roda o teste subindo ambiente redu
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=mysql test_ambiente
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=sqlserver test_ambiente
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=oracle test_ambiente
+
+test_ambientes_http: test_confirmation ## Roda o teste subindo ambiente com http com url custom, nas 3 bases de dados
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@echo "Vamos iniciar uma execucao da montagem dos ambientes com http no sei ao inves de https. Aguarde..."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@sleep 5
 	
+	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=mysql test_ambiente
+	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=sqlserver test_ambiente
+	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=oracle test_ambiente
+	
+	make MODALIDADE=default-http CONFIRMACAO=y BANCO=mysql test_ambiente
+
 test_ambientes_full: test_confirmation ## Roda o teste subindo ambiente full com todos os componentes com url custom, nas 3 bases de dados
 	@echo "*****************************************************"
 	@echo "*****************************************************"
@@ -112,9 +160,9 @@ test_ambientes_full: test_confirmation ## Roda o teste subindo ambiente full com
 	@echo "*****************************************************"
 	@sleep 5
 	
-	make MODALIDADE=completa CONFIRMACAO=y BANCO=mysql test_ambiente
-	make MODALIDADE=completa CONFIRMACAO=y BANCO=sqlserver test_ambiente
-	make MODALIDADE=completa CONFIRMACAO=y BANCO=oracle test_ambiente
+	make MODALIDADE=completa CONFIRMACAO=y BANCO=mysql TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
+	make MODALIDADE=completa CONFIRMACAO=y BANCO=sqlserver TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
+	make MODALIDADE=completa CONFIRMACAO=y BANCO=oracle TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
 
 test_ambiente: test_confirmation ## Roda o teste em um unico ambiente. Deve ser passado parametro para Base e Modalidade
 	
@@ -125,10 +173,10 @@ test_ambiente: test_confirmation ## Roda o teste em um unico ambiente. Deve ser 
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@echo "Vamos desligar o projeto atual, caso esteja rodando, e apagar os volumes... Aguarde..."
-	@$(CMDMAKE) clear
-	@$(CMDMAKE) apagar_volumes
+	@$(CMDMAKE) -s clear
+	@$(CMDMAKE) -s apagar_volumes
 
-	make test_verificar_volumes_nao_existe
+	make -s test_verificar_volumes_nao_existe
 	
 	@echo "Vamos copiar o envlocal de referencia para o $(BANCO)..."
 	@echo "*****************************************************"
@@ -143,28 +191,32 @@ endif
 	@echo "Vamos subir o projeto..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
-	$(CMDMAKE) setup
+	@$(CMDMAKE) -s setup
 	
 	@echo "Vamos verificar os volumes..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	
-	make test_verificar_volumes_existe
+	make -s test_verificar_volumes_existe
 	
-	make test_verificar_app_url
+	make -s test_verificar_app_url
 	
-	make test_verficar_componentes
+	make -s test_verficar_componentes
 	
-	make test_verificar_balanceador_urls
+	make -s test_verificar_balanceador_urls
+	
+	make -s test_escalonar
+	
+	make -s test_selenium_basico1
 	
 	@echo "Vamos destruir o sistema..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	
-	$(CMDMAKE) clear
-	$(CMDMAKE) apagar_volumes
+	$(CMDMAKE) -s clear
+	$(CMDMAKE) -s apagar_volumes
 	
-	make test_verificar_volumes_nao_existe
+	make -s test_verificar_volumes_nao_existe
 	
 	@echo "*****************************************************"
 	@echo "***VERIFICACAO DE TESTE DO $(BANCO) FINALIZADA**********"
@@ -219,9 +271,19 @@ test_verificar_app_url: ## verifica se a url do sei responde a pagina de login
 	
 	@echo "Tentando acessar o login do SEI"
 	@echo "*****************************************************"
-	@echo "*****************************************************"
-	
-	@for i in {1..15}; do echo 'Tentando acessar...'; var=$$(echo $$($(CURLCMDSEI_LOGIN))); if [ "$$var" != "" ]; then echo 'Pagina respondeu com tela de login'; break; else echo 'Aguardando resposta ...'; fi; sleep 10;  done
+	@echo "*****************************************************";
+
+	@for i in {1..15}; do \
+	    echo 'Tentando acessar...'; \
+		var=$$(echo $$($(CURLCMDSEI_LOGIN))); \
+		if [ "$$var" != "" ]; then \
+		    echo 'Pagina respondeu com tela de login'; \
+			break; \
+		else \
+		    echo 'Aguardando resposta ...'; \
+	    fi; \
+		sleep 10; \
+	done
 	@var=$$(echo $$($(CURLCMDSEI_LOGIN)));  if [ "$$var" = "" ]; then echo 'Nao respondeu tela de login. Saindo do teste'; exit 1; fi
 	
 	@echo "Tentando acessar o login do SIP"
@@ -274,12 +336,181 @@ endif
 
 
 test_escalonar: ## escalona o app para 2 para 1 depois para 3 e volta para 1
+ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@echo "Vamos escalonar a aplicacao para verificar o comportamento"
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	
-	$(CMDMAKE) scale
+	@echo "Escalonando para 2 instancias e verificando..."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@$(CMDMAKE) scale
+	@var=$$(echo $$(docker ps | grep app_1)) \
+	&& \
+	if [ "$$var" = "" ]; then \
+	echo 'App1 nao encontrado. Saindo do teste'; exit 1; \
+	else \
+	echo 'App1 encontrado com sucesso'; \
+	fi; \
+	\
+	var=$$(echo $$(docker ps | grep app_2)); \
+	if [ "$$var" = "" ]; then \
+	echo 'App2 nao encontrado. Saindo do teste'; exit 1; \
+	else \
+	echo 'App2 encontrado com sucesso'; \
+	fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar logs do noh 2...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh2 responder...'; else echo 'Noh 2 respondeu com sucesso'; break; fi; sleep 5;  done; \
+	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh2 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi;
+	
+	@echo "Escalonando de volta para 1 e verificando..."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@$(CMDMAKE) qtd=1 scale
+	@var=$$(echo $$(docker ps | grep app | wc -l)) \
+	&& \
+	if [ "$$var" = "1" ]; then \
+	echo 'Unico app encontrado.'; \
+	else \
+	echo 'Numero de apps diferente do esperado. Saindo do teste'; exit 1; \
+	fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLHAPROXYFULL) | grep app));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
+	
+	
+	@echo "Escalonando para 3 instancias e verificando..."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@$(CMDMAKE) qtd=3 scale
+	@var=$$(echo $$(docker ps | grep app_1)) \
+	&& \
+	if [ "$$var" = "" ]; then \
+	echo 'App1 nao encontrado. Saindo do teste'; exit 1; \
+	else \
+	echo 'App1 encontrado com sucesso'; \
+	fi; \
+	\
+	var=$$(echo $$(docker ps | grep app_2)); \
+	if [ "$$var" = "" ]; then \
+	echo 'App2 nao encontrado. Saindo do teste'; exit 1; \
+	else \
+	echo 'App2 encontrado com sucesso'; \
+	fi; \
+	var=$$(echo $$(docker ps | grep app_3)); \
+	if [ "$$var" = "" ]; then \
+	echo 'App3 nao encontrado. Saindo do teste'; exit 1; \
+	else \
+	echo 'App3 encontrado com sucesso'; \
+	fi; \
+	for i in {1..6}; do echo 'Tentando acessar logs do noh 2...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh2 responder...'; else echo 'Noh 2 respondeu com sucesso'; break; fi; sleep 5;  done; \
+	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh2 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
+	sleep 1 \
+	&& \
+	for i in {1..6}; do echo 'Tentando acessar logs do noh 3...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_3 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh 3 responder...'; else echo 'Noh 3 respondeu com sucesso'; break; fi; sleep 5;  done; \
+	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_3 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh3 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_3)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_3));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
+	
+	@echo "Escalonando de volta para 1 e verificando..."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@$(CMDMAKE) qtd=1 scale
+	@var=$$(echo $$(docker ps | grep app | wc -l)) \
+	&& \
+	if [ "$$var" = "1" ]; then \
+	echo 'Unico app encontrado.'; \
+	else \
+	echo 'Numero de apps diferente do esperado. Saindo do teste'; exit 1; \
+	fi; \
+	\
+	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLHAPROXYFULL) | grep app));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
 
+else
+
+	@echo "Balanceador nao setado portanto nao sera feito teste de escalonamento"
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	
+endif	
+
+test_selenium_basico1: ## roda um teste em selenium apontando para a instancia escolhida para criar processo com anexos
+	
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@echo "Vamos agora rodar um teste simples no Selenium para saber se estao de acordo:"
+	@echo "- login;"
+	@echo "- modulos basicos instalados;"
+	@echo "- criacao de processo com anexo e doc interno;"
+	@echo "- logout"
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	
+	@echo "Subindo SeleniumChrome..."
+	
+	@var=$$(echo $$(docker ps -a | grep "seleniumchrome"));  if [ "$$var" != "" ]; then docker stop seleniumchrome; fi;
+	
+ifeq ("$(APP_HOST)",  "localhost") 
+
+ifeq ("$(ISLINUX)",  "1")
+	@echo "Subindo SeleniumChrome na rede do host"
+	@$(CMDSELENIUMCHROMELOCAL)
+else
+	@echo "Ambiente subiu com url localhost, pulando testes Selenium para quem nao usa linux. Recomendavel rodar esse teste em linux."
+endif
+
+else
+	@echo "Subindo SeleniumChrome na rede docker"
+	@$(CMDSELENIUMCHROME)
+
+endif
+
+
+ifneq ($(APP_HOST)$(ISLINUX),  localhost0)
+	
+	@for i in {1..4}; do echo 'Tentando acessar SeleniumChrome...'; var=$$(echo $$(docker logs  seleniumchrome | grep "Started Selenium Standalone")); if [ "$$var" != "" ]; then echo 'SeleniumChrome respondeu com sucesso....'; break; else echo 'Aguardando SeleniumChrome...'; fi; sleep 5;  done; \
+	var=$$(echo $$(docker logs  seleniumchrome | grep "Started Selenium Standalone"));  if [ "$$var" = "" ]; then echo 'Selenium nao subiu. Saindo do teste'; exit 1; fi;
+	
+	@echo "Selenium no ar vamos rodar o teste...";
+	@rm -f Selenium/PythonExported/test_suiteBasics-executar.py && cp Selenium/PythonExported/test_suiteBasics.py Selenium/PythonExported/test_suiteBasics-executar.py
+	@sed -i'' -e "s|<<PROTOCOLO>>|$(APP_PROTOCOLO)|" Selenium/PythonExported/test_suiteBasics-executar.py
+	@sed -i'' -e "s|<<HOST>>|$(APP_HOST)|" Selenium/PythonExported/test_suiteBasics-executar.py
+	@sed -i'' -e "s|<<SENHA>>|$(TESTE_SELENIUM_USER_SENHA)|" Selenium/PythonExported/test_suiteBasics-executar.py
+	
+ifeq ("$(APP_HOST)",  "localhost") 
+
+ifeq ("$(ISLINUX)",  "1")
+	@echo "Subindo teste na rede do host"
+	@$(CMDSELENIUMTESTLOCAL) || true; 
+endif
+
+else
+	@echo "Subindo teste na rede docker"
+	@$(CMDSELENIUMTEST) || true
+
+endif
+	
+	@echo ""
+	@echo "Testes finalizados"
+	@echo "Obrigado SeleniumChrome, mas vou te destruir..."
+	@docker stop seleniumchrome 
+	
+	@echo ""; \
+	var=$$(grep "failure message" Selenium/PythonExported/resultado.xml); \
+	if [ "$$var" != "" ]; then echo 'Deu erro no teste Selenium, verifique. Parando o restante dos testes...'; exit 1; fi;
+	
+	@echo ""; \
+	var=$$(grep "test setup failure" Selenium/PythonExported/resultado.xml); \
+	if [ "$$var" != "" ]; then echo 'Deu erro no teste Selenium, verifique. Parando o restante dos testes...'; exit 1; fi;
+endif
 
 test_verificar_volumes_existe: ## Verifica volumes existentes
 	@echo "Vamos verificar se os volumes existem"
