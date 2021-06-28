@@ -68,3 +68,21 @@ make test_lineup_completa
 ```
 
 O comando acima desencadeia o processo de teste completo criando e testando cada instância/sabor. 
+
+---
+
+Caso deseje rodar os teste em apenas uma instância, pode rodar da seguinte forma:
+``` 
+make MODALIDADE=completa BANCO=oracle test_ambiente
+```
+
+O comando acima vai rodar os testes apenas em um ambiente, na modalidade completa e no oracle
+
+outro exemplo:
+
+``` 
+make MODALIDADE=default BANCO=mysql test_ambiente
+```
+
+Nesse caso acima, vai rodar os testes apenas na instalação default no mysql
+
