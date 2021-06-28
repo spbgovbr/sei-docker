@@ -468,6 +468,74 @@ else
     
 fi
 
+echo "***************************************************"
+echo "***************************************************"
+echo "**CONFIGURANDO MODULO RESPOSTA*********************"
+echo "***************************************************"
+echo "***************************************************"
+if [ "$MODULO_RESPOSTA_INSTALAR" == "true" ]; then
+    
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-resposta.ok ]; then
+        
+        if [ -z "$MODULO_RESPOSTA_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_RESPOSTA_VERSAO"
+
+        else
+            
+            echo "Verificando existencia do modulo resposta"
+            if [ -d "/opt/sei/web/modulos/mod-sei-resposta" ]; then
+                echo "Ja existe um diretorio para o modulo resposta. Vamos assumir que o codigo la esteja integro"
+        
+            else
+                echo "Copiando o módulo resposta"
+                cp -Rf /sei-modulos/mod-sei-resposta /opt/sei/web/modulos/
+            fi
+        
+
+            cd /opt/sei/web/modulos/mod-sei-resposta
+            git checkout $MODULO_RESPOSTA_VERSAO
+            echo "Versao do WSSEI é agora: $MODULO_RESPOSTA_VERSAO" 
+
+            cd /opt/sei/
+            sed -i "s#/\*novomodulo\*/#'MdRespostaIntegracao' => 'mod-sei-resposta/', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+        
+            TMPFILE_SEI=/opt/sei/web/modulos/mod-sei-resposta/sei_atualizar_versao_modulo_sei_resposta.php
+            if test -f "$TMPFILE_SEI"; then
+        
+                # mover os scripts e executar
+                cp /opt/sei/web/modulos/mod-sei-resposta/sei_atualizar_versao_modulo_sei_resposta.php /opt/sei/scripts
+        
+                echo "Vou rodar o script de atualizacao do modulo no SEI"
+                php -c /etc/php.ini /opt/sei/scripts/sei_atualizar_versao_modulo_sei_resposta.php
+            fi
+
+            TMPFILE_SIP=/opt/sei/web/modulos/mod-sei-resposta/sip_atualizar_versao_modulo_sei_resposta.php
+            if test -f "$TMPFILE_SIP"; then
+        
+                # mover os scripts e executar
+                cp /opt/sei/web/modulos/mod-sei-resposta/sip_atualizar_versao_modulo_sei_resposta.php /opt/sip/scripts
+        
+                echo "Vou rodar o script de atualizacao do modulo no SIP"
+                php -c /etc/php.ini /opt/sip/scripts/sip_atualizar_versao_modulo_sei_resposta.php
+            fi
+        
+            touch /sei/controlador-instalacoes/instalado-modulo-resposta.ok  
+            
+        fi
+        
+    else
+    
+        echo "Arquivo de controle do Modulo RESPOSTA encontrado pulando configuracao do modulo"
+    
+    fi
+
+else
+    
+    echo "Variavel MODULO_RESPOSTA_INSTALAR nao setada para true, pulando configuracao..."
+    
+fi
 
 touch /sei/controlador-instalacoes/instalado.ok
 

@@ -32,7 +32,7 @@ if [ -z "$APP_PROTOCOLO" ] || \
    [ -z "$APP_DB_SEI_PASSWORD" ] || \
    [ -z "$APP_DB_ROOT_USERNAME" ] || \
    [ -z "$APP_DB_ROOT_PASSWORD" ]; then
-    echo "Informe as seguinte variáveis de ambiente no seu docker-compose ou no container:"
+    echo "Informe as seguinte variï¿½veis de ambiente no seu docker-compose ou no container:"
     echo "APP_PROTOCOLO=$APP_PROTOCOLO"
     echo "APP_HOST=$APP_HOST"
     echo "APP_ORGAO=$APP_ORGAO"
@@ -63,7 +63,7 @@ APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
 echo "127.0.0.1 $APP_HOST" >> /etc/hosts
 
-# Direciona logs para saida padrão para utilizar docker logs
+# Direciona logs para saida padrï¿½o para utilizar docker logs
 ln -sf /dev/stdout /var/log/httpd/access_log
 ln -sf /dev/stdout /var/log/httpd/ssl_access_log
 ln -sf /dev/stdout /var/log/httpd/ssl_request_log
@@ -71,7 +71,7 @@ ln -sf /dev/stderr /var/log/httpd/error_log
 ln -sf /dev/stderr /var/log/httpd/ssl_error_log
 
 
-# Atribuição dos parâmetros de configuração do SEI
+# Atribuiï¿½ï¿½o dos parï¿½metros de configuraï¿½ï¿½o do SEI
 if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/ConfiguracaoSEI.php~ ]; then
     mv /opt/sei/config/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php~
 fi
@@ -80,7 +80,7 @@ if [ ! -f /opt/sei/config/ConfiguracaoSEI.php ]; then
     cp /sei/files/conf/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php
 fi
 
-# Atribuição dos parâmetros de configuração do SIP
+# Atribuiï¿½ï¿½o dos parï¿½metros de configuraï¿½ï¿½o do SIP
 if [ -f /opt/sip/config/ConfiguracaoSip.php ] && [ ! -f /opt/sip/config/ConfiguracaoSip.php~ ]; then
     mv /opt/sip/config/ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php~
 fi
@@ -89,7 +89,7 @@ if [ ! -f /opt/sip/config/ConfiguracaoSip.php ]; then
     cp /sei/files/conf/ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php
 fi
 
-# Ajustes de permissões diversos para desenvolvimento do SEI
+# Ajustes de permissï¿½es diversos para desenvolvimento do SEI
 chmod +x /opt/sei/bin/pdfboxmerge.jar
 mkdir -p /opt/sei/temp
 mkdir -p /opt/sip/temp
@@ -132,7 +132,7 @@ echo "UPDATE NA BASE DE DADOS - ORGAO E SISTEMA**********"
 echo "***************************************************"
 echo "***************************************************"
 
-# Atualização do endereço de host da aplicação
+# Atualizaï¿½ï¿½o do endereï¿½o de host da aplicaï¿½ï¿½o
 echo "Atualizando Banco de Dados com as Configuracoes Iniciais..."
 if [ "$APP_DB_TIPO" == "MySql" ]; then
     echo "Atualizando MySql..."
@@ -187,7 +187,7 @@ echo "**GERACAO DE CERTIFICADO PARA O APACHE*************"
 echo "***************************************************"
 echo "***************************************************"
 
-# Gera certificados caso necessário para desenvolvimento    
+# Gera certificados caso necessï¿½rio para desenvolvimento    
 if [ ! -d "/sei/certs/seiapp" ]; then
     echo "Diretorio /sei/certs/seiapp nao encontrado, criando ..."
     mkdir -p /sei/certs/seiapp
@@ -215,7 +215,7 @@ if [ ! -f /sei/certs/seiapp/sei-ca.pem ] || [ ! -f /sei/certs/seiapp/sei.crt ]; 
     cat /sei/certs/seiapp/sei-ca.pem >> /etc/ssl/certs/cacert.pem
     echo "Adicionada nova CA ao TrustStore\n"
 else
-    echo "Arquivos de cert encontrados vamos tentar utilizá-los..."
+    echo "Arquivos de cert encontrados vamos tentar utilizï¿½-los..."
 fi
 
 cd /sei/certs/seiapp
@@ -264,14 +264,14 @@ if [ "$MODULO_ESTATISTICAS_INSTALAR" == "true" ]; then
                 echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
         
             else
-                echo "Copiando o módulo de estatísticas"
+                echo "Copiando o mï¿½dulo de estatï¿½sticas"
                 cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
             fi
         
 
             cd /opt/sei/web/modulos/mod-sei-estatisticas
             git checkout $MODULO_ESTATISTICAS_VERSAO
-            echo "Versao do Governanca é agora: $MODULO_ESTATISTICAS_VERSAO"
+            echo "Versao do Governanca ï¿½ agora: $MODULO_ESTATISTICAS_VERSAO"
 
             cd /opt/sei/
         
@@ -317,14 +317,14 @@ if [ "$MODULO_WSSEI_INSTALAR" == "true" ]; then
                 echo "Ja existe um diretorio para o modulo wssei. Vamos assumir que o codigo la esteja integro"
         
             else
-                echo "Copiando o módulo wssei"
+                echo "Copiando o mï¿½dulo wssei"
                 cp -Rf /sei-modulos/mod-wssei /opt/sei/web/modulos/
             fi
         
 
             cd /opt/sei/web/modulos/mod-wssei
             git checkout $MODULO_WSSEI_VERSAO
-            echo "Versao do WSSEI é agora: $MODULO_WSSEI_VERSAO" 
+            echo "Versao do WSSEI ï¿½ agora: $MODULO_WSSEI_VERSAO" 
 
             cd /opt/sei/
             sed -i "s#/\*novomodulo\*/#'MdWsSeiRest' => 'mod-wssei/', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
@@ -342,6 +342,75 @@ if [ "$MODULO_WSSEI_INSTALAR" == "true" ]; then
 else
     
     echo "Variavel MODULO_WSSEI_INSTALAR nao setada para true, pulando configuracao..."
+    
+fi
+
+echo "***************************************************"
+echo "***************************************************"
+echo "**CONFIGURANDO MODULO RESPOSTA*********************"
+echo "***************************************************"
+echo "***************************************************"
+if [ "$MODULO_RESPOSTA_INSTALAR" == "true" ]; then
+    
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-resposta.ok ]; then
+        
+        if [ -z "$MODULO_RESPOSTA_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_RESPOSTA_VERSAO"
+
+        else
+            
+            echo "Verificando existencia do modulo resposta"
+            if [ -d "/opt/sei/web/modulos/mod-sei-resposta" ]; then
+                echo "Ja existe um diretorio para o modulo resposta. Vamos assumir que o codigo la esteja integro"
+        
+            else
+                echo "Copiando o mÃ³dulo resposta"
+                cp -Rf /sei-modulos/mod-sei-resposta /opt/sei/web/modulos/
+            fi
+        
+
+            cd /opt/sei/web/modulos/mod-sei-resposta
+            git checkout $MODULO_RESPOSTA_VERSAO
+            echo "Versao do WSSEI Ã© agora: $MODULO_RESPOSTA_VERSAO" 
+
+            cd /opt/sei/
+            sed -i "s#/\*novomodulo\*/#'MdRespostaIntegracao' => 'mod-sei-resposta/', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+        
+            TMPFILE_SEI=/opt/sei/web/modulos/mod-sei-resposta/sei_atualizar_versao_modulo_sei_resposta.php
+            if test -f "$TMPFILE_SEI"; then
+        
+                # mover os scripts e executar
+                cp /opt/sei/web/modulos/mod-sei-resposta/sei_atualizar_versao_modulo_sei_resposta.php /opt/sei/scripts
+        
+                echo "Vou rodar o script de atualizacao do modulo no SEI"
+                php -c /etc/php.ini /opt/sei/scripts/sei_atualizar_versao_modulo_sei_resposta.php
+            fi
+
+            TMPFILE_SIP=/opt/sei/web/modulos/mod-sei-resposta/sip_atualizar_versao_modulo_sei_resposta.php
+            if test -f "$TMPFILE_SIP"; then
+        
+                # mover os scripts e executar
+                cp /opt/sei/web/modulos/mod-sei-resposta/sip_atualizar_versao_modulo_sei_resposta.php /opt/sip/scripts
+        
+                echo "Vou rodar o script de atualizacao do modulo no SIP"
+                php -c /etc/php.ini /opt/sip/scripts/sip_atualizar_versao_modulo_sei_resposta.php
+            fi
+        
+            touch /sei/controlador-instalacoes/instalado-modulo-resposta.ok  
+            
+        fi
+        
+    else
+    
+        echo "Arquivo de controle do Modulo RESPOSTA encontrado pulando configuracao do modulo"
+    
+    fi
+
+else
+    
+    echo "Variavel MODULO_RESPOSTA_INSTALAR nao setada para true, pulando configuracao..."
     
 fi
 
