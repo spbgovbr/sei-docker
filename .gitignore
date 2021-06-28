@@ -1,2 +1,6 @@
 orquestrators/docker-compose/docker-compose.yml
 orquestrators/docker-compose/docker-compose.yml-e
+tests/Selenium/PythonExported/__pycache__
+tests/Selenium/PythonExported/resultado.xml
+tests/Selenium/PythonExported/test_suiteBasics-executar.py
+tests/Selenium/PythonExported/test_suiteBasics-executar.py-e
