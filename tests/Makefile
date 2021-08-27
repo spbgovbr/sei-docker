@@ -121,6 +121,12 @@ test_lineup_completa: test_confirmation ## Roda todos os testes na sequencia
 	
 	cp -f ../envlocal-example-mysql.env ../envlocal.env
 	
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	@echo "Testes Finalizados."
+	@echo "*****************************************************"
+	@echo "*****************************************************"
+	
 
 test_ambientes_default: test_confirmation ## Roda o teste subindo ambiente default em localhost nas 3 bases
 	@echo "*****************************************************"
@@ -174,6 +180,7 @@ test_ambientes_full: test_confirmation ## Roda o teste subindo ambiente full com
 
 test_ambiente: test_confirmation ## Roda o teste em um unico ambiente. Deve ser passado parametro para Base e Modalidade
 	
+	@echo "" ; echo "" ; echo "";
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@echo "Modalidade dessa Execucao... $(MODALIDADE) ..."
