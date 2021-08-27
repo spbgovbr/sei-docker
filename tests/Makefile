@@ -181,6 +181,7 @@ test_ambiente: test_confirmation ## Roda o teste em um unico ambiente. Deve ser 
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@echo "Vamos desligar o projeto atual, caso esteja rodando, e apagar os volumes... Aguarde..."
+	@$(CMDMAKE) -s build_docker_compose
 	@$(CMDMAKE) -s clear
 	@$(CMDMAKE) -s apagar_volumes
 
