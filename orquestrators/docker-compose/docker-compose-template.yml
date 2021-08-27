@@ -255,7 +255,7 @@ services:
         - MODULO_WSSEI_ID_APP=${MODULO_WSSEI_ID_APP}
         - MODULO_WSSEI_CHAVE=${MODULO_WSSEI_CHAVE}
         - MODULO_RESPOSTA_INSTALAR=${MODULO_RESPOSTA_INSTALAR}
-        - MODULO_RESPOSTA_VERSAO=${MODULO_RESPOSTA_VERSAO}        
+        - MODULO_RESPOSTA_VERSAO=${MODULO_RESPOSTA_VERSAO}
         - VIRTUAL_HOST=https://${APP_HOST}/sei*,https://${APP_HOST}/sip*,https://${APP_HOST}/infra*,http://${APP_HOST}/sei*,http://${APP_HOST}/sip*,http://${APP_HOST}/infra*
         #- EXCLUDE_PORTS=443
         #- EXCLUDE_PORTS=80

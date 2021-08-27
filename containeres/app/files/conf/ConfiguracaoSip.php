@@ -33,6 +33,8 @@ class ConfiguracaoSip extends InfraConfiguracao  {
  	          'Banco' => getenv('APP_DB_SIP_BASE'),
  	          'Usuario' => getenv('APP_DB_SIP_USERNAME'),
  	          'Senha' => getenv('APP_DB_SIP_PASSWORD'),
+ 	          'UsuarioScript' => getenv('APP_DB_SIP_USERNAME'),
+ 	          'SenhaScript' => getenv('APP_DB_SIP_PASSWORD'),
  	          'Tipo' => getenv('APP_DB_TIPO')), //MySql, SqlServer, Oracle ou PostgreSql
 
         /*

@@ -79,9 +79,17 @@ endif
 ISLINUX:=$(shell echo $$(uname | grep -i linux | wc -l))
 CMDSELENIUMCHROME=docker run -d --rm --name seleniumchrome  -p 4444:4444 --network=docker-compose_default --link $(LINK_SEI):$(APP_HOST) -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
 CMDSELENIUMCHROMELOCAL=docker run -d --rm --name seleniumchrome  -p 4444:4444 --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
-CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=docker-compose_default --link seleniumchrome linhares/pytestseleniumdocker:latest bash -c "pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
-CMDSELENIUMTESTLOCAL=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=host linhares/pytestseleniumdocker:latest bash -c "echo '127.0.0.1 seleniumchrome' >> /etc/hosts && pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
 
+ifeq ("$(APP_HOST)",  "localhost")
+CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=host linhares/pytestseleniumdocker:latest bash -c "echo '127.0.0.1 seleniumchrome' >> /etc/hosts && pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
+ifeq ("$(ISLINUX)",  "1")
+
+endif
+
+else
+	CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=docker-compose_default --link seleniumchrome linhares/pytestseleniumdocker:latest bash -c "pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
+
+endif
 
 
 help:   ## Lista de comandos disponiveis e descricao. Voce pode usar TAB para completar os comandos
@@ -489,20 +497,29 @@ ifeq ("$(APP_HOST)",  "localhost")
 
 ifeq ("$(ISLINUX)",  "1")
 	@echo "Subindo teste na rede do host"
-	@$(CMDSELENIUMTESTLOCAL) || true; 
 endif
 
 else
 	@echo "Subindo teste na rede docker"
-	@$(CMDSELENIUMTEST) || true
 
 endif
+
+	@$(CMDSELENIUMTEST) || true
+
+	@echo ""; \
+	var=$$(grep "failure message" Selenium/PythonExported/resultado.xml); \
+	if [ "$$var" != "" ]; then echo 'Deu erro no teste Selenium, vamos tentar novamente em 20segs'; sleep 20; $(CMDSELENIUMTEST) || true; fi;
 	
+	@echo ""; \
+	var=$$(grep "failure message" Selenium/PythonExported/resultado.xml); \
+	if [ "$$var" != "" ]; then echo 'Deu erro novamente no teste Selenium, vamos tentar outra em 20segs'; sleep 20; $(CMDSELENIUMTEST) || true; fi;
+
 	@echo ""
 	@echo "Testes finalizados"
 	@echo "Obrigado SeleniumChrome, mas vou te destruir..."
 	@docker stop seleniumchrome 
 	
+
 	@echo ""; \
 	var=$$(grep "failure message" Selenium/PythonExported/resultado.xml); \
 	if [ "$$var" != "" ]; then echo 'Deu erro no teste Selenium, verifique. Parando o restante dos testes...'; exit 1; fi;
