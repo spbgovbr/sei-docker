@@ -53,7 +53,7 @@ CURLCMDSIP_LOGIN = $(CURLCMD_SIP) | grep txtUsuario
 
 CURLHAPROXY = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy | grep Statistics
 CURLHAPROXYFULL = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy
-CURLSOLR = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/solr | grep Dashboard
+CURLSOLR = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1"  --resolve "$(APP_HOST):80:127.0.0.1"  https://$(APP_HOST)/solr | grep Dashboard
 CURLDBADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/dbadmin | grep Adminer
 CURLMEMCACHEDADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/memcachedadmin/ | grep phpMemcachedAdmin
 CURLPHPLDAPADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/phpldapadmin/ | grep phpLDAPadmin
