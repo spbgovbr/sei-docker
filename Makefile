@@ -414,6 +414,7 @@ kubernetes_montar_yaml:
 	@echo "Verifique cada um antes de publicar"
 	@echo "Como existem muitas variações de versões de kubernetes e orquestradores pode ser necessário algum ajuste adicional"
 	@echo "Esses foram testados em um kubernetes 1.21 embaixo de plataforma rancher"
-	@echo "Comece publicando o configmap e o secret, depois o pvc e em seguida os demais componentes"
+	@echo "Comece publicando o configmap e o secret, depois os pvcs e em seguida os demais componentes"
+	@echo "Como o codigo fonte do SEI nao eh publico faz-se necessario mover manualmente os fontes para o pvc vol-sei-fontes"
 
 	

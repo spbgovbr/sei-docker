@@ -18,11 +18,31 @@ Para maiores informações sobre o código fonte consulte o site do [processoele
 
 ## Anatomia do Projeto Atualmente
 
-Segue a anatomia do projeto atualmente caso se deseje subir por completo. Cada computadorzinho ai é um conteiner docker e cada tamborzinho é um volume docker. Os links e acessos são responsabilidade do orquestrador escolhido. Nessa versão apenas docker-compose:
+Segue a anatomia do projeto atualmente caso se deseje subir por completo. Cada computadorzinho ai é um conteiner docker e cada tamborzinho é um volume docker. Os links e acessos são responsabilidade do orquestrador escolhido:
 
 *Clique com o botão direito na figura -> copiar endereço da imagem; depois abra em uma nova aba do seu browser:*
 
 ![Anatomia do Projeto](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/anatomia_01.jpeg)
+
+## Kubernetes
+
+Além da infra acima em docker-compose existe uma receita para rodar um ambiente de dev em kubernetes.
+A receita kubernetes conta com os seguintes recursos:
+- **configmap** - mapeamento dos valores env do app
+- **secret** - segredos e senhas
+- **persistent volume claimns** - pontos de montagem para persistência
+- **job de instalacao inicial** - instalador inicial do sistema
+- **statefullsets** para o banco e solr
+- **deployments** para jod, memcached e sei-app
+- **ingress** com https
+- gera apenas para mysql
+
+Para gerar a receita kubernetes basta ajustar seu envfile com os valores corretos (url desejada para o sei, nome do orgao, etc).
+Em seguida veja tb no envfile os valores para o kubernetes referentes a namespace, classe do storage e tb os recursos que vc vai delegar para cada componente.
+
+Depois basta rodar `make kubernetes_montar_yaml`
+
+Ao publicar a receita atente-se para o fonte do SEI. Como o código fonte do SEI não é publico faz-se necessário mover manualmente os fontes para o pvc vol-sei-fontes
 
 ## Serviços que Apresentam Interface
 
