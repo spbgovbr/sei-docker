@@ -185,6 +185,28 @@ spec:
         image: processoeletronico/sei4-app:1.4.3
         imagePullPolicy: Always
         name: sei-app
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl -s -L localhost/sei | grep frmLogin
+          failureThreshold: 2
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl -s -L localhost/sei | grep frmLogin
+          failureThreshold: 2
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
         resources:
           limits:
             cpu: ${KUBERNETES_LIMITS_CPU_APP}

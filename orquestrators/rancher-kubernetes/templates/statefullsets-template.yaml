@@ -60,10 +60,10 @@ spec:
         - bash
         - -c
         - echo "Vamos verificar se existe uma pasta com os dados do mysql."; echo
-          "Caso nao exista vamos criar..."; i=$(ls -A /t);  if [[ "$i" = "" ]]; then     echo
+          "Caso nao exista vamos criar..."; i=$(ls -A /t);  if [[ "$(ls -A /t)" = "" ]]; then     echo
           "Diretorio vazio, vamos copiar os dados do banco...";     cp -a /var/lib/mysql/*
           /t/ &&     echo "Dados copiados!"; else   echo "Diretorio nao esta vazio.
-          " ;   echo "Arquivos encontrados";    i=$(ls -lha /t);   echo $i;   echo
+          " ;   echo "Arquivos encontrados";    i=$(ls -lha /t);   echo $(ls -A /t);   echo
           "Nao vamos alterar nada. " ;   echo "Caso o banco nao suba, verifique se
           nesse dir existe um banco e que as permissoes do arquivo estejam com o mysql
           (id 999)" ; fi;  exit 0
@@ -140,6 +140,26 @@ spec:
       - image: processoeletronico/sei4-solr8.2.0:1.0
         imagePullPolicy: Always
         name: solr
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /solr/admin/info/system
+            port: 8983
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /solr/admin/info/system
+            port: 8983
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
         resources:
           limits:
             cpu: ${KUBERNETES_LIMITS_CPU_SOLR}
@@ -155,6 +175,35 @@ spec:
         - mountPath: /dados
           name: vol1
       dnsPolicy: ClusterFirst
+      initContainers:
+        - command:
+          - bash
+          - -c
+          - echo "Vamos verificar se existe uma pasta com os dados do solr."; echo
+            "Caso nao exista vamos criar..."; if [[ "$(ls -A /t)" = "" ]]; then
+            echo "Diretorio vazio, vamos copiar os dados do solr..."; cp -a /dados/*
+            /t/ && echo "Dados copiados!"; else echo "Diretorio nao esta vazio. " ;
+            echo "Arquivos encontrados"; echo $(ls -lha /t); echo "Nao vamos alterar
+            nada. " ; echo "Caso o solr nao suba, verifique se nesse dir existe um
+            solr e que as permissoes do arquivo estejam com o Solr (id 1000)" ; fi;  exit
+            0
+          image: processoeletronico/sei4-solr8.2.0:1.0
+          imagePullPolicy: Always
+          name: solr-init
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+          volumeMounts:
+          - mountPath: /t
+            name: vol1
       restartPolicy: Always
       terminationGracePeriodSeconds: 60
       volumes:
