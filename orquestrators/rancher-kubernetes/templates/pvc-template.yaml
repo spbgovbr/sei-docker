@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-arquivosexternos
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: ${KUBERNETES_PVC_STORAGECLASS}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-controladorinstalacao
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ${KUBERNETES_PVC_STORAGECLASS}
+
+---
+  
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-db
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ${KUBERNETES_PVC_STORAGECLASS}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-fontes
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: ${KUBERNETES_PVC_STORAGECLASS}
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vol-sei-solr
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: ${KUBERNETES_PVC_STORAGECLASS}

@@ -59,6 +59,8 @@ echo "**INICIANDO CONFIGURACOES BASICAS DO APACHE E SEI**"
 echo "***************************************************"
 echo "***************************************************"
 
+sleep 5
+
 APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
 echo "127.0.0.1 $APP_HOST" >> /etc/hosts
@@ -70,6 +72,12 @@ ln -sf /dev/stdout /var/log/httpd/ssl_request_log
 ln -sf /dev/stderr /var/log/httpd/error_log
 ln -sf /dev/stderr /var/log/httpd/ssl_error_log
 
+# vefificar se existe codigo fonte
+if [ ! -f /opt/sei/web/SEI.php ] || [ ! -f /opt/sip/web/Sip.php ] ; then
+  echo "Codigo fonte do sei  ou sip nao encontrado ou sem permissao. Abandonando subida..."
+  sleep 10
+  exit 1
+fi
 
 # Atribuição dos parâmetros de configuração do SEI
 if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/ConfiguracaoSEI.php~ ]; then
@@ -77,7 +85,7 @@ if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/Configur
 fi
 
 if [ ! -f /opt/sei/config/ConfiguracaoSEI.php ]; then
-    cp /sei/files/conf/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php
+    \cp -r /sei/files/conf/ConfiguracaoSEI.php /opt/sei/config/
 fi
 
 # Atribuição dos parâmetros de configuração do SIP
@@ -86,7 +94,7 @@ if [ -f /opt/sip/config/ConfiguracaoSip.php ] && [ ! -f /opt/sip/config/Configur
 fi
 
 if [ ! -f /opt/sip/config/ConfiguracaoSip.php ]; then
-    cp /sei/files/conf/ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php
+    \cp -r /sei/files/conf/ConfiguracaoSip.php /opt/sip/config/
 fi
 
 # Ajustes de permissões diversos para desenvolvimento do SEI

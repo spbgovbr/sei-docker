@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dth
+    ingress.kubernetes.io/app-root: /sei/
+    ingress.kubernetes.io/backend-protocol: HTTPS
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/app-root: /sei/
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/session-cookie-name: PIINGRESSAFFINITY
+  name: ing-sei
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  rules:
+  - host: ${APP_HOST}
+    http:
+      paths:
+      - backend:
+          serviceName: sei-app
+          servicePort: 443
+  tls:
+  - hosts:
+    - ${APP_HOST}
+    secretName: tls-sei1

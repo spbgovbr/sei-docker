@@ -1,0 +1,168 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    servico: db
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: db
+  serviceName: db
+  template:
+    metadata:
+      labels:
+        servico: db
+    spec:
+      containers:
+      - image: processoeletronico/sei4-mysql5.7:1.0
+        imagePullPolicy: Always
+        name: db
+        resources:
+          limits:
+            cpu: ${KUBERNETES_LIMITS_CPU_DB}
+            memory: ${KUBERNETES_LIMITS_MEMORY_DB}
+          requests:
+            cpu: ${KUBERNETES_REQUEST_CPU_DB}
+            memory: ${KUBERNETES_REQUEST_MEMORY_DB}
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: vol1
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - bash
+        - -c
+        - echo "Vamos verificar se existe uma pasta com os dados do mysql."; echo
+          "Caso nao exista vamos criar..."; i=$(ls -A /t);  if [[ "$i" = "" ]]; then     echo
+          "Diretorio vazio, vamos copiar os dados do banco...";     cp -a /var/lib/mysql/*
+          /t/ &&     echo "Dados copiados!"; else   echo "Diretorio nao esta vazio.
+          " ;   echo "Arquivos encontrados";    i=$(ls -lha /t);   echo $i;   echo
+          "Nao vamos alterar nada. " ;   echo "Caso o banco nao suba, verifique se
+          nesse dir existe um banco e que as permissoes do arquivo estejam com o mysql
+          (id 999)" ; fi;  exit 0
+        image: processoeletronico/sei4-mysql5.7:1.0
+        imagePullPolicy: Always
+        name: db-init
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /t
+          name: vol1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-db
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    servico: solr
+  sessionAffinity: None
+  type: ClusterIP
+
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: solr
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: solr
+  serviceName: solr
+  template:
+    metadata:
+      labels:
+        servico: solr
+    spec:
+      containers:
+      - image: processoeletronico/sei4-solr8.2.0:1.0
+        imagePullPolicy: Always
+        name: solr
+        resources:
+          limits:
+            cpu: ${KUBERNETES_LIMITS_CPU_SOLR}
+            memory: ${KUBERNETES_LIMITS_MEMORY_SOLR}
+          requests:
+            cpu: ${KUBERNETES_REQUEST_CPU_SOLR}
+            memory: ${KUBERNETES_REQUEST_MEMORY_SOLR}
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /dados
+          name: vol1
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-solr
+  updateStrategy:
+    rollingUpdate:
+      partition: 0
+    type: RollingUpdate
+

@@ -391,3 +391,29 @@ apagar_volume_openldap: ## Apagar volumes OpenLDAP
 apagar_volume_controlador_instalacao: ## Apagar volume controlador da instalacao
 	docker volume rm $(VOLUME_CONTROLADOR_INSTALACAO) || true
 
+
+kubernetes_montar_yaml:
+	@echo "Vamos montar os arquivos yaml para o kubernetes. Apenas mysql e somente componentes essenciais..."
+	@rm -rf orquestrators/rancher-kubernetes/topublish/configmaps.yaml \
+	orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml \
+	orquestrators/rancher-kubernetes/topublish/ingress.yaml \
+	orquestrators/rancher-kubernetes/topublish/jobs.yaml \
+	orquestrators/rancher-kubernetes/topublish/pvc.yaml \
+	orquestrators/rancher-kubernetes/topublish/statefullsets.yaml \
+	orquestrators/rancher-kubernetes/topublish/secrets.yaml
+	
+	@envsubst < orquestrators/rancher-kubernetes/templates/configmaps-template.yaml > orquestrators/rancher-kubernetes/topublish/configmaps.yaml 
+	@envsubst < orquestrators/rancher-kubernetes/templates/deploys-svc-template.yaml > orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml 
+	@envsubst < orquestrators/rancher-kubernetes/templates/ingress-template.yaml > orquestrators/rancher-kubernetes/topublish/ingress.yaml 
+	@envsubst < orquestrators/rancher-kubernetes/templates/jobs-template.yaml > orquestrators/rancher-kubernetes/topublish/jobs.yaml 
+	@envsubst < orquestrators/rancher-kubernetes/templates/pvc-template.yaml > orquestrators/rancher-kubernetes/topublish/pvc.yaml 
+	@envsubst < orquestrators/rancher-kubernetes/templates/statefullsets-template.yaml > orquestrators/rancher-kubernetes/topublish/statefullsets.yaml 
+	@./generatebase64.sh 
+	
+	@echo "Arquivos gerados no diretorio orquestrators/rancher-kubernetes/topublish"
+	@echo "Verifique cada um antes de publicar"
+	@echo "Como existem muitas variações de versões de kubernetes e orquestradores pode ser necessário algum ajuste adicional"
+	@echo "Esses foram testados em um kubernetes 1.21 embaixo de plataforma rancher"
+	@echo "Comece publicando o configmap e o secret, depois o pvc e em seguida os demais componentes"
+
+	

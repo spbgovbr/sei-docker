@@ -17,7 +17,7 @@ yum -y update
 # Instalação do PHP e demais extenções necessárias para o projeto
 yum -y install php php-common php-cli php-pear php-bcmath php-gd php-gmp php-imap php-intl php-ldap php-mbstring php-mysqli \
     php-odbc php-pdo php-pecl-apcu php-pspell php-zlib php-snmp php-soap php-xml php-xmlrpc php-zts php-devel \
-    php-pecl-apcu-devel php-pecl-memcache php-calendar php-shmop php-intl php-mcrypt php-pecl-zip \
+    php-pecl-apcu-devel php-pecl-memcache php-calendar php-shmop php-intl php-mcrypt php-zip php-pecl-zip \
     gearmand libgearman libgearman-devel php-pecl-gearman vixie-cron \
     freetds freetds-devel php-mssql php-sodium \
     git nc gearmand libgearman-dev libgearman-devel mysql
