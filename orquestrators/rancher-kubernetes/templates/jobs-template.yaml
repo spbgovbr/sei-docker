@@ -20,7 +20,7 @@ spec:
             name: sei-app
         - secretRef:
             name: sei-secret1
-        image: processoeletronico/sei4-app:1.4.3
+        image: processoeletronico/sei4-app:2.0.0
         imagePullPolicy: Always
         name: sei-inicializador
         resources:
