@@ -420,6 +420,47 @@ else
 
 fi
 
+if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-gestaodocumental.ok ]; then
+
+        if [ -z "$MODULO_GESTAODOCUMENTAL_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_GESTAODOCUMENTAL_VERSAO"
+
+        else
+
+            echo "Verificando existencia do modulo gestao documental"
+            if [ -d "/opt/sei/web/modulos/mod-gestao-documental" ]; then
+                echo "Ja existe um diretorio para o modulo gestao documental. Vamos assumir que o codigo la esteja integro"
+
+            else
+                echo "Copiando o módulo gestao documental"
+                cp -Rf /sei-modulos/mod-gestao-documental /opt/sei/web/modulos/
+            fi
+
+
+            cd /opt/sei/web/modulos/mod-gestao-documental
+            git checkout $MODULO_GESTAODOCUMENTAL_VERSAO
+            echo "Versao do Gestao Documental eh agora: $MODULO_GESTAODOCUMENTAL_VERSAO"
+
+            cd /opt/sei/
+            sed -i "s#/\*novomodulo\*/#'MdGestaoDocumentalIntegracao' => 'mod-gestao-documental', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo GESTAO DOCUMENTAL encontrado pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_GESTAODOCUMENTAL_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
 
 touch /sei/controlador-instalacoes/instalado.ok
 

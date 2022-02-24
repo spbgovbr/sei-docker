@@ -1,6 +1,7 @@
 FROM centos:7
 
-ENV TERM xterm
+ENV TERM="xterm" \
+    LANG="pt_BR.ISO-8859-1"
 
 ADD https://github.com/spbgovbr/sei-docker-binarios/raw/main/pacoteslinux/msttcore-fonts-2.0-3.noarch.rpm \
     https://github.com/spbgovbr/sei-docker-binarios/raw/main/pacoteslinux/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
