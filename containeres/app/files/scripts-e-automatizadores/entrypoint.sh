@@ -420,6 +420,13 @@ else
 
 fi
 
+
+echo "***************************************************"
+echo "***************************************************"
+echo "**CONFIGURANDO MODULO GESTAO DOC*******************"
+echo "***************************************************"
+echo "***************************************************"
+
 if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
 
     if [ ! -f /sei/controlador-instalacoes/instalado-modulo-gestaodocumental.ok ]; then
@@ -458,6 +465,127 @@ if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
 else
 
     echo "Variavel MODULO_GESTAODOCUMENTAL_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
+
+echo "***************************************************"
+echo "***************************************************"
+echo "*INICIANDO CONFIGURACOES DO MODULO LOGIN UNICO*****"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_LOGINUNICO_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-loginunico.ok ]; then
+
+        if [ -z "$MODULO_LOGINUNICO_VERSAO" ] || \
+           [ -z "$MODULO_LOGINUNICO_CLIENTID" ] || \
+           [ -z "$MODULO_LOGINUNICO_SECRET" ] || \
+           [ -z "$MODULO_LOGINUNICO_URLPROVIDER" ] || \
+           [ -z "$MODULO_LOGINUNICO_REDIRECTURL" ] || \
+           [ -z "$MODULO_LOGINUNICO_URLLOGOUT" ] || \
+           [ -z "$MODULO_LOGINUNICO_SCOPE" ] || \
+           [ -z "$MODULO_LOGINUNICO_URLSERVICOS" ] || \
+           [ -z "$MODULO_LOGINUNICO_URLREVALIDACAO" ] || \
+           [ -z "$MODULO_LOGINUNICO_CIENTIDVALIDACAO" ] || \
+           [ -z "$MODULO_LOGINUNICO_SECRETVALIDACAO" ] || \
+           [ -z "$MODULO_LOGINUNICO_ORGAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_LOGINUNICO_VERSAO, MODULO_LOGINUNICO_CLIENTID, MODULO_LOGINUNICO_SECRET, MODULO_LOGINUNICO_URLPROVIDER, MODULO_LOGINUNICO_REDIRECTURL"
+            echo "MODULO_LOGINUNICO_URLLOGOUT, MODULO_LOGINUNICO_SCOPE, MODULO_LOGINUNICO_URLSERVICOS, MODULO_LOGINUNICO_URLREVALIDACAO"
+            echo "MODULO_LOGINUNICO_CIENTIDVALIDACAO, MODULO_LOGINUNICO_SECRETVALIDACAO, MODULO_LOGINUNICO_ORGAO, VAR_LOGINUNICO_REDIRECT_URL"
+
+        else
+
+            echo "Verificando existencia do modulo de loginunico"
+            if [ -d "/opt/sei/web/modulos/mod-sei-loginunico" ]; then
+                echo "Ja existe um diretorio para o modulo de loginunico. Vamos assumir que o codigo la esteja integro"
+
+            else
+                echo "Copiando o módulo de loginunico"
+                cp -Rf /sei-modulos/mod-sei-loginunico /opt/sei/web/modulos/
+            fi
+
+
+            cd /opt/sei/web/modulos/mod-sei-loginunico
+            git checkout $MODULO_LOGINUNICO_VERSAO
+            echo "Versao do LoginÚnico é agora: $MODULO_LOGINUNICO_VERSAO"
+
+            cd /opt/sei/
+
+            sed -i "s#/\*novomodulo\*/#'LoginUnicoIntegracao' => 'loginunico', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+            sed -i "s#/\*extramodulesconfig\*/#'LoginUnico' => array('client_id' => '$MODULO_LOGINUNICO_CLIENTID', 'secret'    => '$MODULO_LOGINUNICO_SECRET', 'url_provider' => '$MODULO_LOGINUNICO_URLPROVIDER', 'redirect_url'  => '$MODULO_LOGINUNICO_REDIRECTURL',  'url_logout' =>    '$MODULO_LOGINUNICO_URLLOGOUT', 'scope'  => '$MODULO_LOGINUNICO_SCOPE', 'url_servicos'   => '$MODULO_LOGINUNICO_URLSERVICOS', 'url_revalidacao'   => '$MODULO_LOGINUNICO_URLREVALIDACAO',  'client_id_validacao'   => '$MODULO_LOGINUNICO_CIENTIDVALIDACAO', 'secret_validacao'   => '$MODULO_LOGINUNICO_SECRETVALIDACAO', 'niveis_confiabilidade'  => array(2,3), 'orgao' => $MODULO_LOGINUNICO_ORGAO), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo de LoginUnico encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_LOGINUNICO_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
+
+echo "***************************************************"
+echo "***************************************************"
+echo "INICIANDO CONFIGURACOES DO MODULO ASSINATURA AVANCADA*****"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_ASSINATURAVANCADA_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-assinaturavancada.ok ]; then
+
+        if [ -z "$MODULO_ASSINATURAVANCADA_VERSAO" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_CLIENTID" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_SECRET" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_URLPROVIDER" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_REDIRECTURL" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_URLLOGOUT" ] || \
+           [ -z "$MODULO_ASSINATURAVANCADA_SERVIDORQUALIFICADA" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_ASSINATURAVANCADA_VERSAO, MODULO_ASSINATURAVANCADA_CLIENTID, MODULO_ASSINATURAVANCADA_SECRET, MODULO_ASSINATURAVANCADA_URLPROVIDER, MODULO_ASSINATURAVANCADA_REDIRECTURL"
+            echo "MODULO_ASSINATURAVANCADA_URLLOGOUT, MODULO_ASSINATURAVANCADA_SERVIDORQUALIFICADA"
+
+        else
+
+            echo "Verificando existencia do modulo de assinatura avancada"
+            if [ -d "/opt/sei/web/modulos/mod-sei-assinatura-avancada" ]; then
+                echo "Ja existe um diretorio para o modulo de assinatura avancada. Vamos assumir que o codigo la esteja integro"
+  
+            else
+                echo "Copiando o módulo de assinatura avancada"
+                cp -Rf /sei-modulos/mod-sei-assinatura-avancada /opt/sei/web/modulos/
+                mv /opt/sei/web/modulos/mod-sei-assinatura-avancada /opt/sei/web/modulos/mod-assinatura
+
+            fi
+
+            cd /opt/sei/web/modulos/mod-assinatura
+            git checkout $MODULO_ASSINATURAVANCADA_VERSAO
+            echo "Versao do LoginUnico eh agora: $MODULO_ASSINATURAVANCADA_VERSAO"
+
+            cd /opt/sei/
+
+            sed -i "s#/\*novomodulo\*/#'MdAssinaturaIntegracao' => 'mod-assinatura', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+            sed -i "s#/\*extramodulesconfig\*/#'AssinaturaAvancada' => array('client_id' => '$MODULO_ASSINATURAVANCADA_CLIENTID', 'secret'    => '$MODULO_ASSINATURAVANCADA_SECRET', 'url_provider' => '$MODULO_ASSINATURAVANCADA_URLPROVIDER', 'redirect_url'  => '$MODULO_ASSINATURAVANCADA_REDIRECTURL',  'url_logout' =>    '$MODULO_ASSINATURAVANCADA_URLLOGOUT', 'servidor_qualificada'  => '$MODULO_ASSINATURAVANCADA_SERVIDORQUALIFICADA'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo de Assinatura Avancada encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_ASSINATURAVANCADA_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
 
