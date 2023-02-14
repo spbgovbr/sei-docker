@@ -85,7 +85,7 @@ class TestSuiteBasics():
     self.driver.find_element(By.ID, "selSerie").click()
     dropdown = self.driver.find_element(By.ID, "selSerie")
     dropdown.find_element(By.XPATH, "//option[. = 'Abaixo-Assinado']").click()
-    WebDriverWait(self.driver, 30).until(expected_conditions.element_to_be_clickable((By.ID, "filArquivo")))
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "filArquivo")))
     self.driver.find_element(By.ID, "txtDataElaboracao").click()
     self.driver.find_element(By.ID, "txtDataElaboracao").send_keys("03/09/2020")
     self.driver.find_element(By.CSS_SELECTOR, "#divOptNato .infraRadioLabel").click()
@@ -104,7 +104,7 @@ class TestSuiteBasics():
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//a[contains(.,\'99990\')]")))
     elements = self.driver.find_elements(By.XPATH, "//a[contains(.,\'99990\')]")
     assert len(elements) > 0
-    self.driver.find_element(By.CSS_SELECTOR, "#lnkSairSistema > .infraImg").click()
+    self.driver.find_element(By.XPATH, "//a[@id='lnkSairSistema'] | //a[@id='lnkInfraSairSistema']").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.ID, "txtUsuario")))
     elements = self.driver.find_elements(By.ID, "txtUsuario")
     assert len(elements) > 0

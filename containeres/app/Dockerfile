@@ -15,6 +15,10 @@ ADD files/ /sei/files/
     
 RUN bash /sei/files/install.sh
 
+#aqui n eh a senha do seu github e sim o seu token. Aconselhavel usar via linha de comando docker build ... --build-arg GITPASS_REPO...
+ARG GITPASS_REPO_MODULOS=informe_pass_via_cmdline
+ARG GITUSER_REPO_MODULOS=informe_user_via_cmdline
+
 RUN cp /sei/files/scripts-e-automatizadores/entrypoint.sh / && \
     cp /sei/files/scripts-e-automatizadores/entrypoint-atualizador.sh /  && \
     bash /sei/files/scripts-e-automatizadores/clone-modules.sh
