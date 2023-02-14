@@ -1,5 +1,11 @@
 # SEI - Docker
 
+## Atenção
+
+1. Esse repositório está estacionado. Verifique a possibilidade de usar o novo projeto dedicado ao Super: https://github.com/supergovbr/super-docker
+2. Após o lançamento do docker compose v2.x, houve uma mudança no comportamento do docker-compose que trouxe um bug no balanceador usado nesse projeto, desta forma recomendamos o uso do docker-compose na versão 1.x. Maiores informações: https://github.com/spbgovbr/sei-docker/issues/48
+
+
 
 # Projeto de Infraestrutura sob Código para o SEI
 
