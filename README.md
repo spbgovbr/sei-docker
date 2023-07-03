@@ -1,160 +1,123 @@
-# SEI - Docker
+# SEI-DOCKER
 
-## Atenção
+```
+Atenção. Mudanças Importantes
 
-1. Esse repositório está estacionado. Verifique a possibilidade de usar o novo projeto dedicado ao Super: https://github.com/supergovbr/super-docker
-2. Após o lançamento do docker compose v2.x, houve uma mudança no comportamento do docker-compose que trouxe um bug no balanceador usado nesse projeto, desta forma recomendamos o uso do docker-compose na versão 1.x. Maiores informações: https://github.com/spbgovbr/sei-docker/issues/48
+Desde 07/2023 fizemos uma adaptação nesse projeto trazendo diversas melhorias que foram implementadas no projeto super-docker.
+Desta forma o projeto sei-docker aqui listado precisou ser modificado em sua estrutura para atender aos novos requisitos.
+É exatamente o mesmo projeto de antes, porém com novas pastas e funcionalidades, suportando por exemplo o sei4.1.
+
+Para diminuir o impacto de possíveis integrações que usam esse repositório, criamos a branch sei4-docker-inicial. Nessa branch está o projeto sei-docker em sua antiga estrutura.
+Portanto caso esteja usando alguma esteira ou automação que dependa desse repositório, e não queira fazer as adaptações necessárias para a nova estrutura, basta apontar para essa branch sei4-docker-inicial.
+
+No entanto, recomendamos usar a branch main pois será ela que vai receber novas atualizações/correções.
+```
+
+## O que é
+
+O SEI-Docker é o projeto disponibilizado para provisionamento de ambientes do SEI usando a tecnologia docker e os orquestradores docker-compose, cattle ou kubernetes.
+
+## Para quem
+
+O projeto atende a qualquer dos profissionais que desejem subir uma instância do SEI entre eles:
+- desenvolvedores
+- arquitetos
+- analistas de testes
+- analistas de segurança (para avaliação/mapeamento de eventuais vulnerabilidades)
+- profissionais de TI envolvidos nas atividades de dev e sustentação do SEI
+
+## Para que
+
+- desenvolvimento/debug do código-fonte do SEI
+- desenvolvimento/debug do código-fonte dos módulos do SEI
+- disponibilização de ambientes diversos para o SEI:
+	- teste
+	- treinamento
+	- avaliação
+- ambientar profissional de infra com os serviços/componentes necessários para a implantação e sustentação do SEI
+
+# Organização
+
+Podemos dividir o projeto em 3 grandes áreas:
+
+- ### Dev
+
+	Na pasta dev há um Automatizador (Makefile) pronto para subir uma instância do SEI escolhendo a base de dados e com o xdebug habilitado. Apropriada para subir um ambiente local montando o código fonte do SEI. Desta forma você pode usar o seu editor / debugger preferido na edição do código.
+
+	Nessa modalidade o projeto disponibiliza para o desenvolvedor os seguintes componentes:
+	- app  (serviço apache para o SEI)
+	- database (mariadb, sqlserver ou oracle)
+	- memcached
+	- jod
+	- solr
+	- mailcatcher (servidor smtp e mailcatcher para visualizar os emails enviados)
+
+	Para maiores informações, acesse a pasta dev e leia o Readme respectivo ou [clique aqui](dev/README.md) para abrir diretamente
+
+- ### Arquitetos e profissionais de infra
+
+	Na pasta infra há um Automatizador (Makefile) pronto para que um profissional de infra suba rapidamente a estrutura completa do SEI usando o docker-compose, com opçoes de: 
+	- openldap
+	- simulador de servidor de email
+	- solr admin
+	- memcached admim
+	- instalacao automática de módulos
+	- orgao, siglas e descricoes do ambiente
+	- http ou https, com cert proprio ou auto-assinado
+	- entre outras customizações
+
+	Usado para criar ambientes de teste, validação, treinamento, tanto para a área técnica quanto para a área negocial
+
+	Há a possibilidade de subir toda a infra em uma única vm ou gerar as receitas kubernetes ou Cattle para rodar em seu cluster local
+
+	Para maiores informações, acesse a pasta infra e leia o Readme respectivo ou [clique aqui](infra/README.md) para abrir diretamente
+
+- ### Containers
+
+	Na pasta containers encontram-se as receitas para as imagens docker. Os conteineres já existem de forma pública para você rodar o projeto em sua máquina local ou infra. Não é necessário entrar aqui ou conhecer essa área para rodar o SEI.
+
+	Mas caso mesmo assim deseje buildar as imagens por conta própria, modificá-las ou usar o seu próprio registry; basta acessar essa pasta. Nela estão as receitas docker usadas, bem como as automatizações (Makefile) para criar seus próprios conteineres em seu próprio Docker Registry.
+
+	Para maiores informações, acesse a pasta containers e leia o Readme respectivo ou [clique aqui](containers/README.md) para abrir diretamente
+
+## Testes
+
+Caso faça alguma alteração no projeto, rode os testes propostos para garantir que pelo menos o básico está funcionando de acordo com o esperado.
+
+Dentro de cada grande área há uma pasta de testes.
+Nessas pastas ficam os testes automatizados para cada área:
+
+- **containers/tests**: existem diversos testes para os conteineres.
+
+	Rode ``` make test-containers ``` para executar uma bateria com todos os subtestes envolvidos. Aqui ele vai criar os conteineres com a tag test e tentará fazer o push bem como outras operações previstas no makefile
+
+- **dev/tests**: aqui ele irá usar os modelos de envfiles fornecidos, subirá o SEI para cada um deles e rodará testes de criacao de processo/documento para saber se está ou não funcionando.
+
+	Rode ``` make tests-all-bases ``` para executar a bateria com todos os subtestes envolvidos.
+
+- **infra/tests**: existem diversos testes para a área de infra. Como são muitas possibilidades de customização esse teste é demorado. O automatizador vai subir e destruir o SEI diversas vezes variando as formas e possibilidades de customização.
+
+	Rode ``` make test_lineup_completa ``` para executar todos os subtestes envolvidos. Dependendo da necessidade pode executar os subtestes isoladamente, basta digitar ``` make help ``` para uma lista completa das opções disponíveis.
 
 
 
-# Projeto de Infraestrutura sob Código para o SEI
+# Pré-Requisitos
 
-Esse projeto altamente parametrizável permitirá ao administrador de infraestrutura subir um SEI completo, com todos os componentes necessários para o seu uso imediato em ambiente de DTH.
+Para utilizar esse projeto você precisa de:
+- código fonte do SEI
+- docker
+- docker-compose
 
-Nesse momento vamos focar o esforço para um ambiente de Desenvolvimento / Testes / Treinamento ou Primeira Homologação - DTH. 
+# Origem
 
-**Não recomendado para produção.** 
-
-Configurações e ajustes em produção deverão ser observadas todas as recomendações na documentação do TRF, do PEN e as melhores práticas de infraestrutura de TI comercialmente aceitas. Eventualmente dependendo das necessidades dos órgãos e priorizações alinhadas com a comunidade poderemos evoluir a entrega para algo mais próximo de produção. Porém importante frisar que os ativos de segurança, como firewall, filtro de conteúdo, backup entre outros ficam a cargo do órgão responsável. 
-
-**Atenção** 
-O código fonte do SEI é propriedade do TRF4. Sob nenhuma hipótese o mesmo deverá ser distribuído, emprestado ou salvo em qualquer lugar que não seja privativo da TI do orgão.
-
-Para maiores informações sobre o código fonte consulte o site do [processoeletronico.gov.br](http://processoeletronico.gov.br)
-
-## Anatomia do Projeto Atualmente
-
-Segue a anatomia do projeto atualmente caso se deseje subir por completo. Cada computadorzinho ai é um conteiner docker e cada tamborzinho é um volume docker. Os links e acessos são responsabilidade do orquestrador escolhido:
-
-*Clique com o botão direito na figura -> copiar endereço da imagem; depois abra em uma nova aba do seu browser:*
-
-![Anatomia do Projeto](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/anatomia_01.jpeg)
-
-## Kubernetes
-
-Além da infra acima em docker-compose existe uma receita para rodar um ambiente de dev em kubernetes.
-A receita kubernetes conta com os seguintes recursos:
-- **configmap** - mapeamento dos valores env do app
-- **secret** - segredos e senhas
-- **persistent volume claimns** - pontos de montagem para persistência
-- **job de instalacao inicial** - instalador inicial do sistema
-- **statefullsets** para o banco e solr
-- **deployments** para jod, memcached e sei-app
-- **ingress** com https
-- gera apenas para mysql
-
-Para gerar a receita kubernetes basta ajustar seu envfile com os valores corretos (url desejada para o sei, nome do orgao, etc).
-Em seguida veja tb no envfile os valores para o kubernetes referentes a namespace, classe do storage e tb os recursos que vc vai delegar para cada componente.
-
-Depois basta rodar `make kubernetes_montar_yaml`
-
-Ao publicar a receita atente-se para o fonte do SEI. Como o código fonte do SEI não é publico faz-se necessário mover manualmente os fontes para o pvc vol-sei-fontes
-
-## Serviços que Apresentam Interface
-
-Através de um único comando provisiona-se os serviços listados abaixo. Cada serviço tem um nível de customização envolvido. Iremos entregando maior complexidade ao longo do tempo.
-
-*Clique com o ctrl pressionado (Mac Users com o CMD pressionado)* para abrir uma tela cheia com a interface gráfica do serviço
-
-*URLNAME é o nome que vc define para o seu ambiente no arquivo envlocal.env. Por ex:* **sei.treinamento.orgao.gov.br**
-
-### Balanceador
-Interface de estatísticas do balanceador - Acessível com URLNAME/haproxy (usuário e senha: stats)
-![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/haproxy.jpg)
-
-### SEI: 
-Acesse com URLNAME ou URLNAME/sei
-![SEI:](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/sei.jpg)
+Este projeto é a junção de dois outros projetos:
+- [Sei-Vagrant](https://github.com/spbgovbr/sei-vagrant)
+- [Sei-Docker](https://github.com/spbgovbr/sei-docker)
 
 
-### SIP
-Acesse com URLNAME/sip
-![SIP:](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/sip.jpg) 
+# Dúvidas Sugestões Bugs ou Contribuição
 
-### Memcached Admin
-Interface de administração e acompanhamento do Memcached. Acessível com URLNAME/memcachedadmin
-![Memcached Admin](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/memcachedadmin.jpg)
+Dúvidas, sugestões ou reporte de bugs usar a parte de issues: https://github.com/spbgovbr/sei-docker/issues
 
-### Solr Admin
-Interface de Administração do Solr - acesse com URLNAME/solr
-![Solr](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/solradmin.jpg)
+Para contribuir basta fazer o pull request. Aconselhável antes alinhar os requisitos com algum project owner.
 
-### Database Admin
-Adminer para administração simples do banco de dados. Acessível com URLNAME/dbadmin
-![Database Admin](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/dbadmin.jpg)
-
-### Mail Catcher
-Interface para receber e visualizar e-mails em formato html. Acessível com URLNAME/mailadmin
-![Mail Admin](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/mailadmin.jpg)
-
-### Ldap Admin
-Interface de administração do OpenLdap para cadastro de árvores de Departamentos e Usuários. Acessível com URLNAME/phpldapadmin
-![PhpLdapAdmin](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/phpldapadmin.jpg)
-
-
-
-
-**Todos os Servicos:**
-- **Balanceador** - além de fazer o proxy https para os serviços adicionais, escala o sei/sip em quantas instâncias se achar necessário
-- **Nó(s) de aplicação** - SEI/SIP com https auto escalável
-- **Memcached** - serviço de cache em memória RAM
-- **Administrador do Memcached** - Administração e acompanhamento do Memcached
-- **Solr** - indexador de palavras e termos
-- **Administrador do Solr** - Administração e acompanhamento do Solr
-- **Banco de Dados** - escolha mysql, sqlserver e Oracle
-- **Administrador do Banco de Dados** - Ferramenta adminer, para administrar os schemas, table structures ou simplesmente rodar queries diretamente no banco - ainda nao funciona para o Oracle apenas Mysql e SqlServer
-- **MailCatcher** - serviço para receber todos os emails enviados pelo SEI. Acompanha junto uma interface web para visualizar os emails sendo enviados. Ótimo para ambiente de teste ou treinamento de usuários
-- **JOD** - serviço para exportar docs do Office para PDF
-- **Openldap** - serviço para criar e administrar árvores de departamentos/grupos e usuários
-- **Administrador do Ldap** - serviço para administrar o openldap
-
-Cada serviço tem seu próprio nível de customização e o administrador poderá decidir por exemplo se deseja usar o banco de dados provisionado pelo projeto ou usar seu próprio banco de dados.
-O mesmo vale para qualquer outro serviço.
-
-**Volumes de Dados**
-
-- arquivos externos
-- certificados
-- solr-data
-- banco de dados
-- base de dados openldap
-- codigo fonte do SEI
-- controlador da instalação
-
-Alguns dos parâmetros externos que é possível informar ao rodar o projeto:
-
-- URLs de acesso para o SEI e serviços
-- http/https
-- Certificados (usar um próprio ou mandar criar um auto-assinado)
-- Escolha da versão do SEI (inicialmente apenas SEI4)
-- Instalação de módulo e sua versão
-- Escolha do banco de dados desejado com a base de referência
-- além desses há dezenas de outros parâmetros já implementados para alterar o comportamento e sabor do ambiente
-
-## Publicação e Orquestração
-
-Inicialmente a entrega vai focar em mono máquina. Mas está previsto no nosso roadmap entregar também a instalação em várias máquinas. Para isso vamos usar o Rancher/Cattle, Rancher/Kubernetes 
-
-Além disso iremos publicar aqui a nossa esteira de testes em jenkins, que além de instalar um ambiente do zero com os módulos desejados, faz a execução dos testes funcionais que já escrevemos para alguns módulos, usando um cluster com SeleniumGrid.
-
-## Instruções Gerais
-
-[Clique aqui](docs/README.md) para as instruções gerais, orientações iniciais e vídeo tutoriais
-
-## Como Contribuir
-
-Use as issues do projeto para tirar dúvidas, solicitar funcionalidades, etc: https://github.com/spbgovbr/sei-docker/issues
-
-Caso você queira, pode fazer **pull requests** observando o seguinte:
-- seguir a "filosofia" docker
-- altamente desejável que possa ser aproveitado por toda a comunidade
-- se achar necessário, discuta antes na parte de issues as melhorias a serem implementadas
-
-## Testes para o Desenvolvedor
-
-Caso desenvolva algo, não esqueça de rodar os testes para saber se não quebrou algo já existente.
-Maiores informações do teste: 
-[tests/README.md](tests/README.md)
-
-## Informações Adicionais
-Caso esteja procurando o projeto antigo para o SEI3 que havia aqui pule para a branch [SEI3x-Docker-Antigo](https://github.com/spbgovbr/sei-docker-antigo)

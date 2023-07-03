@@ -1,0 +1,78 @@
+version: '2'
+services:
+  jod:  
+    image: ${DOCKER_REGISTRY}/jod:${ENVIRONMENT_VERSION}
+    container_name: jod
+
+  smtp:
+    image: ${DOCKER_REGISTRY}/mailcatcher:${ENVIRONMENT_VERSION}
+    container_name: smtp
+    ports:
+      - "1080:1080"
+
+  memcached:
+    image: ${DOCKER_REGISTRY}/memcached:${ENVIRONMENT_VERSION}
+    container_name: memcached
+    ports:
+      - "11211:11211"
+
+  database:
+    image: ${DOCKER_REGISTRY}/${DATABASE_IMAGE}:${ENVIRONMENT_VERSION}
+    container_name: ${DATABASE_HOST}
+    restart: always
+    volumes:
+      - ${DATABASE_HOST}:${DATABASE_DATA_DIR}
+    ports:
+      - ${DATABASE_PORT}:${DATABASE_PORT}
+
+  solr:
+    image: ${DOCKER_REGISTRY}/solr8.2.0:${ENVIRONMENT_VERSION}
+    container_name: solr
+    ports:
+      - "8983:8983"
+
+  httpd:
+    image: ${DOCKER_REGISTRY}/app-dev:${ENVIRONMENT_VERSION}
+    container_name: httpd
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on: 
+      - database
+    #command: "tail -f /dev/null"
+    volumes:
+      - ${SEI_PATH}:/opt/
+    environment:
+      - XDEBUG_CONFIG="idekey=default client_host=${HOST_IP} client_port=9003 discover_client_host=1"
+      - XDEBUG_SESSION=default
+      - XDEBUG_MODE=debug
+      - HOST_URL=http://localhost:8000
+      - DATABASE_TYPE=${DATABASE_TYPE}
+      - DATABASE_HOST=${DATABASE_HOST}
+      - DATABASE_PORT=${DATABASE_PORT}
+
+      - SEI_CHAVE_ACESSO=${SEI_CHAVE_ACESSO}
+      - SEI_DATABASE_NAME=${SEI_DATABASE_NAME}
+      - SEI_DATABASE_USER=${SEI_DATABASE_USER}
+      - SEI_DATABASE_PASSWORD=${SEI_DATABASE_PASSWORD}
+      - SEI_DATABASE_USER_SCRIPT=${SEI_DATABASE_USER_SCRIPT}
+      - SEI_DATABASE_PASSWORD_SCRIPT=${SEI_DATABASE_PASSWORD_SCRIPT}
+
+      - SIP_CHAVE_ACESSO=${SIP_CHAVE_ACESSO}
+      - SIP_DATABASE_NAME=${SIP_DATABASE_NAME}
+      - SIP_DATABASE_USER=${SIP_DATABASE_USER}
+      - SIP_DATABASE_PASSWORD=${SIP_DATABASE_PASSWORD}
+      - SIP_DATABASE_USER_SCRIPT=${SIP_DATABASE_USER_SCRIPT}
+      - SIP_DATABASE_PASSWORD_SCRIPT=${SIP_DATABASE_PASSWORD_SCRIPT}
+    links:
+      - database:${DATABASE_HOST}
+      - memcached:memcached
+      - solr:solr
+      - smtp:smtp
+      - jod:jod
+
+
+volumes:
+  mysql:
+  oracle:
+  sqlserver:

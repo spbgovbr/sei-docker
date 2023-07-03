@@ -1,0 +1,212 @@
+# para facilitar o deploy em dev, vamos criar aqui o solr e o banco como deployments, em eventual prod crie-os
+# como statefulsets
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: db
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 3306
+    protocol: TCP
+    targetPort: 3306
+  selector:
+    servico: db
+  sessionAffinity: None
+  type: ClusterIP
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: db
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        servico: db
+    spec:
+      containers:
+      - image: ${DOCKER_IMAGE_BD}
+        imagePullPolicy: Always
+        name: db
+        resources:
+          limits:
+            cpu: ${KUBERNETES_LIMITS_CPU_DB}
+            memory: ${KUBERNETES_LIMITS_MEMORY_DB}
+          requests:
+            cpu: ${KUBERNETES_REQUEST_CPU_DB}
+            memory: ${KUBERNETES_REQUEST_MEMORY_DB}
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /var/lib/mysql
+          name: vol1
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - bash
+        - -c
+        - echo "Vamos verificar se existe uma pasta com os dados do mysql."; echo
+          "Caso nao exista vamos criar..."; i=$(ls -A /t);  if [[ "$(ls -A /t)" = "" ]]; then     echo
+          "Diretorio vazio, vamos copiar os dados do banco...";     cp -a /var/lib/mysql/*
+          /t/ &&     echo "Dados copiados!"; else   echo "Diretorio nao esta vazio.
+          " ;   echo "Arquivos encontrados";    i=$(ls -lha /t);   echo $(ls -A /t);   echo
+          "Nao vamos alterar nada. " ;   echo "Caso o banco nao suba, verifique se
+          nesse dir existe um banco e que as permissoes do arquivo estejam com o mysql
+          (id 999)" ; fi;  exit 0
+        image: ${DOCKER_IMAGE_BD}
+        imagePullPolicy: Always
+        name: db-init
+        resources:
+          limits:
+            cpu: 100m
+            memory: 64Mi
+          requests:
+            cpu: 100m
+            memory: 64Mi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /t
+          name: vol1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-db
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: solr
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    servico: solr
+  sessionAffinity: None
+  type: ClusterIP
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: solr
+  namespace: ${KUBERNETES_NAMESPACE}
+spec:
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: solr
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        servico: solr
+    spec:
+      containers:
+      - image: ${DOCKER_IMAGE_SOLR}
+        imagePullPolicy: Always
+        name: solr
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /solr/admin/info/system
+            port: 8983
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /solr/admin/info/system
+            port: 8983
+            scheme: HTTP
+          initialDelaySeconds: 20
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 10
+        resources:
+          limits:
+            cpu: ${KUBERNETES_LIMITS_CPU_SOLR}
+            memory: ${KUBERNETES_LIMITS_MEMORY_SOLR}
+          requests:
+            cpu: ${KUBERNETES_REQUEST_CPU_SOLR}
+            memory: ${KUBERNETES_REQUEST_MEMORY_SOLR}
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /dados
+          name: vol1
+      dnsPolicy: ClusterFirst
+      initContainers:
+        - command:
+          - bash
+          - -c
+          - echo "Vamos verificar se existe uma pasta com os dados do solr."; echo
+            "Caso nao exista vamos criar..."; if [[ "$(ls -A /t)" = "" ]]; then
+            echo "Diretorio vazio, vamos copiar os dados do solr..."; cp -a /dados/*
+            /t/ && echo "Dados copiados!"; else echo "Diretorio nao esta vazio. " ;
+            echo "Arquivos encontrados"; echo $(ls -lha /t); echo "Nao vamos alterar
+            nada. " ; echo "Caso o solr nao suba, verifique se nesse dir existe um
+            solr e que as permissoes do arquivo estejam com o Solr (id 1000)" ; fi;  exit
+            0
+          image: ${DOCKER_IMAGE_SOLR}
+          imagePullPolicy: Always
+          name: solr-init
+          resources:
+            limits:
+              cpu: 100m
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 64Mi
+          stdin: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          tty: true
+          volumeMounts:
+          - mountPath: /t
+            name: vol1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-solr
+
