@@ -1,9 +1,9 @@
-# SUPER - Docker
+# SEI - Docker
 
 
-# Projeto de Infraestrutura sob Código para o SUPER
+# Projeto de Infraestrutura sob Código para o SEI
 
-Esse projeto altamente parametrizável permitirá ao administrador de infraestrutura subir um SUPER completo, com todos os componentes necessários para o seu uso imediato em ambiente de DTH.
+Esse projeto altamente parametrizável permitirá ao administrador de infraestrutura subir um SEI completo, com todos os componentes necessários para o seu uso imediato em ambiente de DTH.
 
 Nesse momento vamos focar o esforço para um ambiente de Desenvolvimento / Testes / Treinamento ou Primeira Homologação - DTH. 
 
@@ -56,9 +56,9 @@ Através de um único comando provisiona-se os serviços listados abaixo. Cada s
 Interface de estatísticas do balanceador - Acessível com URLNAME/haproxy (usuário e senha: stats)
 ![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/haproxy.jpg)
 
-### SUPER: 
+### SEI: 
 Acesse com URLNAME ou URLNAME/sei ou URLNAME/sip
-![SUPER:](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/super1.jpg)
+![SEI:](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/super1.jpg)
 
 
 ### Memcached Admin
@@ -113,7 +113,7 @@ O mesmo vale para qualquer outro serviço.
 
 Alguns dos parâmetros externos que é possível informar ao rodar o projeto:
 
-- URLs de acesso para o SUPER e serviços
+- URLs de acesso para o SEI e serviços
 - http/https
 - Certificados (usar um próprio ou mandar criar um auto-assinado)
 - Escolha da versão do SEI (inicialmente apenas SEI4)

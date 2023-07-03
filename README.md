@@ -1,5 +1,17 @@
 # SEI-DOCKER
 
+```
+Atenção. Mudanças Importantes
+
+Desde 07/2023 fizemos uma adaptação nesse projeto trazendo diversas melhorias que foram implementadas no projeto super-docker.
+Desta forma o projeto sei-docker aqui listado precisou ser modificado em sua estrutura para atender aos novos requisitos.
+É exatamente o mesmo projeto de antes, porém com novas pastas e funcionalidades, suportando por exemplo o sei4.1.
+
+Para diminuir o impacto de possíveis integrações que usam esse repositório, criamos a branch sei4-docker-inicial. Nessa branch está o projeto sei-docker em sua antiga estrutura.
+Portanto caso esteja usando alguma esteira ou automação que dependa desse repositório, e não queira fazer as adaptações necessárias para a nova estrutura, basta apontar para essa branch sei4-docker-inicial.
+
+No entanto, recomendamos usar a branch main pois será ela que vai receber novas atualizações/correções.
+```
 
 ## O que é
 

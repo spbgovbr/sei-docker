@@ -6,7 +6,7 @@
 - docker
 - docker-compose
 - o projeto usa também makefile e comandos como envsubst, portanto os pacotes para esses comandos devem estar instalados, geralmente eles já vem por default
-- e o principal: **Código Fonte do SUPER**
+- e o principal: **Código Fonte do SEI**
 
 *PS: versões antigas do docker ou docker-compose fatalmente irão dar erro*
 
@@ -39,7 +39,7 @@ leia a orientação que ali aparece e posicione o código fonte no local adequad
 
 Suba primeiro com a sugestão ofertada. Depois usando o make, desligue o projeto e remova os volumes. Altere um parâmetro no envlocal.env e suba novamente. Teste as alterações e o resto do ambiente. Desligue e limpe os volumes novamente, altere os parâmetros e suba até compreender todo o ecossistema e definir o que você vai deixar rodando.
 
-Depois de subir em localhost e testar, pare o projeto, apague tudo com o comando make adequado; abra o envlocal.env novamente e altere ali a chave que indica qual o nome da url do SUPER e coloque a url desejada. Lembre q o seu DNS ou seu /etc/hosts devem apontar para a máquina onde vc está subindo o novo SUPER.
+Depois de subir em localhost e testar, pare o projeto, apague tudo com o comando make adequado; abra o envlocal.env novamente e altere ali a chave que indica qual o nome da url do SEI e coloque a url desejada. Lembre q o seu DNS ou seu /etc/hosts devem apontar para a máquina onde vc está subindo o novo SEI.
 
 Verifique se não há nada rodando na porta 80 ou 443 senao ele não irá subir. 
 
@@ -65,18 +65,18 @@ PS: Importante: Recomendamos sempre antes de rodar o make run ou make setup, cas
 
 ## Makefile
 
-Após posicionar corretamente o fonte do SUPER vc poderá usar o Makefile para montar a receita para o seu orquestrador preferido. Agora apenas está disponível o docker-compose.
+Após posicionar corretamente o fonte do SEI vc poderá usar o Makefile para montar a receita para o seu orquestrador preferido. Agora apenas está disponível o docker-compose.
 
 Vamos agora subir o SEI completo em 3 passos:
 
-- 1. Baixar/clonar o projeto do SUPER
+- 1. Baixar/clonar o projeto do SEI
 ```
 git clone https://github.com/spbgovbr/sei-docker.git
 #vá para a pasta do projeto
-cd super-docker/infra
+cd sei-docker/infra
 ```
 
-- 2. Posicionar o volume dos Fontes do SUPER
+- 2. Posicionar o volume dos Fontes do SEI
 ```
 ver arquivo envlocal.env e posicionar de acordo
 ```
@@ -85,7 +85,7 @@ ver arquivo envlocal.env e posicionar de acordo
 ```
 make setup
 ```
-O make setup acima, vai ler o seu envlocal.env e vai montar um docker-compose.yml adequado para rodar o SUPER. 
+O make setup acima, vai ler o seu envlocal.env e vai montar um docker-compose.yml adequado para rodar o SEI. 
 A partir dai ele já vai baixar as imagens dos componentes necessários e rodar toda a infra disponibilizada.
 
 ## Comandos Adicionais
@@ -137,7 +137,7 @@ apagar_volume_controlador_instalacao:  Apagar volume controlador da instalacao
 
 ---
 
-## Como subir 2 instâncias (2 SUPERs diferentes) na mesma vm
+## Como subir 2 instâncias (2 SEIs diferentes) na mesma vm
 
 Siga esse [tutorial aqui](duploSEI/duplosei.md)
 

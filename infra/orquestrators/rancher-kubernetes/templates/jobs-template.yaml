@@ -19,7 +19,7 @@ spec:
         - configMapRef:
             name: sei-app
         - secretRef:
-            name: super-secret1
+            name: sei-secret1
         image: ${DOCKER_IMAGE_APP}
         imagePullPolicy: Always
         name: sei-inicializador

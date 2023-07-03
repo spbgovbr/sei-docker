@@ -25,9 +25,9 @@ crie uma pasta vazia e siga para ela
 
 ``` cd ../.. ```
 
-``` cp -R super-docker super-docker2 ```
+``` cp -R sei-docker sei-docker2 ```
 
-``` cd super-docker/infra ```
+``` cd sei-docker/infra ```
 
 ``` vim envlocal.env ```
 
@@ -44,7 +44,7 @@ Sobe logo o primeiro SEI
 
 ``` 
 cd .. 
-cd super-docker2/infra
+cd sei-docker2/infra
 ```
 Encontre as linhas referentes e altere-as para exatamente esse valor:
 ```
@@ -132,8 +132,8 @@ Deve aparecer uma tela como abaixo:
 
 Verifique se os backends do proxy estao verdinhos. Sinal que subiu corretamente. Ver figura acima.
 
-- o primeiro SUPER estará disponível em: https://meusei1.com.br/
-- o segundo SUPER estará disponível em: https://meusei2.com.br/
+- o primeiro SEI estará disponível em: https://meusei1.com.br/
+- o segundo SEI estará disponível em: https://meusei2.com.br/
 - conforme figura abaixo:
 ![seis](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/duplosei/seisladoalado.jpg)
 

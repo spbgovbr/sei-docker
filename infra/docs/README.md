@@ -1,4 +1,4 @@
-# Documentação Geral do SUPER-Docker
+# Documentação Geral do SEI-Docker
 
 ## Apresentação
 

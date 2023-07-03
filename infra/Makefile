@@ -19,7 +19,7 @@ LOGS_SEGUIR=true
 
 DIR := ${CURDIR}
 COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.yml 
-CMD_CURL_SUPER_LOGIN = curl -s -L -k $(APP_PROTOCOLO)://$(APP_HOST)/sei | grep "txtUsuario"
+CMD_CURL_SEI_LOGIN = curl -s -L -k $(APP_PROTOCOLO)://$(APP_HOST)/sei | grep "txtUsuario"
 
 check_isalive-timeout := "37"
 kube_timeout := "180s"
@@ -28,10 +28,10 @@ help:   ## Lista de comandos disponiveis e descricao. Voce pode usar TAB para co
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
 
-check-super-isalive: ## Target de apoio. Acessa o SEI e verifica se esta respondendo a tela de login
-	@echo "Vamos tentar acessar a pagina de login do SUPER, vamos aguardar ate 95 segs."
+check-sei-isalive: ## Target de apoio. Acessa o SEI e verifica se esta respondendo a tela de login
+	@echo "Vamos tentar acessar a pagina de login do SEI, vamos aguardar ate 95 segs."
 	@for number in $$(seq 1 $(check_isalive-timeout)); do \
-	    echo 'Tentando acessar...'; var=$$(echo $$($(CMD_CURL_SUPER_LOGIN))); \
+	    echo 'Tentando acessar...'; var=$$(echo $$($(CMD_CURL_SEI_LOGIN))); \
 			if [ "$$var" != "" ]; then \
 					echo 'Pagina respondeu com tela de login' ; \
 					break ; \
@@ -40,7 +40,7 @@ check-super-isalive: ## Target de apoio. Acessa o SEI e verifica se esta respond
 			fi; \
 			sleep 5; \
 	done; \
-	var=$$(echo $$($(CMD_CURL_SUPER_LOGIN))); \
+	var=$$(echo $$($(CMD_CURL_SEI_LOGIN))); \
 	if [ "$$var" == "" ]; then echo 'Pagina de login nao respondeu. Verifique. Abandonando execucao'; exit 1 ; fi;
 
 

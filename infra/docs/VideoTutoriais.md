@@ -3,8 +3,8 @@
 
 Os vídeos abaixo foram gravados por nossa equipe para auxiliar no entendimento do ecossistema desse projeto.
 
-Neles, citamos diversas dicas tanto do projeto em si, mas também de docker, infra e SUPER.
-Vale a pena gastar o tempo assistindo a todos eles principalmente se você é da área de infra, arquiteto, ou tenha pouco conhecimento no SUPER. 
+Neles, citamos diversas dicas tanto do projeto em si, mas também de docker, infra e SEI.
+Vale a pena gastar o tempo assistindo a todos eles principalmente se você é da área de infra, arquiteto, ou tenha pouco conhecimento no SEI. 
 
 Eles irão abrir a sua mente para um projeto mais amplo na entrada em produção.
 
@@ -14,7 +14,7 @@ Assista-os de preferência na ordem disposta abaixo.
 
 ## Subir Infra Reduzida Rapidamente
 
-Neste vídeo demonstramos a subida do SUPER rapidamente com orientações básicas usando o arquivo default de configuração:
+Neste vídeo demonstramos a subida do SEI rapidamente com orientações básicas usando o arquivo default de configuração:
 - sobe o sei em localhost com https
 - Mostra a interface de estatísticas do balanceador
 - outras orientações básicas para  rodar o projeto
@@ -28,7 +28,7 @@ Aqui vamos demonstrar uma subida com todos os componentes disponíveis no projet
 
 - Clona o projeto
 - Altera arquivo de ambiente com customizações
-- Sobe o SUPER com:
+- Sobe o SEI com:
 - https
 - domain name de sua preferência
 - Nome e Sigla do Orgao de sua preferência
