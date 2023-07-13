@@ -82,10 +82,13 @@ else
     echo "Fazendo a copia dos fontes. Aguarde..."
     cd super
     git checkout $APP_FONTES_GIT_CHECKOUT
-    cp -R src/* /opt/
+    cp -R * /opt/
     cd /
     rm -rf /tmp/super /tmp/lhave.key
 fi
+
+#todo melhorar isso
+mkdir -p /opt/sip/config ; mkdir -p /opt/sei/config
 
 APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
@@ -1105,6 +1108,86 @@ else
 
 fi
 
+echo "***************************************************"
+echo "***************************************************"
+echo "********MODULO PROTOCOLO INTEGRADO*****************"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_PI_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-pi.ok ]; then
+
+        if [ -z "$MODULO_PI_VERSAO" ] || \
+           [ -z "$MODULO_PI_URL" ] || \
+           [ -z "$MODULO_PI_USUARIO" ] || \
+           [ -z "$MODULO_PI_SENHA" ] || \
+           [ -z "$MODULO_PI_EMAIL" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_PI_VERSAO, MODULO_PI_URL, MODULO_PI_USUARIO, MODULO_PI_SENHA, MODULO_PI_EMAIL"
+
+        else
+
+                echo "Sincronizando nova versão do módulo pi"
+                rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado /opt/sei/web/modulos/protocolo-integrado
+
+                cd /sei-modulos/mod-sei-protocolo-integrado
+                git pull
+
+                cd /opt/sei/web/modulos
+                cp -R /sei-modulos/mod-sei-protocolo-integrado mod-sei-protocolo-integrado
+
+                cd mod-sei-protocolo-integrado
+                git checkout $MODULO_PI_VERSAO
+                echo "Versao do PEN agora: $MODULO_PI_VERSAO"
+                
+                make clean
+                make dist
+                cd dist
+                files=( *.zip )
+                f="${files[0]}"
+                mkdir -p temp
+                cp $f temp/
+                cd temp/
+                yes | unzip $f
+                \cp -Rf sei/* /opt/sei/
+                \cp -Rf sip/* /opt/sip/
+
+                cd /opt/sei/web/modulos
+                mv mod-sei-protocolo-integrado mod-sei-protocolo-integrado.old
+
+                cd /opt/sei/config/mod-protocolo-integrado/
+                mv ./ConfiguracaoModProtocoloIntegrado.exemplo.php ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"WebService\" => \"\"#'WebService' => \"$MODULO_PI_URL\"#g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"UsuarioWebService\" => \"\"#'UsuarioWebService' => \"$MODULO_PI_USUARIO\"#g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s|\"SenhaWebService\" => \"\"|'SenhaWebService' => \"$MODULO_PI_SENHA\"|g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"PublicarProcessosRestritos\" => false#'PublicarProcessosRestritos' => true#g" ConfiguracaoModProtocoloIntegrado.php
+
+                # adiciona config
+                cd /opt/sei
+                sed -i "s#/\*novomodulo\*/#'ProtocoloIntegradoIntegracao' => 'protocolo-integrado', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+                cd /opt
+                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-protocolo-integrado/sip_atualizar_versao_modulo_protocolo_integrado.php
+                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-protocolo-integrado/sei_atualizar_versao_modulo_protocolo_integrado.php
+                
+                rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado.old
+                
+                touch /sei/controlador-instalacoes/instalado-modulo-pi.ok
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo PROTOCOLO INTEGRADO encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
 
 
 touch /sei/controlador-instalacoes/instalado.ok

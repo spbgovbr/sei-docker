@@ -731,6 +731,72 @@ else
 
 fi
 
+if [ "$MODULO_PI_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-pi.ok ]; then
+
+        if [ -z "$MODULO_PI_VERSAO" ] || \
+           [ -z "$MODULO_PI_URL" ] || \
+           [ -z "$MODULO_PI_USUARIO" ] || \
+           [ -z "$MODULO_PI_SENHA" ] || \
+           [ -z "$MODULO_PI_EMAIL" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_PI_VERSAO, MODULO_PI_URL, MODULO_PI_USUARIO, MODULO_PI_SENHA, MODULO_PI_EMAIL"
+
+        else
+
+            echo "Verificando existencia do modulo PEN"
+            if [ -d "/opt/sei/web/modulos/protocolo-integrado" ]; then
+                echo "Ja existe um diretorio para o modulo do PI. Vamos assumir que o codigo la esteja integro"
+
+            else
+
+                echo "Buildando o modulo PI"
+
+                cd /opt/sei/web/modulos
+                cp -R /sei-modulos/mod-sei-protocolo-integrado mod-sei-protocolo-integrado
+                cd mod-sei-protocolo-integrado
+                git checkout $MODULO_PI_VERSAO
+                echo "Versao do PI agora: $MODULO_PI_VERSAO"
+                make clean
+                make dist
+                cd dist
+                files=( *.zip )
+                f="${files[0]}"
+                mkdir temp
+                cp $f temp/
+                cd temp/
+                yes | unzip $f
+                \cp -Rf sei/* /opt/sei/
+                \cp -Rf sip/* /opt/sip/
+
+                cd /opt/sei/web/modulos
+                mv mod-sei-protocolo-integrado mod-sei-protocolo-integrado.old
+
+                cd /opt/sei/config/mod-protocolo-integrado/
+                echo -ne "y" | mv ./ConfiguracaoModProtocoloIntegrado.exemplo.php ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"WebService\" => \"\"#'WebService' => \"$MODULO_PI_URL\"#g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"UsuarioWebService\" => \"\"#'UsuarioWebService' => \"$MODULO_PI_USUARIO\"#g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"SenhaWebService\" => \"\"#'SenhaWebService' => \"$MODULO_PI_SENHA\"#g" ConfiguracaoModProtocoloIntegrado.php
+                sed -i "s#\"PublicarProcessosRestritos\" => false#'PublicarProcessosRestritos' => true#g" ConfiguracaoModProtocoloIntegrado.php
+
+            fi
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo PI encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
+
 echo "Atualizador finalizado procedendo com a subida dos agendamentos..."
 
 
