@@ -1,6 +1,3 @@
-
-
-
 #!/bin/bash
 
 set -e
@@ -74,6 +71,10 @@ yum -y install \
     libgearman-dev \
     libgearman-devel
 
+cd /tmp/assets/
+cp ca-certIN.pem /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+update-ca-trust enable
 
 cd /tmp/assets/pacotes
 
@@ -100,7 +101,7 @@ rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
 
 if [ "$IMAGEM_APP_PACOTEMYSQL_PRESENTE" == "true" ]; then
 
-  yum install -y mysql php-mysqli
+    yum install -y mysql php-mysqli
 
 fi
 

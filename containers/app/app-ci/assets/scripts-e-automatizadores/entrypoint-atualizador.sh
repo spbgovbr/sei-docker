@@ -608,7 +608,7 @@ if [ "$MODULO_REST_INSTALAR" == "true" ]; then
             sed -i "s#MOD_WSSEI_ID_APP#MODULO_REST_ID_APP#g" ConfiguracaoMdWSSEI.php
             sed -i "s#MOD_WSSEI_CHAVE_AUTORIZACAO#MODULO_REST_CHAVE#g" ConfiguracaoMdWSSEI.php
             sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_REST_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
-            
+
             cd /opt/sei/scripts/mod-wssei/
             echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_wssei.php
 
@@ -1002,7 +1002,7 @@ if [ "$MODULO_PEN_INSTALAR" == "true" ]; then
                 cd mod-sei-pen
                 git checkout $MODULO_PEN_VERSAO
                 echo "Versao do PEN agora: $MODULO_PEN_VERSAO"
-                
+
                 make clean
                 make dist
                 cd dist
@@ -1036,9 +1036,9 @@ if [ "$MODULO_PEN_INSTALAR" == "true" ]; then
                 cd /opt
                 echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-pen/sip_atualizar_versao_modulo_pen.php
                 echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-pen/sei_atualizar_versao_modulo_pen.php
-                
+
                 rm -rf /opt/sei/web/modulos/mod-sei-pen.old
-                
+
                 echo "Iniciar Configuracao automatica do modulo"
                 source /sei/files/scripts-e-automatizadores/modulos/mod-sei-pen/mod-sei-pen.sh
 
@@ -1140,7 +1140,7 @@ if [ "$MODULO_PI_INSTALAR" == "true" ]; then
                 cd mod-sei-protocolo-integrado
                 git checkout $MODULO_PI_VERSAO
                 echo "Versao do PEN agora: $MODULO_PI_VERSAO"
-                
+
                 make clean
                 make dist
                 cd dist
@@ -1170,9 +1170,11 @@ if [ "$MODULO_PI_INSTALAR" == "true" ]; then
                 cd /opt
                 echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-protocolo-integrado/sip_atualizar_versao_modulo_protocolo_integrado.php
                 echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-protocolo-integrado/sei_atualizar_versao_modulo_protocolo_integrado.php
-                
+
                 rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado.old
-                
+
+                php
+
                 touch /sei/controlador-instalacoes/instalado-modulo-pi.ok
 
         fi
@@ -1186,6 +1188,79 @@ if [ "$MODULO_PI_INSTALAR" == "true" ]; then
 else
 
     echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
+echo "***************************************************"
+echo "***************************************************"
+echo "********MODULO INCOM*******************************"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-incom.ok ]; then
+
+        if [ -z "$MODULO_INCOM_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_INCOM_VERSAO"
+
+        else
+
+                echo "Sincronizando nova versão do modulo incom"
+                rm -rf /opt/sei/web/modulos/mod-sei-incom /opt/sei/web/modulos/incom
+
+                cd /sei-modulos/mod-sei-incom
+                git pull
+
+                cd /opt/sei/web/modulos
+                cp -R /sei-modulos/mod-sei-incom mod-sei-incom
+
+                cd mod-sei-incom
+                git checkout $MODULO_INCOM_VERSAO
+                echo "Versao do Incom agora: $MODULO_INCOM_VERSAO"
+
+                make clean
+                make dist
+                cd dist
+                files=( *.zip )
+                f="${files[0]}"
+                mkdir -p temp
+                cp $f temp/
+                cd temp/
+                yes | unzip $f
+                \cp -Rf sei/* /opt/sei/
+                \cp -Rf sip/* /opt/sip/
+
+                cd /opt/sei/web/modulos
+                mv mod-sei-incom mod-sei-incom.old
+
+                # adiciona config
+                cd /opt/sei
+                sed -i "s#/\*novomodulo\*/#'MdIncomIntegracao' => 'incom', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+                cd /opt
+                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-incom/sip_atualizar_versao_modulo_incom.php
+                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-incom/sei_atualizar_versao_modulo_incom.php
+
+                echo "Rodando configuracoes"
+                php /sei/files/scripts-e-automatizadores/modulos/mod-sei-incom/mod-sei-incom.php
+
+                rm -rf /opt/sei/web/modulos/mod-sei-incom.old
+
+                touch /sei/controlador-instalacoes/instalado-modulo-incom.ok
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo INCOM encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
 
