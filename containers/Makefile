@@ -69,6 +69,10 @@ verificar-imagem-base-oracle: ## target de apoio para verificar se a imagem base
 		@if [ -z "$(IMAGEM_BASE_ORACLE)" ]; then echo "Var IMAGEM_BASE_ORACLE nao definida"; make envcontainers.env; fi
 		@if [ -z "$(IMAGEM_BASE_ORACLE_VERSAO)" ]; then echo "Var IMAGEM_BASE_ORACLE_VERSAO nao definida"; exit 1; fi
 
+verificar-imagem-base-postgres: ## target de apoio para verificar se a imagem base do postgres foi informada
+		@if [ -z "$(IMAGEM_BASE_POSTGRES)" ]; then echo "Var IMAGEM_BASE_POSTGRES nao definida"; make envcontainers.env; fi
+		@if [ -z "$(IMAGEM_BASE_POSTGRES_VERSAO)" ]; then echo "Var IMAGEM_BASE_POSTGRES_VERSAO nao definida"; exit 1; fi
+
 
 verificar-imagem-base-app-agendador: ## target de apoio para verificar se a imagem base do app-agendador foi informada
 		@if [ -z "$(IMAGEM_BASE_APP_AGENDADOR)" ]; then echo "Var IMAGEM_BASE_APP_AGENDADOR nao definida"; make envcontainers.env; fi
@@ -167,6 +171,13 @@ erase-conteiner-base-oracle: ## apagar a imagem base-oracle
 
 erase-conteiner-oracle: ## apagar a imagem oracle
 		@make IMAGEMTMP=oracle11g IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
+
+erase-conteiner-base-postgres: ## apagar a imagem base-postgres
+		@make IMAGEMTMP=base-postgres15 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
+
+
+erase-conteiner-postgres: ## apagar a imagem postgres
+		@make IMAGEMTMP=postgres15 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
 
 
 erase-conteiner-solr: ## apagar a imagem solr
@@ -315,6 +326,22 @@ build-conteiner-oracle: verificar-imagem-base-oracle
 					build-conteiner-generic
 
 
+build-conteiner-base-postgres: ## construir imagem base-postgres
+		@make IMAGEMTMP=base-postgres15 \
+		      IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) \
+					IMAGEMTMP_PATH=databases/postgres-base \
+					build-conteiner-generic
+
+
+## build-conteiner-postgres construir imagem postgres
+build-conteiner-postgres: verificar-imagem-base-postgres
+		@make IMAGEMTMP=postgres15 \
+		      IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) \
+					IMAGEMTMP_PATH=databases/postgres \
+					BUILD_ARGS=--build-arg\ IMAGEM_BASE=$(IMAGEM_BASE_POSTGRES):$(IMAGEM_BASE_POSTGRES_VERSAO) \
+					build-conteiner-generic
+
+
 ## build-conteiner-solr construir imagem solr
 build-conteiner-solr: verificar-imagem-base-centos
 		@make IMAGEMTMP=solr8.2.0 \
@@ -423,7 +450,7 @@ build-conteiner-dbadminer: ## construir imagem dbadminer
 
 
 ## build-conteiners: roda todos os outros targets de build na sequencia
-build-conteiners: verificar-git-parameters build-conteiner-base-centos build-conteiner-memcached build-conteiner-jod build-conteiner-mailcatcher build-conteiner-base-mariadb build-conteiner-mariadb build-conteiner-base-sqlserver build-conteiner-sqlserver build-conteiner-base-oracle build-conteiner-oracle build-conteiner-solr build-conteiner-base-app build-conteiner-app-dev build-conteiner-app-ci build-conteiner-app-ci-agendador build-conteiner-phpmemcachedadmin-base build-conteiner-phpmemcachedadmin build-conteiner-openldap-base build-conteiner-openldap build-conteiner-haproxy-base build-conteiner-haproxy build-conteiner-phpldapadmin build-conteiner-dbadminer
+build-conteiners: verificar-git-parameters build-conteiner-base-centos build-conteiner-memcached build-conteiner-jod build-conteiner-mailcatcher build-conteiner-base-mariadb build-conteiner-mariadb build-conteiner-base-sqlserver build-conteiner-sqlserver build-conteiner-base-oracle build-conteiner-oracle build-conteiner-base-postgres build-conteiner-postgres build-conteiner-solr build-conteiner-base-app build-conteiner-app-dev build-conteiner-app-ci build-conteiner-app-ci-agendador build-conteiner-phpmemcachedadmin-base build-conteiner-phpmemcachedadmin build-conteiner-openldap-base build-conteiner-openldap build-conteiner-haproxy-base build-conteiner-haproxy build-conteiner-phpldapadmin build-conteiner-dbadminer
 
 #*****************************************************
 #*******PUBLISH CONTAINERS TARGETS********************
@@ -485,6 +512,13 @@ publish-container-oracle: ## publicar imagem oracle
 		@make IMAGEMTMP=oracle11g IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
 
 
+publish-container-base-postgres: ## publicar imagem base-postgres
+		@make IMAGEMTMP=base-postgres15 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
+
+
+publish-container-postgres: ## publicar imagem postgres
+		@make IMAGEMTMP=postgres15 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
+
 publish-container-solr: ## publicar imagem solr
 		@make IMAGEMTMP=solr8.2.0 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
 
@@ -538,4 +572,4 @@ publish-container-dbadminer: ## publicar imagem dbadminer
 
 
 ## publish-containers: executa todos os targets de publicacao de imagem na sequencia
-publish-containers: publish-container-base-centos publish-container-memcached publish-container-jod publish-container-mailcatcher publish-container-base-mariadb publish-container-mariadb publish-container-base-sqlserver publish-container-sqlserver publish-container-base-oracle publish-container-oracle publish-container-solr publish-container-base-app publish-container-app-dev publish-container-app-ci publish-container-app-ci-agendador publish-container-phpmemcachedadmin-base publish-container-phpmemcachedadmin publish-container-openldap-base publish-container-openldap publish-container-haproxy-base publish-container-haproxy publish-container-phpldapadmin publish-container-dbadminer
+publish-containers: publish-container-base-centos publish-container-memcached publish-container-jod publish-container-mailcatcher publish-container-base-mariadb publish-container-mariadb publish-container-base-sqlserver publish-container-sqlserver publish-container-base-oracle publish-container-oracle publish-container-base-postgres publish-container-postgres publish-container-solr publish-container-base-app publish-container-app-dev publish-container-app-ci publish-container-app-ci-agendador publish-container-phpmemcachedadmin-base publish-container-phpmemcachedadmin publish-container-openldap-base publish-container-openldap publish-container-haproxy-base publish-container-haproxy publish-container-phpldapadmin publish-container-dbadminer

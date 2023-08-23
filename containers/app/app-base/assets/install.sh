@@ -143,4 +143,11 @@ if [ "$IMAGEM_APP_PACOTEORACLE_PRESENTE" == "true" ]; then
 
 fi
 
+if [ "$IMAGEM_APP_PACOTEPOSTGRES_PRESENTE" == "true" ]; then
+
+   yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
+   yum install -y postgresql15 postgresql15-libs php-pgsql php-pecl-pq
+
+fi
+
 cd -

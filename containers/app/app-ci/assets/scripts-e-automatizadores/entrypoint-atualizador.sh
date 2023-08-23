@@ -219,6 +219,16 @@ if [ "$APP_DB_TIPO" == "SqlServer" ]; then
     cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
 fi
 
+if [ "$APP_DB_TIPO" == "PostgreSql" ]; then
+    echo "Atualizando Postgres..."
+
+    PSQL_CMD="psql -h $APP_DB_HOST -U $APP_DB_ROOT_USERNAME "
+    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';"
+    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sei -c "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';"
+    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';"
+    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';"
+fi
+
 echo "***************************************************"
 echo "***************************************************"
 echo "**GERACAO DE CERTIFICADO PARA O APACHE*************"
