@@ -34,7 +34,7 @@ class TestSuiteBasics():
     self.driver.find_element(By.ID, "txtUsuario").send_keys("teste")
     self.driver.find_element(By.ID, "pwdSenha").click()
     self.driver.find_element(By.ID, "pwdSenha").send_keys("<<SENHA>>")
-    self.driver.find_element(By.ID, "Acessar").click()
+    self.driver.find_element(By.XPATH, "//*[@id='sbmAcessar'] | //*[@id='Acessar']").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//div[@id=\'divControleProcessosConteudo\']/div[2]")))
     elements = self.driver.find_elements(By.XPATH, "//div[@id=\'divControleProcessosConteudo\']/div[2]")
     assert len(elements) > 0
@@ -58,11 +58,23 @@ class TestSuiteBasics():
     self.driver.find_element(By.CSS_SELECTOR, "#divOptPublico .infraRadioLabel").click()
     self.driver.find_element(By.CSS_SELECTOR, "#divInfraBarraComandosInferior > #btnSalvar").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrArvore\']")))
-    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\']")))
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\'] | //iframe[@id=\'ifrConteudoVisualizacao\']")))
+    
+    elements = self.driver.find_elements(By.XPATH, "//iframe[@id=\'ifrConteudoVisualizacao\']")
+    self.bolSei41 = len(elements) > 0
+    
     self.driver.switch_to.frame(1)
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//img[@alt=\'Incluir Documento\']")))
     self.driver.find_element(By.XPATH, "//img[@alt=\'Incluir Documento\']").click()
-    self.driver.find_element(By.LINK_TEXT, "Despacho").click()
+    
+    if(self.bolSei41):
+        time.sleep(5)
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//iframe[@id='ifrConteudoVisualizacao']"))
+        self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//iframe[@id='ifrVisualizacao']"))
+    
+    WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//a[text()='Despacho']")))
+    self.driver.find_element(By.XPATH, "//a[text()='Despacho']").click()
     self.driver.find_element(By.CSS_SELECTOR, "#divOptPublico .infraRadioLabel").click()
     self.vars["window_handles"] = self.driver.window_handles
     self.driver.find_element(By.CSS_SELECTOR, "#divInfraBarraComandosInferior > #btnSalvar").click()
@@ -75,10 +87,17 @@ class TestSuiteBasics():
     self.driver.close()
     self.driver.switch_to.window(self.vars["root"])
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrArvore\']")))
-    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\']")))
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\'] | //iframe[@id=\'ifrConteudoVisualizacao\']")))
     self.driver.switch_to.frame(1)
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//img[@alt=\'Incluir Documento\']")))
     self.driver.find_element(By.XPATH, "//img[@alt=\'Incluir Documento\']").click()
+    
+    if(self.bolSei41):
+        time.sleep(5)    
+        self.driver.switch_to.default_content()
+        self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//iframe[@id='ifrConteudoVisualizacao']"))
+        self.driver.switch_to.frame(self.driver.find_element(By.XPATH, "//iframe[@id='ifrVisualizacao']"))
+    
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.LINK_TEXT, "Externo")))
     self.driver.find_element(By.LINK_TEXT, "Externo").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.element_to_be_clickable((By.ID, "selSerie")))
@@ -97,10 +116,11 @@ class TestSuiteBasics():
     self.driver.find_element(By.CSS_SELECTOR, "#divInfraBarraComandosInferior > #btnSalvar > .infraTeclaAtalho").click()
     self.driver.switch_to.default_content()
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrArvore\']")))
-    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\']")))
-    self.driver.find_element(By.XPATH, "//div[@id='divInfraBarraSistemaPadrao']/div/div/button").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//iframe[@id=\'ifrVisualizacao\'] | //iframe[@id=\'ifrConteudoVisualizacao\']")))
+    self.driver.find_element(By.XPATH, "//div[@id='divInfraBarraSistemaPadrao']/div/div/button | //div[@id='divInfraBarraSistemaPadrao']/div/div/a[@id='lnkInfraMenuSistema']").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//ul[@id=\'infraMenu\']/li[8]/a/span")))
-    self.driver.find_element(By.XPATH, "//ul[@id=\'infraMenu\']/li[8]/a/span").click()
+    WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//ul[@id='infraMenu']//span[text()='Controle de Processos']")))
+    self.driver.find_element(By.XPATH, "//ul[@id='infraMenu']//span[text()='Controle de Processos']").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//a[contains(.,\'99990\')]")))
     elements = self.driver.find_elements(By.XPATH, "//a[contains(.,\'99990\')]")
     assert len(elements) > 0

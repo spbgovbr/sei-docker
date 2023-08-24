@@ -108,9 +108,10 @@ tests-base: ## target de apoio roda o teste em determinada base de dados via par
 		@echo "*****************************************************"
 		@echo "Base de dados dessa execucao: $(BASE)"
 		@echo "*****************************************************"
-	  make -C ../ destroy
+		make -C ../ destroy
 		make -C ../ base=$(BASE) config
 		make -C ../ up
+		make -C ../ update
 		make test_selenium_basico1
 		make -C ../ destroy
 		@echo "*****************************************************"
@@ -124,6 +125,7 @@ tests-all-bases: ## RODE ESSE TARGET PARA TESTAR TODA A STACK DO DEV
 		make BASE=mysql tests-base
 		make BASE=sqlserver tests-base
 		make BASE=oracle tests-base
+		make BASE=postgres tests-base
 		@echo "*****************************************************"
 		@echo "*****************************************************"
 		@echo "TESTES FINALIZADOS"

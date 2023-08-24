@@ -24,6 +24,9 @@ endef
 export MENSAGEM_AVISO_FONTES
 
 CMD_CURL_SEI_LOGIN = curl -s -L $(HOST_URL)/sei | grep "txtUsuario"
+CMD_INSTALACAO_SEI = echo -ne '$(SEI_DATABASE_USER)\n$(SEI_DATABASE_PASSWORD)\n' | php atualizar_versao_sei.php
+CMD_INSTALACAO_SIP = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php atualizar_versao_sip.php
+CMD_INSTALACAO_RECURSOS_SEI = echo -ne '$(SIP_DATABASE_USER)\n$(SIP_DATABASE_PASSWORD)\n' | php atualizar_recursos_sei.php
 
 help: ## Mostra essa ajuda. Voce pode usar tab para completar os comandos
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//' | sed -e 's|^\ ||'
@@ -70,10 +73,15 @@ up: prerequisites-up
 	docker-compose --env-file env.env up -d
 	make check-sei-isalive
 
+## update: Roda arquivos de update de versao para o sei e sip. Caso fonte na v4.1 e bd na 4.0, rode este target apos o up
+update: prerequisites-up
+	docker-compose --env-file env.env run --rm -w /opt/sei/scripts/ httpd bash -c "$(CMD_INSTALACAO_SEI)"; true
+	docker-compose --env-file env.env run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_SIP)"; true
+	docker-compose --env-file env.env run --rm -w /opt/sip/scripts/ httpd bash -c "$(CMD_INSTALACAO_RECURSOS_SEI)"; true
 
 config: ## sobreescreve o arquivo env.env para uma nova base de dados. Ex: make base=sqlserver config
 	@cp -f envs/env-$(base).env env.env
-	@echo "Ambiente configurado para utilizar a base de dados $(base). (base=[mysql|oracle|sqlserver])"
+	@echo "Ambiente configurado para utilizar a base de dados $(base). (base=[mysql|oracle|sqlserver|postgres])"
 
 
 down: ## apenas para o projeto com possibilidade de subir novamente mais tarde

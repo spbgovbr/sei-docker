@@ -108,17 +108,16 @@ endif
 test_lineup_completa: test_confirmation
 	@echo "*****************************************************"
 	@echo "*****************************************************"
-	@echo "Vamos iniciar uma execucao da montagem do ambiente reduzida com url customizada, nas 3 bases de dados. "
-	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente default com localhost, nas 3 bases de dados. "
-	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 3 bases de dados. Aguarde ... "
+	@echo "Vamos iniciar uma execucao da montagem do ambiente reduzida com url customizada, nas 4 bases de dados. "
+	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente default com localhost, nas 4 bases de dados. "
+	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 4 bases de dados. Aguarde ... "
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@sleep 5
 	
 	make CONFIRMACAO=y test_ambientes_reduzida
 	make CONFIRMACAO=y test_ambientes_default
-	make CONFIRMACAO=y test_ambientes_full
-	
+	make CONFIRMACAO=y test_ambientes_full	
 	make CONFIRMACAO=y  test_ambientes_http
 	
 	cp -f ../envlocal-example-mysql.env ../envlocal.env
@@ -130,11 +129,11 @@ test_lineup_completa: test_confirmation
 	@echo "*****************************************************"
 
 
-## test_ambientes_default: Roda o teste subindo ambiente default em localhost nas 3 bases
+## test_ambientes_default: Roda o teste subindo ambiente default em localhost nas 4 bases
 test_ambientes_default: test_confirmation
 	@echo "*****************************************************"
 	@echo "*****************************************************"
-	@echo "Vamos iniciar uma execucao da montagem do ambiente default, nas 3 bases de dados. Aguarde..."
+	@echo "Vamos iniciar uma execucao da montagem do ambiente default, nas 4 bases de dados. Aguarde..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@sleep 5
@@ -142,13 +141,14 @@ test_ambientes_default: test_confirmation
 	make CONFIRMACAO=y BANCO=mysql test_ambiente
 	make CONFIRMACAO=y BANCO=sqlserver test_ambiente
 	make CONFIRMACAO=y BANCO=oracle test_ambiente
+	make CONFIRMACAO=y BANCO=postgres test_ambiente
 
 
-## test_ambientes_reduzida: Roda o teste subindo ambiente reduzido com url custom, nas 3 bases de dados
+## test_ambientes_reduzida: Roda o teste subindo ambiente reduzido com url custom, nas 4 bases de dados
 test_ambientes_reduzida: test_confirmation
 	@echo "*****************************************************"
 	@echo "*****************************************************"
-	@echo "Vamos iniciar uma execucao da montagem do ambiente reduzida com url customizada, nas 3 bases de dados. Aguarde..."
+	@echo "Vamos iniciar uma execucao da montagem do ambiente reduzida com url customizada, nas 4 bases de dados. Aguarde..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@sleep 5
@@ -156,9 +156,10 @@ test_ambientes_reduzida: test_confirmation
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=mysql test_ambiente
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=sqlserver test_ambiente
 	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=oracle test_ambiente
+	make MODALIDADE=reduzida CONFIRMACAO=y BANCO=postgres test_ambiente
 
 
-## test_ambientes_http: Roda o teste subindo ambiente com http com url custom, nas 3 bases de dados
+## test_ambientes_http: Roda o teste subindo ambiente com http com url custom, nas 4 bases de dados
 test_ambientes_http: test_confirmation
 	@echo "*****************************************************"
 	@echo "*****************************************************"
@@ -170,15 +171,16 @@ test_ambientes_http: test_confirmation
 	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=mysql test_ambiente
 	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=sqlserver test_ambiente
 	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=oracle test_ambiente
+	make MODALIDADE=reduzida-http CONFIRMACAO=y BANCO=postgres test_ambiente
 	
 	make MODALIDADE=default-http CONFIRMACAO=y BANCO=mysql test_ambiente
 
 
-## test_ambientes_full: Roda o teste subindo ambiente full com todos os componentes com url custom, nas 3 bases de dados
+## test_ambientes_full: Roda o teste subindo ambiente full com todos os componentes com url custom, nas 4 bases de dados
 test_ambientes_full: test_confirmation
 	@echo "*****************************************************"
 	@echo "*****************************************************"
-	@echo "Vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 3 bases de dados. Aguarde..."
+	@echo "Vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 4 bases de dados. Aguarde..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@sleep 5
@@ -186,6 +188,7 @@ test_ambientes_full: test_confirmation
 	make MODALIDADE=completa CONFIRMACAO=y BANCO=mysql TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
 	make MODALIDADE=completa CONFIRMACAO=y BANCO=sqlserver TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
 	make MODALIDADE=completa CONFIRMACAO=y BANCO=oracle TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
+	make MODALIDADE=completa CONFIRMACAO=y BANCO=postgres TESTE_SELENIUM_USER_SENHA=123456 test_ambiente
 
 
 ## test_ambiente: Roda o teste em um unico ambiente. Deve ser passado parametro para Base e Modalidade

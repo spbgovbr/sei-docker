@@ -278,12 +278,6 @@ cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
 update-ca-trust extract
 update-ca-trust enable
 
-echo "***************************************************"
-echo "***************************************************"
-echo "**ATUALIZACAO DE SEQUENCES*************************"
-echo "***************************************************"
-echo "***************************************************"
-
 if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 
     echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
@@ -291,27 +285,6 @@ if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 
 fi
 
-#echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
-# copiado do sei-vagrant do guilhermao
-# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-#php -r "
-#    require_once '/opt/sip/web/Sip.php';
-#    \$conexao = BancoSip::getInstance();
-#    \$conexao->setBolScript(true);
-#    \$objScriptRN = new ScriptRN();
-#    \$objScriptRN->atualizarSequencias();
-#"
-
-#echo "atualizar sequences do SEI"
-## Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-#php -r "
-#    require_once '/opt/sei/web/SEI.php';
-#    \$conexao = BancoSEI::getInstance();
-#    \$conexao->setBolScript(true);
-#    \$objScriptRN = new ScriptRN();
-#    \$objScriptRN->atualizarSequencias();
-#"
-#echo "Finalizacao de atualizacao de sequences"
 
 echo "***************************************************"
 echo "***************************************************"
@@ -404,26 +377,6 @@ if [ "$OPENLDAP_PRESENTE" == "true" ]; then
 
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap.php
 
-        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
-        # copiado do sei-vagrant do guilhermao
-        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-        php -r "
-            require_once '/opt/sip/web/Sip.php';
-            \$conexao = BancoSip::getInstance();
-            \$objScriptRN = new ScriptRN();
-            \$objScriptRN->atualizarSequencias();
-        "
-
-        echo "atualizar sequences do SEI"
-        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-        php -r "
-            require_once '/opt/sei/web/SEI.php';
-            \$conexao = BancoSEI::getInstance();
-            \$objScriptRN = new ScriptRN();
-            \$objScriptRN->atualizarSequencias();
-        "
-        echo "Finalizacao de atualizacao de sequences"
-
         echo ""
     else
 
@@ -444,26 +397,6 @@ else
         echo "ATENCAO: USUARIO E SENHA TERAO O MESMO VALOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap-desligar.php
-
-        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
-        # copiado do sei-vagrant do guilhermao
-        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-        php -r "
-            require_once '/opt/sip/web/Sip.php';
-            \$conexao = BancoSip::getInstance();
-            \$objScriptRN = new ScriptRN();
-            \$objScriptRN->atualizarSequencias();
-        "
-
-        echo "atualizar sequences do SEI"
-        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
-        php -r "
-            require_once '/opt/sei/web/SEI.php';
-            \$conexao = BancoSEI::getInstance();
-            \$objScriptRN = new ScriptRN();
-            \$objScriptRN->atualizarSequencias();
-        "
-        echo "Finalizacao de atualizacao de sequences"
 
 
     else
