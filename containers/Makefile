@@ -232,7 +232,7 @@ erase-conteiner-dbadminer: ## apagar a imagem dbadminer
 		@make IMAGEMTMP=dbadminer IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
 
 ## erase-conteiners-local: target que chama todos os outros targets para apagar as imagens do projeto
-erase-conteiners-local: erase-conteiner-app-ci-agendador erase-conteiner-app-ci erase-conteiner-app-dev erase-conteiner-base-app erase-conteiner-solr erase-conteiner-memcached erase-conteiner-jod erase-conteiner-mailcatcher erase-conteiner-mariadb erase-conteiner-base-mariadb erase-conteiner-sqlserver erase-conteiner-base-sqlserver erase-conteiner-oracle erase-conteiner-base-oracle erase-conteiner-base-centos erase-conteiner-phpmemcachedadmin erase-conteiner-phpmemcachedadmin-base erase-conteiner-openldap erase-conteiner-openldap-base erase-conteiner-haproxy erase-conteiner-haproxy-base erase-conteiner-phpldapadmin erase-conteiner-dbadminer
+erase-conteiners-local: erase-conteiner-app-ci-agendador erase-conteiner-app-ci erase-conteiner-app-dev erase-conteiner-base-app erase-conteiner-solr erase-conteiner-memcached erase-conteiner-jod erase-conteiner-mailcatcher erase-conteiner-mariadb erase-conteiner-base-mariadb erase-conteiner-sqlserver erase-conteiner-base-sqlserver erase-conteiner-oracle erase-conteiner-base-oracle erase-conteiner-postgres erase-conteiner-base-postgres erase-conteiner-base-centos erase-conteiner-phpmemcachedadmin erase-conteiner-phpmemcachedadmin-base erase-conteiner-openldap erase-conteiner-openldap-base erase-conteiner-haproxy erase-conteiner-haproxy-base erase-conteiner-phpldapadmin erase-conteiner-dbadminer
 
 
 #*****************************************************
