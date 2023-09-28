@@ -76,15 +76,18 @@ else
 
     echo "Fazendo o clone dos fontes. Aguarde..."
     export GIT_SSH=/tmp/gitwrap.sh
-    git clone $APP_FONTES_GIT_PATH
+    git clone $APP_FONTES_GIT_PATH spe
     export GIT_SSH=ssh
 
     echo "Fazendo a copia dos fontes. Aguarde..."
-    cd sei
+    cd spe
+    if [ -d "src" ] ; then
+        cd src
+    fi
     git checkout $APP_FONTES_GIT_CHECKOUT
     cp -R * /opt/
     cd /
-    rm -rf /tmp/super /tmp/lhave.key
+    rm -rf /tmp/sei /tmp/lhave.key
 fi
 
 #todo melhorar isso
