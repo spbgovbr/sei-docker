@@ -81,10 +81,10 @@ else
 
     echo "Fazendo a copia dos fontes. Aguarde..."
     cd spe
+    git checkout $APP_FONTES_GIT_CHECKOUT
     if [ -d "src" ] ; then
         cd src
     fi
-    git checkout $APP_FONTES_GIT_CHECKOUT
     cp -R * /opt/
     cd /
     rm -rf /tmp/sei /tmp/lhave.key
