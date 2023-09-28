@@ -74,6 +74,10 @@ yum -y install \
     libgearman-dev \
     libgearman-devel
 
+cd /tmp/assets/
+cp ca-certIN.pem /etc/pki/ca-trust/source/anchors/
+update-ca-trust extract
+update-ca-trust enable
 
 cd /tmp/assets/pacotes
 

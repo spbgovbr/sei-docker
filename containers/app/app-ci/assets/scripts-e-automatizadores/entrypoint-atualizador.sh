@@ -80,7 +80,7 @@ else
     export GIT_SSH=ssh
 
     echo "Fazendo a copia dos fontes. Aguarde..."
-    cd super
+    cd sei
     git checkout $APP_FONTES_GIT_CHECKOUT
     cp -R * /opt/
     cd /
@@ -1129,6 +1129,79 @@ if [ "$MODULO_PI_INSTALAR" == "true" ]; then
 else
 
     echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
+echo "***************************************************"
+echo "***************************************************"
+echo "********MODULO INCOM*******************************"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-incom.ok ]; then
+
+        if [ -z "$MODULO_INCOM_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_INCOM_VERSAO"
+
+        else
+
+                echo "Sincronizando nova versão do modulo incom"
+                rm -rf /opt/sei/web/modulos/mod-sei-incom /opt/sei/web/modulos/incom
+
+                cd /sei-modulos/mod-sei-incom
+                git pull
+
+                cd /opt/sei/web/modulos
+                cp -R /sei-modulos/mod-sei-incom mod-sei-incom
+
+                cd mod-sei-incom
+                git checkout $MODULO_INCOM_VERSAO
+                echo "Versao do Incom agora: $MODULO_INCOM_VERSAO"
+
+                make clean
+                make dist
+                cd dist
+                files=( *.zip )
+                f="${files[0]}"
+                mkdir -p temp
+                cp $f temp/
+                cd temp/
+                yes | unzip $f
+                \cp -Rf sei/* /opt/sei/
+                \cp -Rf sip/* /opt/sip/
+
+                cd /opt/sei/web/modulos
+                mv mod-sei-incom mod-sei-incom.old
+
+                # adiciona config
+                cd /opt/sei
+                sed -i "s#/\*novomodulo\*/#'MdIncomIntegracao' => 'incom', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+                cd /opt
+                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-incom/sip_atualizar_versao_modulo_incom.php
+                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-incom/sei_atualizar_versao_modulo_incom.php
+
+                echo "Rodando configuracoes"
+                php /sei/files/scripts-e-automatizadores/modulos/mod-sei-incom/mod-sei-incom.php
+
+                rm -rf /opt/sei/web/modulos/mod-sei-incom.old
+
+                touch /sei/controlador-instalacoes/instalado-modulo-incom.ok
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo INCOM encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
 

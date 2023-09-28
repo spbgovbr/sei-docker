@@ -796,6 +796,68 @@ else
 
 fi
 
+echo "***************************************************"
+echo "***************************************************"
+echo "********MODULO INCOM*******************************"
+echo "***************************************************"
+echo "***************************************************"
+
+if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
+
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-incom.ok ]; then
+
+        if [ -z "$MODULO_INCOM_VERSAO" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_INCOM_VERSAO"
+
+        else
+
+            echo "Verificando existencia do modulo INCM"
+            if [ -d "/opt/sei/web/modulos/incom" ]; then
+                echo "Ja existe um diretorio para o modulo INCOM. Vamos assumir que o codigo la esteja integro"
+
+            else
+
+                echo "Buildando o modulo INCOM"
+
+                cd /opt/sei/web/modulos
+                cp -R /sei-modulos/mod-sei-incom mod-sei-incom
+                cd mod-sei-incom
+                git checkout $MODULO_INCOM_VERSAO
+                echo "Versao do INCOM agora: $MODULO_INCOM_VERSAO"
+                make clean
+                make dist
+                cd dist
+                files=( *.zip )
+                f="${files[0]}"
+                mkdir temp
+                cp $f temp/
+                cd temp/
+                yes | unzip $f
+                \cp -Rf sei/* /opt/sei/
+                \cp -Rf sip/* /opt/sip/
+
+                cd /opt/sei/web/modulos
+                mv mod-sei-incom mod-sei-incom.old
+
+                cd /opt/sei/config/mod-incom/
+
+            fi
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo INCOM encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
 
 echo "Atualizador finalizado procedendo com a subida dos agendamentos..."
 
