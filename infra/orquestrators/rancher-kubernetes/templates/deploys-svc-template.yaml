@@ -191,22 +191,33 @@ spec:
             - sh
             - -c
             - curl -s -L localhost/sei | grep frmLogin
-          failureThreshold: 2
+          failureThreshold: 5
           initialDelaySeconds: 10
-          periodSeconds: 10
+          periodSeconds: 20
           successThreshold: 1
-          timeoutSeconds: 10
+          timeoutSeconds: 20
         readinessProbe:
           exec:
             command:
             - sh
             - -c
             - curl -s -L localhost/sei | grep frmLogin
-          failureThreshold: 2
+          failureThreshold: 5
           initialDelaySeconds: 10
-          periodSeconds: 10
+          periodSeconds: 20
           successThreshold: 1
-          timeoutSeconds: 10
+          timeoutSeconds: 20
+        startupProbe:
+          exec:
+            command:
+              - sh
+              - '-c'
+              - ls /sei/controlador-instalacoes/instalado.ok
+          failureThreshold: 100
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
         resources:
           limits:
             cpu: ${KUBERNETES_LIMITS_CPU_APP}
