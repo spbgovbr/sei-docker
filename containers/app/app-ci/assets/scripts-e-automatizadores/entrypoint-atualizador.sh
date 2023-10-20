@@ -1054,6 +1054,56 @@ else
 
 fi
 
+echo "*****************************************************"
+echo "*****************************************************"
+echo "INICIANDO CONFIGURACOES DO MODULO DE PESQUISA PUBLICA*"
+echo "*****************************************************"
+echo "*****************************************************"
+
+if [ "$MODULO_PESQUISA_INSTALAR" == "true" ]; then
+
+    if [ -f /sei/controlador-instalacoes/instalado-modulo-pesquisa.ok ]; then
+
+        if [ -z "$MODULO_PESQUISA_VERSAO" ] || \
+           [ -z "$MODULO_PESQUISA_URL" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_PESQUISA_VERSAO, MODULO_PESQUISA_URL"
+
+        else
+
+            echo "Verificando existencia do modulo de PESQUISA"
+            if [ -d "/opt/sei/web/modulos/pesquisa" ]; then
+                echo "Ja existe um diretorio para o modulo de PESQUISA. Vamos assumir que o codigo la esteja integro"
+
+            else
+                echo "Copiando o modulo de PESQUISA"
+                cp -Rf /sei-modulos/pesquisa/* /opt
+            fi
+
+            cd /opt/sei/
+
+            sed -i "s#/\*novomodulo\*/#'PesquisaIntegracao' => 'pesquisa', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+
+            cd /opt
+            echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/sip_atualizar_versao_modulo_pesquisa.php
+            echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/sei_atualizar_versao_modulo_pesquisa.php
+
+            touch /sei/controlador-instalacoes/instalado-modulo-pesquisa.ok
+
+        fi
+
+    else
+
+        echo "Arquivo de controle do Modulo de pesquisa encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+
+    fi
+
+else
+
+    echo "Variavel MODULO_PESQUISA_INSTALAR nao setada para true, pulando configuracao..."
+
+fi
+
 echo "***************************************************"
 echo "***************************************************"
 echo "********MODULO PROTOCOLO INTEGRADO*****************"
