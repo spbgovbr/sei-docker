@@ -1,0 +1,69 @@
+div.infraAjaxAutoCompletar {
+    border: 1px solid #9F9F9F;
+    background-color: #F3F3F3;
+    padding: 3px;
+    font-size: 10px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    color: #000000;
+    display: none;
+    position: absolute;
+    z-index: 999;
+}
+
+div.infraAjaxAutoCompletar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+div.infraAjaxAutoCompletar ul li {
+    display: block;
+}
+
+div.infraAjaxAutoCompletar a {
+    color: #000000;
+    text-decoration: none;
+}
+
+div.infraAjaxAutoCompletar a:hover {
+    color: #000000;
+}
+
+div.infraAjaxAutoCompletar li.selected {
+    background-color: #7d95ae;
+    color: #000000;
+}
+
+img.infraAjaxImgProcessando {
+    cursor: default;
+}
+
+a.infraAjaxLinkParar {
+    text-decoration: underline;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+}
+
+div.infraAjaxAutoCompletar b {
+    font-weight: bold;
+}
+
+div.infraAjaxAutoCompletar i {
+    font-style: italic;
+}
+
+span.infraAjaxAutoCompletarGrupo {
+    font-style: italic;
+}
+
+span.infraAjaxAutoCompletarGrupo b {
+    font-style: italic;
+    font-weight: bold;
+}
+
+.infraAjaxMarcarSelecao {
+    background-color: #ffffdd;
+    border: 1px dotted black !important;
+}

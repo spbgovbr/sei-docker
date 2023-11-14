@@ -1,0 +1,9 @@
+.was-validated .bootstrap-select select:invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.bootstrap-select.disabled > button {
+    cursor: not-allowed;
+    background-color: lightgray;
+    color: #8c8c8c; //todo params usados pelo do btn-light, por exemplo (cor de fundo, cor do texto)
+}

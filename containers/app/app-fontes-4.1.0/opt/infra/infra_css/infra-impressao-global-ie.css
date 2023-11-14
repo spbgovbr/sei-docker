@@ -1,0 +1,26 @@
+body {
+    overflow: visible;
+}
+
+div.infraImpressao {
+    overflow: visible;
+    margin: 0 1%;
+}
+
+table {
+    overflow: visible;
+    border-collapse: collapse;
+}
+
+tr, td, th {
+    page-break-inside: avoid;
+}
+
+p.infraQuebraPagina {
+    page-break-before: always;
+}
+
+
+
+
+

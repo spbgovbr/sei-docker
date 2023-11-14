@@ -12,3 +12,5 @@ tests/Selenium/PythonExported/__pycache__
 tests/Selenium/PythonExported/resultado.xml
 tests/Selenium/PythonExported/test_suiteBasics-executar.py
 tests/Selenium/PythonExported/test_suiteBasics-executar.py-e
+
+containers/app/app-base/command.txt

@@ -1,0 +1,1436 @@
+* {
+    font-family: Roboto, Arial, "Droid Sans", Helvetica, Sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
+
+
+html {
+}
+
+body {
+    margin: 0;
+    text-align: center;
+    font-size: 12px;
+}
+
+div, legend, caption {
+    text-align: left;
+}
+
+input, button, textarea, select, table, label, legend, caption, a, span, p {
+    font-size: 0.8rem;
+}
+
+legend {
+    width: auto;
+}
+
+input, button, textarea, select {
+    background-color: #fff;
+}
+
+select:focus, textarea:focus, input:focus {
+    background-color: #dfdfdf;
+    outline: none;
+}
+
+button:focus {
+    outline: 1px solid black;
+}
+
+select option {
+    padding: 1px .5rem;
+}
+
+a:focus {
+    outline: none;
+}
+
+a:focus img, img:focus {
+    outline: 1px dotted black;
+    border-radius: 4px;
+}
+
+a:hover img, img:hover {
+    outline: none !important;
+}
+
+div.infraBarraSistema a:focus img,
+div.infraDivOrdenacao a:focus img,
+#imgInfraMenuPontosTopo:focus,
+#lnkInfraCheck:focus img {
+    outline: 1px dotted white;
+}
+
+#lnkInfraUnidade:focus {
+    outline: 1px dotted white;
+    outline-offset: 1px;
+}
+
+#lnkInfraMenuSistema:focus img,
+#lnkInfraMenuSistema:focus span {
+    outline: 1px dotted white;
+    outline-offset: 1px;
+    border-radius: 4px;
+}
+
+div.infraAreaPaginacao a:focus img {
+    outline: 1px dotted black;
+}
+
+a, img {
+    cursor: pointer;
+}
+
+hr {
+    border-bottom: solid #0494c7 .125rem;
+}
+
+label.infraLabelTitulo {
+    font-size: 1rem;
+    color: white;
+    padding: 4px 10px;
+    font-weight: 400;
+    background-color: #0494c7;
+    border-radius: .2rem;
+    width: 99%;
+}
+
+label.infraLabelTitulo img {
+    vertical-align: top;
+}
+
+div.infraBarraSeguranca {
+    padding: .2em;
+    display: block;
+    background-color: red;
+    text-align: center;
+}
+
+div.infraBarraSeguranca span {
+    color: white;
+    font-weight: bold;
+}
+
+div.infraBarraAcesso {
+    padding: 8px 4px;
+    text-align: right;
+}
+
+div.infraBarraAcesso span {
+    font-size: .875rem;
+    font-weight: 600;
+}
+
+div.infraBarraAcesso a {
+    font-size: .875rem;
+    text-decoration: none;
+}
+
+div.infraBarraAcesso a:hover {
+    text-decoration: underline;
+}
+
+nav.infraBarraNavegacao {
+    min-height: 66px;
+}
+
+div.infraBarraSistema {
+}
+
+div.infraBarraSistema h6 {
+    font-size: .6rem;
+    padding: 2px 0 1px 0;
+}
+
+
+#spnInfraIdentificacaoSistema {
+    color: white;
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+#divInfraBarraSistemaPadrao {
+    z-index: 1000;
+}
+
+#divInfraBarraSistemaLinha {
+    height: 4px;
+}
+
+.infraBarraSistemaPadraoE,
+.infraBarraSistemaMovelE,
+.infraBarraSistemaMovelD {
+    height: 47px;
+    white-space: nowrap;
+}
+
+.infraBarraSistemaPadraoE img {
+    vertical-align: sub;
+}
+
+div.infraAcaoBarraSistema {
+    margin: 5px 0 0 0;
+    padding-left: 3px;
+}
+
+div.infraBarraLocalizacao {
+    margin: 5px 0 2px 0;
+    padding: 2px 4px;
+    font-size: 1.4rem;
+    font-weight: 600;
+    text-align: left;
+    width: fit-content;
+}
+
+div.infraAreaTela {
+    display: block;
+    overflow: visible;
+    width: 100%;
+}
+
+div.infraAreaTelaE {
+    float: unset !important;;
+    width: unset !important;
+}
+
+div.infraAreaTelaD {
+    float: unset !important;
+    width: unset !important;
+    border: unset !important;
+}
+
+div.infraBarraComandos {
+    text-align: left;
+    clear: both;
+    border-top: 2px solid transparent;
+    border-bottom: 8px solid transparent;
+    width: 100%;
+    text-align: right;
+}
+
+div.infraBarraComandos input,
+div.infraBarraComandos button {
+    margin-left: .25rem;
+}
+
+div.infraAreaDados {
+    position: relative;
+    clear: both;
+    overflow: visible;
+}
+
+div.infraAreaTabela {
+    clear: both;
+    display: table;
+    width: 100%;
+    overflow: auto;
+}
+
+div.infraAreaDadosDinamica {
+    clear: both;
+    display: block;
+}
+
+img.infraImg,
+img.infraImgNormal {
+    opacity: 1;
+    border-width: 0;
+}
+
+img.infraImg:hover,
+img.infraImgNormal:hover {
+    opacity: 0.5;
+    border-width: 0;
+}
+
+img.infraImgOpaca {
+    opacity: 0.3;
+    border-width: 0;
+}
+
+div.infraAreaDebug {
+    overflow: auto;
+    display: table;
+    white-space: pre-wrap;
+    font-size: .875rem;
+    width: 100%;
+}
+
+div.infraAutoCompletar {
+    border: .1em solid #9F9F9F;
+    background-color: #00FF00;
+    padding: .3em;
+    font-size: .875rem;
+    color: #000000;
+    display: none;
+    position: absolute;
+    z-index: 999;
+}
+
+div.infraAutoCompletar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+div.infraAutoCompletar ul li {
+    display: block;
+}
+
+div.infraAutoCompletar a {
+    color: #000000;
+    text-decoration: none;
+}
+
+div.infraAutoCompletar a:hover {
+    color: #000000;
+}
+
+div.infraAutoCompletar li.selected {
+    background-color: #7d95ae;
+    color: #000000;
+}
+
+select.infraSelect {
+    display: block;
+    border-radius: .2rem;
+    line-height: 1.5em;
+    font-size: .875rem;
+    height: calc(1.5em + .4rem + 4px);
+    border: 1px solid #ced4da;
+}
+
+select.infraSelect[multiple] {
+    height: unset;
+    margin-top: 3px !important;
+}
+
+button.ms-choice {
+    height: calc(1.5em + .4rem + 4px);
+}
+
+div.ms-drop,
+button.ms-choice > span {
+    font-size: .875rem;
+}
+
+
+select.infraSelectOculto {
+    display: none;
+}
+
+select.infraSelect[multiple] {
+    margin-top: 4px;
+}
+
+div.infraAreaPaginacao {
+    margin: 5px auto;
+    text-align: center;
+    clear: both;
+    height: calc(1.5em + .4rem + 6px);
+}
+
+div.infraAreaPaginacao select {
+    vertical-align: bottom;
+}
+
+div.infraAreaPaginacao a {
+    vertical-align: middle;
+}
+
+td.infraTd {
+}
+
+td.infraTd b {
+    font-weight: bold;
+}
+
+td.infraTd i {
+    font-style: italic;
+}
+
+div.infraBarraCategoria {
+    display: block;
+    overflow: hidden;
+    padding: 0.2em;
+}
+
+div.infraAviso {
+    position: absolute;
+    border: .1em solid #999999;
+    background-color: #f4f4f4;
+    border-radius: .4rem;
+    padding: 10px;
+    z-index: 999;
+}
+
+div.infraAviso img {
+    vertical-align: text-top;
+    width: 40px;
+    height: 40px;
+}
+
+div.infraAviso span {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+
+div.infraFundoTransparente {
+    z-index: 997;
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    width: 10px;
+    height: 10px;
+    left: 0;
+    top: 0;
+    background: transparent url("imagens/fndtransp.gif");
+    background-repeat: repeat;
+}
+
+
+tr.infraTrClara,
+td.infraTdClara {
+    background-color: #fff;
+}
+
+tr.infraTrEscura,
+td.infraTdEscura {
+    background-color: #f4f4f4;
+}
+
+div.infraAreaGlobal a {
+    cursor: pointer;
+}
+
+div.infraLinkOrgao {
+}
+
+span.infraUsuario {
+    display: inline-block;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: right;
+    vertical-align: middle;
+    width: 50%;
+    padding-bottom: .3em;
+}
+
+a.infraAcaoBarraConjugada {
+    padding: 3px 6px;
+    font-size: .75rem;
+    font-weight: 400;
+    color: #495057 !important;
+    height: 24px;
+    line-height: 18px;
+    background-color: white;
+}
+
+a.infraAcaoBarraConjugada:hover {
+    cursor: pointer;
+}
+
+span.infraAcaoBarraConjugada,
+span.infraAcaoBarraConjugada:hover {
+    padding: 2px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    line-height: 0;
+    height: 24px;
+    border: 0;
+    background-color: white;
+}
+
+span.infraAcaoBarraConjugada img {
+    margin-right: 1px;
+}
+
+#lnkInfraMenuSistema:hover {
+    opacity: 0.5;
+}
+
+#lnkInfraUnidade {
+    border: 1px solid white;
+}
+
+#lnkInfraUnidade:hover {
+    border: 1px solid #999;
+    text-decoration: none;
+}
+
+div.infraAreaValidacao {
+    margin-top: 1em;
+    margin-bottom: .2em;
+    font-size: 1.2rem;
+    color: #f00;
+}
+
+input.infraButton, button.infraButton {
+    margin-bottom: 2px;
+    border: 1px solid #666;
+    padding: .3rem .6rem;
+    border-radius: .25rem;
+}
+
+input.infraButton,
+input.infraButton span,
+button.infraButton,
+button.infraButton span {
+    font-size: .8rem;
+    color: #495057;
+    line-height: 1.5;
+    transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+input.infraButton:hover,
+input.infraButton:hover span,
+button.infraButton:hover,
+button.infraButton:hover span {
+    color: #fff;
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+label.infraLabelOpcional,
+label.infraLabelObrigatorio {
+    color: #666;
+    margin-bottom: .5rem;
+    font-size: .875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+}
+
+label.infraLabelObrigatorio {
+    font-weight: 600;
+}
+
+label.infraLabelDesabilitado {
+    color: #999;
+    margin-bottom: .2em;
+}
+
+table.infraTable {
+    margin: 2px 0;
+    color: #212529;
+    border: 1px solid rgba(221, 221, 221, 0.78);
+    border-collapse: collapse;
+    border-spacing: 2px;
+}
+
+table.infraTable thead tr,
+table.infraTable tr > th.infraTh {
+    color: #ECF0F1;
+    text-align: -moz-center;
+}
+
+th.infraTh {
+    display: table-cell;
+    padding: .375rem;
+    font-size: .875rem;
+    border-top: 1px solid #dee2e6;
+    border-bottom: 2px solid #dee2e6;
+    text-align: center;
+    color: #ECF0F1;
+    line-height: 24px;
+}
+
+th.infraTh img {
+    padding: 0;
+    vertical-align: top;
+}
+
+table.infraTable td {
+    font-size: .875rem;
+    line-height: 20px;
+    padding: .375rem;
+    border-top: 1px solid #dee2e6;
+}
+
+
+table.infraTable td a,
+a.infraAncoraSigla {
+    font-size: .875rem;
+}
+
+table.infraTable td b {
+    font-weight: bold;
+}
+
+caption.infraCaption {
+    border-bottom: .1em solid #496004;
+    font-size: .875rem;
+    text-align: right;
+    color: #666;
+    padding: .2em 0;
+}
+
+div.infraDivOrdenacao {
+    display: inline-table;
+    margin: 0px 10px;
+    vertical-align: middle;
+}
+
+div.infraDivSetaOrdenacao {
+    display: table-cell;
+    padding: 0 1px;
+}
+
+div.infraDivRotuloOrdenacao {
+    display: table-cell;
+    padding-right: 3px;
+}
+
+div.infraDivThCheck {
+    display: inline-table;
+    vertical-align: middle;
+    text-align: left;
+    width:100%;
+}
+
+div.infraDivThCheckSelecao {
+    display: table-cell;
+    vertical-align: middle;
+    padding: 0 1px;
+    width:1%;
+}
+
+div.infraDivThCheckRotulo {
+    display: table-cell;
+    vertical-align: middle;
+    padding-left: 3px;
+}
+
+a.infraAncoraSigla {
+    text-decoration: none;
+}
+
+a.infraAncoraSigla:hover {
+    text-decoration: underline;
+}
+
+fieldset.infraFieldset {
+    border: .1em solid #969594;
+    margin-top: 2px;
+    box-sizing: border-box;
+    -moz-border-radius: .2rem;
+    -webkit-border-radius: .2rem;
+    border-radius: .2rem;
+}
+
+legend.infraLegend {
+    font-weight: normal;
+    margin-bottom: 0;
+    font-size: .875rem;
+    letter-spacing: .1em;
+    color: white;
+    background-color: #969594;
+    margin-left: .8em;
+    padding: 0 5px;
+    border-radius: .2rem;
+}
+
+legend.infraLegendOpcional {
+    padding: .2em;
+}
+
+legend.infraLegendObrigatorio {
+    font-weight: bold;
+    padding: .2em;
+}
+
+span.infraTeclaAtalho {
+    text-decoration: underline;
+    font-size: .875rem;
+    font-weight: 400;
+    color: inherit !important;
+    background-color: transparent !important;
+}
+
+label.infraLabelObrigatorio span.infraTeclaAtalho {
+    font-weight: bold;
+}
+
+form.infraForm {
+}
+
+input.infraPassword {
+}
+
+input.infraText, textarea.infraTextarea {
+    border: 1px solid #ced4da;
+    border-radius: .2rem;
+    padding: .25rem .5rem;
+    font-size: .875rem;
+    line-height: 1.5;
+}
+
+input.infraText {
+    height: calc(1.5em + .4rem + 2px);
+}
+
+textarea.infraTextarea {
+    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    resize: none;
+}
+
+
+div.infraExcecao span {
+    font-size: 1rem;
+    color: red;
+}
+
+div.infraDetalhesExcecao,
+div.infraDetalhesManutencao {
+    width: 100%;
+    overflow: hidden;
+    display: table;
+}
+
+div.infraDetalhesExcecao b,
+div.infraDetalhesManutencao b {
+    font-weight: 600;
+}
+
+span.infraDetalhesExcecao,
+span.infraDetalhesManutencao {
+    font-size: .875rem;
+}
+
+div.infraTooltipTitulo {
+    background-color: #ccc;
+    padding: 3px 10px;
+    border-radius: .2rem;
+    border-bottom: unset;
+}
+
+div.infraTooltipTitulo hr {
+    border: 0;
+}
+
+div.infraTooltipTexto {
+    padding: 4px;
+}
+
+div.infraTooltipTexto hr {
+    margin: .25rem 0;
+}
+
+div.infraTooltip {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: .2rem;
+    z-index: 999999999;
+}
+
+tr.infraTrAcessada,
+tr.infraTrAcessada td,
+td.infraTdAcessada {
+    background-color: #ffffb1 !important;
+}
+
+tr.infraTrAcessada td,
+tr.infraTrAcessada span,
+tr.infraTrAcessada b,
+tr.infraTrAcessada div {
+    color: black !important;
+}
+
+tr.infraTrMarcada,
+tr.infraTrMarcada td,
+td.infraTdMarcada {
+    background-color: #79e5e5 !important;
+}
+
+tr.infraTrSelecionada,
+tr.infraTrSelecionada td,
+td.infraTdSelecionada {
+    background-color: #e5e5e5 !important;
+}
+
+.infraReadOnly {
+    border: .1em solid #ced4da;
+    background-color: #f4f4f4;
+}
+
+input.infraAutoCompletar {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+}
+
+.infraAjaxMarcarSelecao {
+    border: 1px solid #ced4da !important;
+}
+
+div.infraBotaoMenu {
+    position: absolute;
+    border: .1em solid #dfdfdf;
+    overflow: hidden;
+    background-color: white;
+}
+
+div.infraBotaoMenu ul {
+    list-style: none;
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+div.infraBotaoMenu a {
+    display: block;
+    margin: 0;
+    text-decoration: none;
+    left: 0;
+    cursor: pointer;
+    color: #666;
+    border: 0.1em solid #fff;
+    padding: 0.15em 0.45em;
+    background-color: #fff;
+    width: 90%;
+}
+
+li.infraSeparadorBotaoMenu {
+    border-bottom: 1px dotted #ccc;
+}
+
+div.infraBotaoMenu a:link,
+div.infraBotaoMenu a:active,
+div.infraBotaoMenu a:visited {
+    color: #666;
+}
+
+div.infraBotaoMenu a:hover,
+div.infraBotaoMenu a:focus {
+    background-color: #e0e0e0;
+}
+
+img.infraImgBotaoMenu {
+    height: 1em;
+    padding-left: .2em;
+    border-width: 0;
+}
+
+div.infraSidebarMenu a:focus {
+    outline: none;
+}
+
+div.infraSidebarMenu a:focus img {
+    outline: none;
+}
+
+div.infraMenuAcoes {
+    position: absolute;
+    display: block;
+    border-top: .1em solid black;
+    border-right: .1em solid #dfdfdf;
+    border-bottom: .1em solid #dfdfdf;
+    border-left: .1em solid black;
+}
+
+div.infraMenuAcoes a {
+    display: block;
+    margin: 0;
+    text-decoration: none;
+    left: 0;
+    cursor: pointer;
+    border: 0.1em solid #fff;
+    padding: 0.15em 0.45em;
+    background-color: #fff;
+}
+
+div.infraMenuAcoes a img {
+    padding-right: .2em;
+}
+
+div.infraMenuAcoes a:link,
+div.infraMenuAcoes a:active,
+div.infraMenuAcoes a:visited {
+    color: #666;
+}
+
+div.infraMenuAcoes a:hover,
+div.infraMenuAcoes a:focus {
+    background-color: #e0e0e0;
+}
+
+img.infraImgMenuAcaoSelecionada {
+    background-color: black;
+}
+
+img.infraImgMenuAcaoNormal {
+    border: 0;
+}
+
+
+div.infraImpressao table {
+    background-color: #dfdfdf;
+}
+
+div.infraImpressao table th {
+    background-color: white;
+    background-image: none;
+}
+
+div.infraImpressao table th,
+div.infraImpressao table td {
+    border: 1px solid #dfdfdf;
+}
+
+div.infraImpressao table.infraTableOrdenacao {
+    background-color: white;
+}
+
+div.infraImpressao table.infraTableOrdenacao td {
+    border: 0;
+}
+
+span.infraTituloLogoSistema {
+    vertical-align: text-top;
+    color: white;
+    font-size: .8rem;
+    font-weight: normal;
+    padding-left: 1em;
+}
+
+div.infraBarraSistemaPadraoE span.infraTituloLogoSistema {
+    vertical-align: text-bottom;
+}
+
+div.infraTituloImprimirTabela {
+    padding-top: .3em;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+#divInfraMensagens {
+    font-size: .875rem;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1000;
+    top: .25rem;
+    opacity: 0;
+}
+
+.fade-in {
+    opacity: 1 !important;
+    transition: opacity 0.2s ease;
+}
+
+.infraNotificacao {
+    font-size: .8rem;
+    display: inline-block;
+    position: relative;
+    top: -1px;
+    line-height: 12px;
+    padding: 0 3px;
+    color: white !important;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.25);
+    border: 1px solid;
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(0, 0, 0, 0.08);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px 1px rgba(0, 0, 0, 0.08);
+}
+
+.infraNotificacao {
+    background: #67c1ef;
+    border-color: #30aae9;
+    background-image: -webkit-linear-gradient(top, #acddf6, #67c1ef);
+    background-image: -moz-linear-gradient(top, #acddf6, #67c1ef);
+    background-image: -o-linear-gradient(top, #acddf6, #67c1ef);
+    background-image: linear-gradient(to bottom, #acddf6, #67c1ef);
+}
+
+.infraNotificacao.verde {
+    background: #77cc51;
+    border-color: #59ad33;
+    background-image: -webkit-linear-gradient(top, #a5dd8c, #77cc51);
+    background-image: -moz-linear-gradient(top, #a5dd8c, #77cc51);
+    background-image: -o-linear-gradient(top, #a5dd8c, #77cc51);
+    background-image: linear-gradient(to bottom, #a5dd8c, #77cc51);
+}
+
+.infraNotificacao.verde2 {
+    background: #12c63d;
+    border-color: #04a432;
+    background-image: -webkit-linear-gradient(top, #82f585, #12c63d);
+    background-image: -moz-linear-gradient(top, #a5dd8c, #12c63d);
+    background-image: -o-linear-gradient(top, #a5dd8c, #12c63d);
+    background-image: linear-gradient(to bottom, #a5dd8c, #12c63d);
+}
+
+.infraNotificacao.azul {
+    background: #2280ff;
+    border-color: #3a69e2;
+    background-image: -webkit-linear-gradient(top, #62a2f5, #0958e6);
+    background-image: -moz-linear-gradient(top, #62a2f5, #0958e6);
+    background-image: -o-linear-gradient(top, #62a2f5, #0958e6);
+    background-image: linear-gradient(to bottom, #62a2f5, #0958e6);
+}
+
+.infraNotificacao.amarelo {
+    text-shadow: 0 1px rgba(255, 255, 255, 0.25);
+    color: black;
+    background: #ffff66;
+    border-color: #f4a306;
+    background-image: -webkit-linear-gradient(top, #ffff66, #faba3e);
+    background-image: -moz-linear-gradient(top, #ffff66, #faba3e);
+    background-image: -o-linear-gradient(top, #ffff66, #faba3e);
+    background-image: linear-gradient(to bottom, #ffff66, #faba3e);
+}
+
+.infraNotificacao.vermelho {
+    background: #fa492c;
+    border-color: #fa3227;
+    background-image: -webkit-linear-gradient(top, #fc9f8a, #fa492c);
+    background-image: -moz-linear-gradient(top, #fc9f8a, #fa492c);
+    background-image: -o-linear-gradient(top, #fc9f8a, #fa492c);
+    background-image: linear-gradient(to bottom, #fc9f8a, #fa492c);
+}
+
+.infraNotificacao.cinza {
+    background: #868686;
+    border-color: #686868;
+    background-image: -webkit-linear-gradient(top, #afafaf, #868686);
+    background-image: -moz-linear-gradient(top, #afafaf, #868686);
+    background-image: -o-linear-gradient(top, #afafaf, #868686);
+    background-image: linear-gradient(to bottom, #afafaf, #868686);
+}
+
+div.dd-select {
+    overflow: hidden;
+}
+
+a.dd-selected, a.dd-option {
+    height: 30px;
+}
+
+a.dd-selected img, a.dd-option img {
+    padding-top: 1px;
+}
+
+a.dd-selected label, a.dd-option label {
+    font-size: .875rem;
+}
+
+label.dd-selected-text {
+    line-height: 30px !important;
+}
+
+a.dd-selected {
+    padding: 1px 0 0 5px;
+}
+
+a.dd-option {
+    padding: 2px 0 2px 5px;
+}
+
+.infraProcessando {
+    background: #fff url('svg/aguarde.svg') no-repeat scroll 100% 100% !important;
+}
+
+.infraProcessando::-ms-clear {
+    display: none;
+}
+
+@media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
+    .divInfraAreaTela {
+        height: calc(100vh - 66px);
+        max-height: calc(100vh - 66px);
+        min-height: calc(100vh - 66px);
+    }
+
+    .divInfraAreaTelaSimples {
+        height: 100vh;
+        max-height: 100vh;
+        min-height: 100vh;
+    }
+}
+
+
+#divInfraAreaTelaD {
+    overflow-y: auto;
+    position: relative;
+}
+
+a {
+    color: #000;
+    background-color: unset;
+}
+
+img {
+    vertical-align: unset;
+    border-style: unset;
+}
+
+table {
+    border-collapse: separate;
+}
+
+caption {
+    padding-top: unset;
+    caption-side: top;
+}
+
+label {
+    display: inline;
+}
+
+button:not(:disabled), [type="button"]:not(:disabled), [type="reset"]:not(:disabled), [type="submit"]:not(:disabled) {
+    cursor: unset;
+    box-sizing: border-box;
+
+}
+
+.divInfraAreaTelaE {
+    background-color: #333;
+
+}
+
+/* Overriding styles */
+
+::-webkit-input-placeholder {
+    font-size: 0.8rem !important;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+    font-size: 0.8rem !important;
+}
+
+::-moz-placeholder { /* Firefox 19+ */
+    font-size: 0.8rem !important;
+}
+
+
+.infraDivCheckbox, .infraDivRadio {
+    white-space: nowrap;
+    height: 30px;
+    line-height: 20px;
+}
+
+.infraCheckbox, .infraRadio {
+    opacity: 0;
+}
+
+fieldset .infraCheckboxDiv, fieldset .infraRadioDiv {
+    margin-left: .8em;
+}
+
+.infraCheckboxInput:disabled + label, .infraRadioInput:disabled + label {
+    opacity: 0.5;
+}
+
+.infraCheckboxInput:focus + label, .infraRadioInput:focus + label {
+    outline: 1px dotted black;
+    outline-offset: 2px;
+}
+
+.infraCheckboxInput:focus + label {
+    border-radius: 2px;
+}
+
+.infraCheckboxDiv, .infraRadioDiv {
+    display: inline-block;
+    vertical-align: middle;
+    cursor: default;
+    height: 20px;
+    width: 20px;
+    text-align: left;
+    position: relative;
+    margin-left: 3px;
+    margin-right: 3px;
+    line-height: 20px;
+}
+
+.infraCheckboxDiv input, .infraRadioDiv input {
+    height: 0;
+    width: 0;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    opacity: 0;
+    z-index: -1;
+}
+
+.infraCheckboxDiv label {
+    height: 20px;
+    width: 20px;
+    position: relative;
+    display: -ms-flexbox !important;
+    display: flex !important;
+    font-size: .875rem;
+    font-weight: bold;
+}
+
+.infraCheckboxDiv label::before {
+    content: "";
+    height: 20px;
+    width: 20px;
+    border: 1px solid #999;
+    transition: all 0.2s ease;
+    background: #FFF;
+    color: #FFF;
+    line-height: 20px;
+    text-align: center;
+}
+
+.infraCheckboxDiv label::before {
+    border-radius: .2rem;
+}
+
+
+.infraCheckboxDiv label:focus::before, .infraCheckboxDiv label:hover::before {
+    background: #DDD;
+}
+
+.infraCheckboxDiv input:checked + label::before {
+    background: #ff7212;
+    border-color: #ff7212;
+}
+
+
+.infraCheckboxDiv input:checked + label::before {
+    content: "\2713";
+}
+
+.infraLabelCheckbox, .infraLabelRadio {
+    position: relative;
+    top: 2px;
+}
+
+label.infraLabelCheckbox:hover, label.infraLabelRadio:hover {
+    cursor: pointer;
+}
+
+.infraRadioDiv label {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    transition: 0.2s;
+    border: 1px solid gray;
+}
+
+
+.infraRadioDiv > input:checked + label { /* (RADIO CHECKED) <i> STYLE */
+    box-shadow: inset 0 0 0 3px #fff;
+    background: orange;
+}
+
+div:focus-visible {
+    outline: 1px dotted black;
+    border-radius: 4px;
+}
+
+#btnInfraTopo {
+    display: none;
+    position: fixed;
+    bottom: 1rem;
+    right: 2.2rem;
+    z-index: 99;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: 0;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3);
+}
+
+#btnInfraTopo:focus {
+    outline: none;
+}
+
+#btnInfraTopo:hover {
+    background: rgba(0, 0, 0);
+}
+
+#btnInfraTopo img:focus {
+    outline: 1px dotted white;
+}
+
+.form-control {
+    background-clip: initial;
+}
+
+.infraInputFile {
+    display: none;
+}
+
+.infraLabelInputFile {
+    background-color: #ffffff;
+    border-bottom-color: #666666;
+    border-radius: 0.25rem;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #666666;
+    color: #495057;
+    padding-bottom: 0.3rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    padding-top: 0.3rem;
+    width: unset !important;
+    transition-delay: 0s, 0s, 0s;
+    transition-duration: 0.15s, 0.15s, 0.15s;
+    transition-property: background-color, border-color, box-shadow;
+    transition-timing-function: ease-in-out, ease-in-out, ease-in-out;
+}
+
+.infraLabelInputFile:hover {
+    background-color: #0494c7;
+    border-color: #155f9b;
+    border-radius: 0.25rem;
+    border-style: solid;
+    border-width: 1px;
+    color: #ffffff;
+    padding-bottom: 0.3rem;
+    padding-left: 0.6rem;
+    padding-right: 0.6rem;
+    padding-top: 0.3rem;
+}
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
+    .w-sm-100 {
+        width: 100% !important;
+    }
+
+    .w-sm-75 {
+        width: 75% !important;
+    }
+
+    .w-sm-50 {
+        width: 50% !important;
+    }
+
+    .w-sm-25 {
+        width: 25% !important;
+    }
+
+    .h-sm-100 {
+        height: 100% !important;
+    }
+
+    .h-sm-75 {
+        height: 75% !important;
+    }
+
+    .h-sm-50 {
+        height: 50% !important;
+    }
+
+    .h-sm-25 {
+        height: 25% !important;
+    }
+}
+
+/* Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+    .w-md-100 {
+        width: 100% !important;
+    }
+
+    .w-md-75 {
+        width: 75% !important;
+    }
+
+    .w-md-50 {
+        width: 50% !important;
+    }
+
+    .w-md-25 {
+        width: 25% !important;
+    }
+
+    .h-md-100 {
+        height: 100% !important;
+    }
+
+    .h-md-75 {
+        height: 75% !important;
+    }
+
+    .h-md-50 {
+        height: 50% !important;
+    }
+
+    .h-md-25 {
+        height: 25% !important;
+    }
+}
+
+/* Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+    .w-lg-100 {
+        width: 100% !important;
+    }
+
+    .w-lg-75 {
+        width: 75% !important;
+    }
+
+    .w-lg-50 {
+        width: 50% !important;
+    }
+
+    .w-lg-25 {
+        width: 25% !important;
+    }
+
+    .h-lg-100 {
+        height: 100% !important;
+    }
+
+    .h-lg-75 {
+        height: 75% !important;
+    }
+
+    .h-lg-50 {
+        height: 50% !important;
+    }
+
+    .h-lg-25 {
+        height: 25% !important;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+    .w-xl-100 {
+        width: 100% !important;
+    }
+
+    .w-xl-75 {
+        width: 75% !important;
+    }
+
+    .w-xl-50 {
+        width: 50% !important;
+    }
+
+    .w-xl-25 {
+        width: 25% !important;
+    }
+
+    .h-xl-100 {
+        height: 100% !important;
+    }
+
+    .h-xl-75 {
+        height: 75% !important;
+    }
+
+    .h-xl-50 {
+        height: 50% !important;
+    }
+
+    .h-xl-25 {
+        height: 25% !important;
+    }
+}

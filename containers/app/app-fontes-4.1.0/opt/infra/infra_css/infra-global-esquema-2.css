@@ -1,0 +1,67 @@
+div.infraBarraLocalizacao {
+    padding-bottom: .3em;
+}
+
+div.infraBarraSuperior {
+    display: block;
+    overflow: hidden;
+    padding: .9em .2em .1em 1em;
+    margin: 0;
+    /* border:0px solid yellow; */
+}
+
+div.infraBarraSuperior label, div.infraBarraSuperior a {
+    margin: 0;
+    padding: 0;
+    font-size: 1em;
+    font-weight: bold !important;
+    color: white !important;
+    text-decoration: none;
+    margin-top: .1em;
+    /* border:0px solid black; */
+}
+
+div.infraBarraSistema {
+    display: block;
+    overflow: hidden;
+    border-bottom: .2em solid #ccc;
+    padding-bottom: .5em;
+}
+
+div.infraBarraSistemaE {
+    float: left;
+    text-align: left;
+    padding-left: 1em;
+    padding-top: .8em;
+    width: 15%;
+}
+
+div.infraBarraSistemaE img {
+    padding-top: 0;
+}
+
+div.infraBarraSistemaD img {
+    padding-top: .2em;
+}
+
+div.infraBarraSistemaD {
+    float: right;
+    text-align: right;
+    padding-right: 1em;
+    padding-top: .5em;
+    width: 80%;
+}
+
+div.infraBarraSistema label, div.infraBarraSistema a {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+div.infraBarraSistema img.infraImg,
+div.infraBarraSistema img.infraImgNormal,
+div.infraBarraSistema img.infraImgOpaca {
+    width: .9em;
+    height: .9em;
+}

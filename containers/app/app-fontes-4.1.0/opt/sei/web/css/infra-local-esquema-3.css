@@ -1,0 +1,582 @@
+/* CSS Local */
+
+.protocoloAberto {
+color:green;
+}
+
+.protocoloFechado {
+color:red;
+}
+
+.protocoloNormal,
+.protocoloAberto,
+.protocoloFechado,
+.linkFuncionalidade {
+text-decoration:none;
+font-size: .875rem !important;
+}
+
+a.protocoloNormal:hover,
+a.protocoloAberto:hover,
+a.protocoloFechado:hover,
+a.processoNaoVisualizadoSigiloso:hover,
+a.processoVisualizadoSigiloso:hover,
+a.linkFuncionalidade:hover{
+text-decoration:underline;
+}
+a.processoNaoVisualizado {
+  color:red;
+}
+
+a.processoVisualizado {
+  color:black;
+}
+
+a.processoVisualizado:focus{
+  outline: 1px dotted black;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a.processoNaoVisualizadoSigiloso {
+  padding: 2px 10px;
+  background-color:red;
+  color:white;
+  text-decoration:none;
+  border-radius: .2rem;
+}
+
+a.processoVisualizadoSigiloso, a.protocoloSigiloso {
+  padding: 2px 10px;
+  background-color:black;
+  color:white;
+  text-decoration:none;
+  border-radius: .2rem;
+}
+
+a.protocoloNormal:focus,
+a.protocoloAberto:focus,
+a.protocoloFechado:focus,
+a.processoNaoVisualizado:focus,
+a.processoNaoVisualizadoSigiloso:focus,
+a.processoVisualizadoSigiloso:focus,
+a.linkFuncionalidade:focus{
+  outline: 1px dotted black;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a.processoCredencialAssinaturaSigiloso {
+  padding: 2px 10px;
+  border: 1px solid red;
+  border-radius: .2rem;
+}
+
+a.processoVisitado {
+  color:#0000cc;
+}
+
+a.processoVisitadoSigiloso {
+  background-color:#0000cc;
+}
+
+a.processoVisitadoCredencialAssinatura {
+  border:1px solid #0000cc;
+}
+
+span.spanRealce {background-color:yellow;}
+a.ancoraOpcao{
+color:black;
+display:block;
+text-decoration:none;
+width:100%;
+}
+
+div.tituloProcessoDocumento {
+padding: .1rem;
+border-radius:.2rem;
+text-align:center;
+vertical-align:middle;
+width:100%;
+color:#666;
+background-color:#dfdfdf;
+margin-bottom:4px;
+overflow:hidden;
+}
+
+div.tituloProcessoDocumento label {
+font-size:1.1rem;
+font-weight:600;
+color:#666;
+background-color:#dfdfdf;
+}
+
+a.ancoraSigla{
+ text-decoration:none;
+ font-size: .875rem;
+}
+
+a.ancoraSigla:hover{
+ text-decoration:underline;
+}
+
+a.ancoraSigla:focus{
+  outline: 1px dotted black;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a.ancoraPadraoAzul, a.ancoraPadraoPreta, a.ancoraPadraoVermelha {
+  padding: 0 2px;
+  text-decoration:none;
+  font-size: .875rem;
+}
+
+a.ancoraPadraoAzul:focus, a.ancoraPadraoPreta:focus, a.ancoraPadraoVermelha:focus{
+  outline: 1px dotted black;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+a.ancoraPadraoAzul {
+  color: #2c67cd;
+}
+
+a.ancoraPadraoPreta{
+color: black;
+}
+
+a.ancoraPadraoVermelha {
+  color: red;
+}
+
+a.ancoraPadraoAzul:hover,
+a.ancoraPadraoPreta:hover,
+a.ancoraPadraoVermelha:hover{
+text-decoration:underline;
+}
+
+a.ancoraHistoricoProcesso,
+a.ancoraVisualizacaoDocumento{
+font-size:.875rem;
+}
+
+a.ancoraVisualizacaoArvore {
+  font-size:.875rem;
+  color: #2c67cd;
+}
+
+a.ancoraVisualizacaoArvore:hover{
+  text-decoration:underline;
+}
+
+a.ancoraVisualizacaoArvore:focus{
+  outline:1px dotted #2c67cd;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+div.divItemCelula{
+  padding:.2em 0 .2em 0;
+}
+
+.divIconeItemCelula,
+.divDiamante{
+  display:table-cell;
+  vertical-align:top;
+  padding-right:.3em;
+  border:.1em solid transparent;
+}
+
+div.divRotuloItemCelula,
+div.divRotuloDiamante{
+  display:table-cell;
+  border:.1em solid transparent;
+}
+
+tr.totalEstatisticas {
+background-color:#ffffdd;
+}
+
+td.totalEstatisticas {
+background-color:#ffffdd;
+}
+
+div.divAreaGrafico {
+float:left;
+overflow:auto !important;
+padding-top:.5em;
+padding-bottom:1.5em;
+font-size:.9rem;
+}
+
+tr.trVermelha{
+background-color:#ffbfbf;
+}
+
+td.tdVermelha{
+  background-clip: padding-box;
+  border-radius: .2rem;
+  background-color: #F59F9F;
+}
+
+button.buttonWorkflow{
+border: .1em solid red;
+}
+
+div.infraTooltip{
+  max-width: 500px;
+}
+
+img.imagemStatus{
+  vertical-align:top;
+  border: 0;
+  padding: 0 2px;
+}
+
+img.imagemStatusFederacao{
+  vertical-align:bottom;
+  border: 0;
+  padding: 0;
+}
+
+div.formularioTexto {display:block; clear:both; overflow:visible; padding:1em 1em 1em 0; font-size:1rem; font-weight: 400;}
+div.formularioTexto span, div.formularioTexto a {font-size:1rem;}
+
+.msgGeral {
+  font-size:.875rem;
+  padding: 5px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.msgSucesso {
+  color: black;
+  background-color: #dff0d8;
+  border-color: #666;
+  display: none;
+}
+
+.msgFalha {
+  color: black;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+  display: none;
+}
+
+.msgAviso {
+  color: black;
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  display: none;
+}
+
+div.msgErroFederacao {
+  margin: 10px 0;
+  background-color: red;
+  padding:5px;
+  border-radius: .2rem;
+  width: 99%;
+}
+
+div.msgErroFederacao label{
+  padding: 0 10px;
+}
+
+div.msgErroFederacao label,
+div.msgErroFederacao a{
+  font-size: 1rem;
+  background-color: red;
+  color: white;
+}
+
+div.pesquisaBarra {
+  display:table;
+  border-bottom: .1em solid #909090;
+  margin-bottom: .5em;
+  width:100%;
+}
+
+div.pesquisaBarra div{
+  display:table-cell;
+  font-size:.875rem;
+}
+
+div.pesquisaBarraE {
+  text-align: left;
+  padding-bottom: .5em;
+}
+
+div.pesquisaBarraD {
+  text-align: right;
+  vertical-align: bottom;
+  padding-bottom: .3em;
+}
+
+div.pesquisaPaginas {
+  border-top: .1em solid #909090;
+  padding: .5em 0 2em 0;
+  text-align: center;
+  font-size: 1rem;
+}
+
+div.pesquisaPaginas b {
+  font-weight: 600;
+}
+
+div.pesquisaPaginas a {
+  font-size: 1rem;
+  color:unset;
+  padding: 2px;
+  border:1px solid white;
+  text-decoration: none;
+  border-radius: .25rem;
+}
+
+div.pesquisaPaginas a:hover {
+  border:1px solid blue;
+}
+
+div.pesquisaPaginaSelecionada {
+  font-size: 1rem;
+  display: inline;
+  color: white;
+  background-color: blue;
+  padding: 3px;
+  border-radius: .25rem;
+}
+
+div.pesquisaSemResultado {
+  font-size: .875rem;
+  margin: .5em 0 0 0;
+}
+
+div.pesquisaSugestao{
+  font-size: .875rem;
+}
+
+td.pesquisaSnippet b {
+  font-size: .875rem;
+  font-weight:600;
+}
+
+table.pesquisaResultado {
+  border-collapse: collapse;
+  border-spacing: 0px;
+  font-size: .875rem;
+  width: 100%;
+}
+
+table.pesquisaResultado td {
+  padding: .3em .5em;
+}
+
+table.pesquisaResultado a.protocoloAberto,
+table.pesquisaResultado a.protocoloNormal{
+  font-size: .875rem;
+}
+
+table.pesquisaResultado a.protocoloAberto:hover,
+table.pesquisaResultado a.protocoloNormal:hover{
+  text-decoration:underline !important;
+}
+
+tr.pesquisaTituloRegistro td {
+  background: #e0e0e0;
+}
+
+tr.pesquisaTituloRegistro span {
+  font-size: .875rem;
+}
+
+td.pesquisaTituloEsquerda {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+
+
+td.pesquisaTituloDireita {
+  text-align:right;
+  width:20%;
+  border-top-right-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+div#conteudo td.pesquisaMetatag {
+  color: #333333;
+  text-align: center;
+  padding-bottom: 2em;
+}
+
+table.pesquisaResultado td.pesquisaMetatag > b {
+  color: #006600;
+  font-weight: normal;
+}
+
+div.ajudaTitulo {
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+  background: #16609B;
+  position: relative;
+  padding: 2pt;
+  border-width: 0px;
+  margin-left:1rem;
+}
+
+div.ajudaTexto {
+  position: relative;
+  padding: 5pt;
+  border-width: 0px;
+  margin-left:2rem;
+}
+
+div.ajudaTexto, div.ajudaTexto * {
+  font-size: .875rem;
+  color: black;
+  background: white;
+}
+
+div.ajudaTexto a{
+  color: #2c67cd !important;
+}
+
+.ajudaExemplo {
+  font-family: Courier;
+  font-size: .875rem;
+  color: #006600;
+  background: white;
+  position: relative;
+  padding: 4px;
+  border-width: thin;
+  border-style: dotted;
+  width: 480px;
+  margin-left:3rem;
+}
+
+div.barraBotoesSEIMovel{
+  display:flex;
+}
+
+div.barraBotoesSEIMovel a{
+  border:0;
+  padding:0;
+  margin: 10px 10px 0 0;
+}
+
+div.barraBotoesSEIMovel img {
+  vertical-align: bottom;
+}
+
+div.barraBotoesSEI {
+  display: table;
+  border: 0;
+  margin-top: 10px;
+  padding: 0 3px;
+  border-radius: 5px;
+  background-color: white;
+  line-height: 0;
+  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, .3), 0 0.0625rem 0.125rem rgba(0, 0, 0, .2);
+}
+
+div.barraBotoesSEI img{
+  height:40px ;
+  width:40px ;
+  margin:3px;
+  background-color: unset !important;
+}
+
+div.barraBotoesSEI img:hover {
+  opacity:0.5;
+}
+
+
+.custom-popover{
+  width: fit-content;
+}
+
+.custom-popover  .list-group-item {
+  padding: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  border: none;
+}
+
+.custom-popover  .list-group-item span {
+  font-size: .875rem;
+}
+
+
+
+.custom-popover  .list-group-item:hover{
+  background-color:#e0e0e0;
+  border-radius: .25rem;
+}
+
+.popover-body{
+  padding:2px;
+  position:relative;
+}
+
+.popover{
+  max-width: none;
+}
+
+div.cke_screen_reader_only {
+  bottom:0;
+}
+
+#txtPesquisaRapida:focus{
+  outline: 1px dotted white;
+  outline-offset: 1px;
+}
+.clipboard-icon-focus{
+  border: 1px dotted transparent !important;
+}
+
+.clipboard-icon-focus:focus,.clipboard-icon-focus:hover{
+  border: 1px dotted black !important;
+ /* background-color:  #E0E0E0;*/
+  color: #212529;
+  text-decoration: none;
+}
+
+.clipboard-icon-focus:focus img{
+  outline:none !important;
+}
+
+.li-fechar{
+  border-top: 1px solid rgba(0,0,0,.125) !important;
+}
+.li-fechar span{
+  margin-left: 28px;
+}
+
+table:focus{
+  outline:0;
+}
+
+#ancVoltarArvoreSuperior,
+#ancVoltarArvoreInferior{
+  display: none;
+  padding: 0px;
+  float: left;
+  height: 32px;
+}
+
+#ancVoltarArvoreSuperior img,
+#ancVoltarArvoreInferior img{
+  width: 32px;
+  height: 32px;
+}
+
+#tblSeiCabecalhoProcesso{
+  border-collapse:separate;
+  border-radius:.375rem;
+}
+
+#tblSeiCabecalhoProcesso td{
+  border-top:0;
+  padding: .25rem .5rem;
+}

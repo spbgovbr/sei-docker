@@ -1,0 +1,538 @@
+version: '2'
+volumes:
+    local-storage-db:
+        external: true
+    local-arquivosexternos-storage:
+        external: true
+    local-controlador-instalacao-storage:
+        external: true
+    local-volume-solr:
+        external: true
+    local-certs-storage:
+        external: true
+    local-fontes-storage:
+        external: true
+    local-openldap-slapd-storage:
+        external: true
+    local-openldap-db-storage:
+        external: true
+
+services:
+    storage-app:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - local-arquivosexternos-storage:/sei/arquivos_externos_sei/:rw
+            - local-fontes-storage:/opt:rw
+            - local-controlador-instalacao-storage:/sei/controlador-instalacoes
+            - local-certs-storage:/sei/certs
+
+    storage-certs:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - local-certs-storage:/certs:rw
+            
+    storage-openldap:
+        image: "busybox:latest"
+        labels:
+            io.rancher.container.start_once: "true"
+        volumes:
+            - local-openldap-slapd-storage:/etc/ldap/slapd.d
+            - local-openldap-db-storage:/var/lib/ldap
+            
+    #ldapadmin: #serviceldap
+    #    image: processoeletronico/phpldapadmin:latest #serviceldap
+    #    environment: #serviceldap
+    #        - PHPLDAPADMIN_LDAP_CLIENT_TLS=false #serviceldap
+    #        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap
+    #        - PHPLDAPADMIN_HTTPS=false #serviceldap
+    #        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap
+    #        - VIRTUAL_HOST=http://localhost/phpldapadmin*,https://localhost/phpldapadmin* #serviceldap
+    #        - EXCLUDE_PORTS=443 #serviceldap
+    #        - FORCE_SSL=true #serviceldap
+    #    links: #serviceldap
+    #        - openldap:openldap #serviceldap
+    #openldap: #serviceldap
+    #    image: processoeletronico/openldap:latest #serviceldap
+    #    environment: #serviceldap
+    #        - KEEP_EXISTING_CONFIG=false #serviceldap
+    #        - LDAP_ADMIN_PASSWORD=adminldap #serviceldap
+    #        - LDAP_BACKEND=mdb #serviceldap
+    #        - LDAP_BASE_DN= #serviceldap
+    #        - LDAP_CONFIG_PASSWORD=configldap #serviceldap
+    #        - LDAP_DOMAIN=pen.gov.br #serviceldap
+    #        - LDAP_LOG_LEVEL=256 #serviceldap
+    #        - LDAP_ORGANISATION=Processo Eletronico Nacional #serviceldap
+    #        - LDAP_READONLY_USER=false #serviceldap
+    #        - LDAP_REMOVE_CONFIG_AFTER_SETUP=true #serviceldap
+    #        - LDAP_REPLICATION=false #serviceldap
+    #        - LDAP_RFC2307BIS_SCHEMA=false #serviceldap
+    #        - LDAP_SSL_HELPER_PREFIX=ldap #serviceldap
+    #        - LDAP_TLS=false #serviceldap
+    #    volumes_from: #serviceldap
+    #        - storage-openldap #serviceldap
+                
+    jod: #servicejod
+        image: processoeletronico/jod:latest #servicejod
+    
+    #mail: #servicemail
+    #    image: processoeletronico/mailcatcher:latest #servicemail
+    #    command: ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"] #servicemail
+    #    expose: #servicemail
+    #        - 25 #servicemail
+    #        - 80 #servicemail
+    #    environment: #servicemail
+    #        - VIRTUAL_HOST=http://localhost/mailadmin*,https://localhost/mailadmin*,http://localhost/assets*,https://localhost/assets*,http://localhost/messages*,https://localhost/messages* #servicemail
+    #        - FORCE_SSL=true #servicemail
+    #        - EXCLUDE_PORTS=25,1080,1025 #servicemail
+    #        - EXTRA_SETTINGS=http-request set-path "%[path\,regsub(^/mailadmin\,/)]" #servicemail
+    
+    memcached:
+        image: processoeletronico/memcached:latest
+    
+    memcachedadmin: #servicememcachedadmin
+        image: processoeletronico/phpmemcachedadmin:latest  #servicememcachedadmin
+        environment: #servicememcachedadmin
+            - VIRTUAL_HOST=http://localhost/memcachedadmin*,https://localhost/memcachedadmin* #servicememcachedadmin
+            - FORCE_SSL=true #servicememcachedadmin
+
+    db:
+        image: processoeletronico/oracle11g:latest
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-db
+        volumes:
+            - local-storage-db:/u01/app/oracle
+    
+    dbadmin: #servicedbadmin
+        image: processoeletronico/dbadminer:latest #servicedbadmin
+        environment: #servicedbadmin
+            - VIRTUAL_HOST=http://localhost/dbadmin*,https://localhost/dbadmin* #servicedbadmin
+            - FORCE_SSL=true #servicedbadmin
+            
+  
+    solr:
+        image: processoeletronico/solr8.2.0:latest
+        environment:
+            - VIRTUAL_HOST=http://localhost/solr*,https://localhost/solr*
+            - FORCE_SSL=true
+        volumes:
+            - local-volume-solr:/dados
+        
+    
+    app-atualizador:
+        image: processoeletronico/app-ci:latest
+        entrypoint: "/entrypoint-atualizador.sh"
+        volumes_from:
+            - storage-app
+            - storage-certs
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.container.start_once: 'true'
+        environment:
+        - APP_PROTOCOLO=http
+        - APP_HOST=localhost
+        - APP_ORGAO=ME
+        - APP_ORGAO_DESCRICAO=Orgao Processo Eletronico - Oracle
+        - APP_NOMECOMPLEMENTO=SEI - PEN - DTH
+        - APP_MEMCACHED_HOST=memcached
+        - APP_DB_TIPO=Oracle
+        - APP_DB_HOST=db
+        - APP_DB_PORTA=1521
+        - APP_DB_SIP_BASE=sip
+        - APP_DB_SIP_USERNAME=sip
+        - APP_DB_SIP_PASSWORD=sip_user
+        - APP_DB_SEI_BASE=sei
+        - APP_DB_SEI_USERNAME=sei
+        - APP_DB_SEI_PASSWORD=sei_user
+        - APP_DB_ROOT_USERNAME=sip
+        - APP_DB_ROOT_PASSWORD=sip_user
+        - APP_SIP_CHAVE_ACESSO=d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933
+        - APP_SEI_CHAVE_ACESSO=7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc
+        - APP_SOLR_URL=http://solr:8983/solr
+        - APP_SOLR_CORE_PROTOCOLOS=sei-protocolos
+        - APP_SOLR_TEMPO_COMMIT_PROTOCOLOS=300
+        - APP_SOLR_CORE_BASECONHECIMENTO=sei-bases-conhecimento
+        - APP_SOLR_TEMPO_COMMIT_BASECONHECIMENTO=60
+        - APP_SOLR_CORE_PUBLICACOES=sei-publicacoes
+        - APP_SOLR_TEMPO_COMMIT_PUBLICACOES=60
+        - APP_MAIL_TIPO=2
+        - APP_MAIL_SERVIDOR=mail
+        - APP_MAIL_PORTA=25
+        - APP_MAIL_CODIFICACAO=8bit
+        - APP_MAIL_MAXDESTINATARIOS=999
+        - APP_MAIL_MAXTAMANHOANEXOSMB=999
+        - APP_MAIL_SEGURANCA=
+        - APP_MAIL_AUTENTICAR=
+        - APP_MAIL_USUARIO=
+        - APP_MAIL_SENHA=
+        - APP_MAIL_PROTEGIDO=
+        - APP_FONTES_GIT_PATH=
+        - APP_FONTES_GIT_PRIVKEY_BASE64=
+        - APP_FONTES_GIT_CHECKOUT=
+        - OPENLDAP_PRESENTE=false
+        - OPENLDAP_ADMIN_PASSWORD=adminldap
+        - OPENLDAP_DESLIGAR_NO_ORGAO_0=false
+        - SERVICO_PD_INSTALAR=false
+        - SERVICO_PD_SIGLA=GOV.BR
+        - SERVICO_PD_NOME=Protocolo.GOV.BR
+        - SERVICO_PD_OPERACOES=3,2,15,0,1
+        - MODULO_ESTATISTICAS_INSTALAR=false
+        - MODULO_ESTATISTICAS_VERSAO=master
+        - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
+        - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
+        - MODULO_ESTATISTICAS_CHAVE=seipublico
+        - MODULO_REST_INSTALAR=false
+        - MODULO_REST_VERSAO=master
+        - MODULO_REST_URL_NOTIFICACAO=
+        - MODULO_REST_ID_APP=
+        - MODULO_REST_CHAVE=
+        - MODULO_REST_TOKEN_SECRET=
+        - MODULO_RESPOSTA_INSTALAR=false
+        - MODULO_RESPOSTA_VERSAO=master
+        - MODULO_RESPOSTA_SISTEMA_ID=
+        - MODULO_RESPOSTA_DOCUMENTO_ID=
+        - MODULO_GESTAODOCUMENTAL_INSTALAR=false
+        - MODULO_GESTAODOCUMENTAL_VERSAO=master
+        - MODULO_LOGINUNICO_INSTALAR=false
+        - MODULO_LOGINUNICO_VERSAO=master
+        - MODULO_LOGINUNICO_CLIENTID=sistemas/homologacao/sei/controlador_externo
+        - MODULO_LOGINUNICO_SECRET=XXXX
+        - MODULO_LOGINUNICO_URLPROVIDER=https://sso.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_REDIRECTURL=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/controlador_loginunico.php
+        - MODULO_LOGINUNICO_URLLOGOUT=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/logout.php
+        - MODULO_LOGINUNICO_SCOPE=openid+email+phone+profile+govbr_empresa+govbr_confiabilidades
+        - MODULO_LOGINUNICO_URLSERVICOS=https://api.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_URLREVALIDACAO=https://oauth.staging.acesso.gov.br/v1/
+        - MODULO_LOGINUNICO_CIENTIDVALIDACAO=sei.xxx.nuvem.gov.br/validacaosenha
+        - MODULO_LOGINUNICO_SECRETVALIDACAO=XXX
+        - MODULO_LOGINUNICO_ORGAO=0
+        - MODULO_ASSINATURAVANCADA_INSTALAR=false
+        - MODULO_ASSINATURAVANCADA_VERSAO=master
+        - MODULO_ASSINATURAVANCADA_CLIENTID=assinaturaAvancadaXXX
+        - MODULO_ASSINATURAVANCADA_SECRET=XXX
+        - MODULO_ASSINATURAVANCADA_URLPROVIDER=https://cas.staging.iti.br/oauth2.0
+        - MODULO_ASSINATURAVANCADA_URL_SERVICOS=assinatura-api.staging.iti.br/externo/v2
+        - MODULO_PEN_INSTALAR=false
+        - MODULO_PEN_VERSAO=master
+        - MODULO_PEN_WEBSERVICE=https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/
+        - MODULO_PEN_CERTIFICADO_SENHA=1234
+        - MODULO_PEN_CERTIFICADO_BASE64=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR4akNDQXE2Z0F3SUJBZ0lDRURBd0RRWUpLb1pJaHZjTkFRRUxCUUF3Y3pFTE1Ba0dBMVVFQmhNQ1FsSXgKR1RBWEJnTlZCQWdNRUVScGMzUnlhWFJ2SUVabFpHVnlZV3d4RVRBUEJnTlZCQWNNQ0VKeVlYTnBiR2xoTVFzdwpDUVlEVlFRS0RBSk5VREVNTUFvR0ExVUVDd3dEVUVWT01Sc3dHUVlEVlFRRERCSkpiblJsY205d1pYSmhZbWxzCmFXUmhaR1V3SGhjTk1UZ3dOekF5TVRVMU16VXpXaGNOTWpnd05qSTVNVFUxTXpVeldqQmNNUXN3Q1FZRFZRUUcKRXdKQ1VqRVpNQmNHQTFVRUNBd1FSR2x6ZEhKcGRHOGdSbVZrWlhKaGJERWNNQm9HQTFVRUNnd1RSR1ZtWVhWcwpkQ0JEYjIxd1lXNTVJRXgwWkRFVU1CSUdBMVVFQXd3TFZGTkZMVWhQVFU5TVQwY3dnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRHo2L1ZOZHE2aTVzNTRUMzhWMW4xeGZXVWpieXhMS25vY3V2S1UKd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeFpYYTh0Nkg4SE5hY3FtcWRHRWplOTFpNgoxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3eEZUVE5GVUpXU1pWYytiZE1pc1VxYzU1ClUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWprVXF5RjZxZkR0QmpOYjRHZVFINjBZT1AKVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MHdTNzRtWDdYeC9oWXFrOU9NUkxQcmoxUwpEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdySDBCemdSbXpBZ01CQUFHamV6QjVNQWtHCkExVWRFd1FDTUFBd0xBWUpZSVpJQVliNFFnRU5CQjhXSFU5d1pXNVRVMHdnUjJWdVpYSmhkR1ZrSUVObGNuUnAKWm1sallYUmxNQjBHQTFVZERnUVdCQlRqM2NlZ01hWFlWU3pIL3dhdDhaamQ1UGtJempBZkJnTlZIU01FR0RBVwpnQlNZM2ZqdXU5TnhPT05oK2FRZXE1T2pZQzN0dXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUt5OFFTSkswCmRmV0VlSHU2Y1ZWdTBrSmo3SGZRd1QwcGkzNkhBOWNsV3dvY2RidWRkR2NHS2JXOHJSVU1DM3h3VzJ2bHlRekoKL0RCN0p4eEphVFZycG5iMVhMRlM3ZHhCbmN0dUd1ZWMrRUNVamg5VDA1VCtTbVVmQ3I1bHBMUnR0bTBiWFlmRgpJMWVjNy90ZitQTEJMbFBMSXhvMXNoWHd4T3d0eHFUcUtMRSt0VkNPNlBUY2NON1ZsQXJTcXZ5T2NYMGE1RFpBCitIUkh1RVdkKzdUWnZJdXhHSTlMYjFDMm5GRkt1WVRMYTczOFE2QWZxT2RlS0VWUWtaMi9HNHFLdGJlK0R5L2IKK2tJK2UxTmZwSTlmQm9nK2hhWnZjZGMrajY3MmFCNWhNOTd0OHJ4ZzVFYVZLV3RIbkJFVGd6WlhLQVZHWE1PdwpsazdYd0VaTU5PRUtMQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV3QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktvd2dnU21BZ0VBQW9JQkFRRHo2L1ZOZHE2aTVzNTQKVDM4VjFuMXhmV1VqYnl4TEtub2N1dktVd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeApaWGE4dDZIOEhOYWNxbXFkR0VqZTkxaTYxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3CnhGVFRORlVKV1NaVmMrYmRNaXNVcWM1NVUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWoKa1VxeUY2cWZEdEJqTmI0R2VRSDYwWU9QVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MAp3Uzc0bVg3WHgvaFlxazlPTVJMUHJqMVNEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdyCkgwQnpnUm16QWdNQkFBRUNnZ0VCQUs5T0RUM0FKMkRpbXM5eTZ2Wko4bHduY0JIWWE3QVY5aTlCMk9nNXhrRUUKeEluaTlXZ21oaURVdzhVRmJpN1FQeXB3UlV1SUdFNS9OZzNiUzB2MGVsSFVkQldpa1A4WW5mN0pMQmNUTnVnTgpKZ1Vub2p0SkUyWjRZekduZnIzNzRNeE5JMG40TWgxV2wwMDdQVytScy9BRkIzencwS0oyMU9tRDVPWGtDVHFuCkhaTy9yUkw2UlFGaVRBeGdUQjZlVjZsclhsVHJkWEFMUGdMcmdBREErMTNjUldtZXNNL3JZWUdCWkpUdjVhVHQKNXRHZm00WWljUExlTHg3QzNmQ0Y0WlN1VEkrbmhPbjlCNXhMdmxicmdMeG1PTGV2eXZXWDREZkFNS3lYWjM1dwp4MUc1djNLaU9zcjYyczZHUG1na1V4QjI5enNmUDhyZnJDSXl2T05RcHdrQ2dZRUEreUtEM05PcmlEcVM0bmdjCjVVWUtSU0EyUlU4Wjd3TDFzYWlhcEFDT3JkYm5yL041OFNJVTBMUG02UnIxeXliYUY1Z3VOQURSZWhtN0ROZnEKT1hJUzNNT0tQOXkvNzdpdnBsMitwM3BYQnYxbU5xTWQ5T1JhNUFmcCtUNFpoUzVsbHZXV3V0b0VvRTdlaFQ4Kwo1akRFYUl6amdRVnBqd0xZdkhBeDJrYUJ4KzBDZ1lFQStLV3JrMHJSMHVTdTM3VnpnNUNVWm03U1FjaWV4aHM2CkZqQzMzQW0wTDJmT2FGbG4wSHlsQTlRL0lxcitDTVErQWlkd3JmdkZZeG51N2xhTGl1VlZSREVWNW9Vbm13ZU8KWVRoTnRiOTdaeXhWUFNzcXh6cGd4TWZ6QVhkVzAvbUFiWlZYWWNUVUVNVW9NdklJSzBlQVpCblFEZmNNYncvKwp2Sk9rbHZTczlCOENnWUVBcTVObU1hM3Y2Ry9VUUtPOVlpc2JBeVZCenRKL0xsdUFUdk9aUzJrU0VkVGNqOHF4CnlqdjFxcXp1bXQ0UGhjOHllNkkrRnN0a1VwNVh2Q3ViMjhtQzk0OGsyZ0xRbzFBenVWOGN6Y0Y0eWM3QVVaM1oKN3FGQk03L3dhNWV3eWR2c0Rsb1ZzKzBWOGd4UVhRcmJ4MXNVSlRYMGpRYU1tdWRmK2taUTJRY0l6ZlVDZ1lFQQowTW1VZkJjc2Y1RWxRcFpFRENyQVlnOFdvTVNNaGo5Z2xEZU9lOGJ1Tll4T0p4TkQrQzVpQmdnWWg4emJpWkwzCm1xbHhsYmEvTllzV05hNFllS1kvNWdYdHBPY1VyYm8zbFcxSTI1K1JTTDVTU1EzUld2K3JPREhKM09aUDA2bEQKYlVFazRlVDhTYVMwTDZ0S3JzVFlpN1dkSGN6ZjlQYVNhZGowTVFuOW5QTUNnWUVBMTBmallOT2krYWsvZ29NeQpvUnZXZEhlUkJ0SDBGcElLWUN6L1BrTTBPYWNMdDdUY29ldm04WXpESUpyTHprd3NtejFSV2pic3VGSlEyeEJhCkxwTkxIRk5Jc3NvbnhtRFVHOWdCekNMU25kbTlIK3JsS0tFTFJhYzREeVE5bUNxYmFDZlVRblpxYmpMQXJ0WTUKekY2UmRJUHRidzV4ZmNoczJHYk9Lb2JDWmc4PQotLS0tXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        - MODULO_PEN_GEARMAN_IP=
+        - MODULO_PEN_GEARMAN_PORTA=
+        - MODULO_PEN_QTD_WORKER_PROC=1
+        - MODULO_PEN_REPOSITORIO_ORIGEM=
+        - MODULO_PEN_TIPO_PROCESSO_EXTERNO=
+        - MODULO_PEN_UNIDADE_GERADORA=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_PEN=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_SEI=
+        - MODULO_PETICIONAMENTO_INSTALAR=false
+        - MODULO_PETICIONAMENTO_VERSAO=master
+        - MODULO_PETICIONAMENTO_URL=https://github.com/anatelgovbr/mod-sei-peticionamento
+        - MODULO_PI_INSTALAR=false
+        - MODULO_PI_VERSAO=master
+        - MODULO_PI_URL=https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+        - MODULO_PI_USUARIO=usuariodeconexaopi
+        - MODULO_PI_SENHA=senhadeconexaoaopi
+        - MODULO_PI_EMAIL=email@example.com
+        - MODULO_INCOM_INSTALAR=false
+        - MODULO_INCOM_VERSAO=v1.0.4
+        - MODULO_INCOM_VEICULOID=2
+        - MODULO_INCOM_SERIEID=10
+        - MODULO_INCOM_SIORG=235876
+        - MODULO_INCOM_URLWS=https://seiwsincom2.in.gov.br/seiwsincom/services/servicoIN?wsdl
+        - MODULO_INCOM_USERWS=XXX
+        - MODULO_INCOM_PASSWS=XXX
+        - MODULO_INCOM_INCLUSAOPUBLICACAO=S
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr #servicesolr
+        - jod:jod #servicejod
+        #- openldap:openldap #serviceldap
+    app-agendador:
+        image: processoeletronico/app-ci-agendador:latest
+        entrypoint: "/entrypoint-agendador.sh"
+        volumes_from:
+            - storage-app
+            - storage-certs
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.container.start_once: 'true'
+        environment:
+        - APP_PROTOCOLO=http
+        - APP_HOST=localhost
+        - APP_ORGAO=ME
+        - APP_ORGAO_DESCRICAO=Orgao Processo Eletronico - Oracle
+        - APP_NOMECOMPLEMENTO=SEI - PEN - DTH
+        - APP_MEMCACHED_HOST=memcached
+        - APP_DB_TIPO=Oracle
+        - APP_DB_HOST=db
+        - APP_DB_PORTA=1521
+        - APP_DB_SIP_BASE=sip
+        - APP_DB_SIP_USERNAME=sip
+        - APP_DB_SIP_PASSWORD=sip_user
+        - APP_DB_SEI_BASE=sei
+        - APP_DB_SEI_USERNAME=sei
+        - APP_DB_SEI_PASSWORD=sei_user
+        - APP_DB_ROOT_USERNAME=sip
+        - APP_DB_ROOT_PASSWORD=sip_user
+        - APP_SIP_CHAVE_ACESSO=d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933
+        - APP_SEI_CHAVE_ACESSO=7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc
+        - APP_SOLR_URL=http://solr:8983/solr
+        - APP_SOLR_CORE_PROTOCOLOS=sei-protocolos
+        - APP_SOLR_TEMPO_COMMIT_PROTOCOLOS=300
+        - APP_SOLR_CORE_BASECONHECIMENTO=sei-bases-conhecimento
+        - APP_SOLR_TEMPO_COMMIT_BASECONHECIMENTO=60
+        - APP_SOLR_CORE_PUBLICACOES=sei-publicacoes
+        - APP_SOLR_TEMPO_COMMIT_PUBLICACOES=60
+        - APP_MAIL_TIPO=2
+        - APP_MAIL_SERVIDOR=mail
+        - APP_MAIL_PORTA=25
+        - APP_MAIL_CODIFICACAO=8bit
+        - APP_MAIL_MAXDESTINATARIOS=999
+        - APP_MAIL_MAXTAMANHOANEXOSMB=999
+        - APP_MAIL_SEGURANCA=
+        - APP_MAIL_AUTENTICAR=
+        - APP_MAIL_USUARIO=
+        - APP_MAIL_SENHA=
+        - APP_MAIL_PROTEGIDO=
+        - APP_FONTES_GIT_PATH=
+        - APP_FONTES_GIT_PRIVKEY_BASE64=
+        - APP_FONTES_GIT_CHECKOUT=
+        - OPENLDAP_PRESENTE=false
+        - OPENLDAP_ADMIN_PASSWORD=adminldap
+        - OPENLDAP_DESLIGAR_NO_ORGAO_0=false
+        - SERVICO_PD_INSTALAR=false
+        - SERVICO_PD_SIGLA=GOV.BR
+        - SERVICO_PD_NOME=Protocolo.GOV.BR
+        - SERVICO_PD_OPERACOES=3,2,15,0,1
+        - MODULO_ESTATISTICAS_INSTALAR=false
+        - MODULO_ESTATISTICAS_VERSAO=master
+        - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
+        - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
+        - MODULO_ESTATISTICAS_CHAVE=seipublico
+        - MODULO_REST_INSTALAR=false
+        - MODULO_REST_VERSAO=master
+        - MODULO_REST_URL_NOTIFICACAO=
+        - MODULO_REST_ID_APP=
+        - MODULO_REST_CHAVE=
+        - MODULO_REST_TOKEN_SECRET=
+        - MODULO_RESPOSTA_INSTALAR=false
+        - MODULO_RESPOSTA_VERSAO=master
+        - MODULO_RESPOSTA_SISTEMA_ID=
+        - MODULO_RESPOSTA_DOCUMENTO_ID=
+        - MODULO_GESTAODOCUMENTAL_INSTALAR=false
+        - MODULO_GESTAODOCUMENTAL_VERSAO=master
+        - MODULO_LOGINUNICO_INSTALAR=false
+        - MODULO_LOGINUNICO_VERSAO=master
+        - MODULO_LOGINUNICO_CLIENTID=sistemas/homologacao/sei/controlador_externo
+        - MODULO_LOGINUNICO_SECRET=XXXX
+        - MODULO_LOGINUNICO_URLPROVIDER=https://sso.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_REDIRECTURL=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/controlador_loginunico.php
+        - MODULO_LOGINUNICO_URLLOGOUT=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/logout.php
+        - MODULO_LOGINUNICO_SCOPE=openid+email+phone+profile+govbr_empresa+govbr_confiabilidades
+        - MODULO_LOGINUNICO_URLSERVICOS=https://api.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_URLREVALIDACAO=https://oauth.staging.acesso.gov.br/v1/
+        - MODULO_LOGINUNICO_CIENTIDVALIDACAO=sei.xxx.nuvem.gov.br/validacaosenha
+        - MODULO_LOGINUNICO_SECRETVALIDACAO=XXX
+        - MODULO_LOGINUNICO_ORGAO=0
+        - MODULO_ASSINATURAVANCADA_INSTALAR=false
+        - MODULO_ASSINATURAVANCADA_VERSAO=master
+        - MODULO_ASSINATURAVANCADA_CLIENTID=assinaturaAvancadaXXX
+        - MODULO_ASSINATURAVANCADA_SECRET=XXX
+        - MODULO_ASSINATURAVANCADA_URLPROVIDER=https://cas.staging.iti.br/oauth2.0
+        - MODULO_ASSINATURAVANCADA_URL_SERVICOS=assinatura-api.staging.iti.br/externo/v2
+        - MODULO_PEN_INSTALAR=false
+        - MODULO_PEN_VERSAO=master
+        - MODULO_PEN_WEBSERVICE=https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/
+        - MODULO_PEN_CERTIFICADO_SENHA=1234
+        - MODULO_PEN_CERTIFICADO_BASE64=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR4akNDQXE2Z0F3SUJBZ0lDRURBd0RRWUpLb1pJaHZjTkFRRUxCUUF3Y3pFTE1Ba0dBMVVFQmhNQ1FsSXgKR1RBWEJnTlZCQWdNRUVScGMzUnlhWFJ2SUVabFpHVnlZV3d4RVRBUEJnTlZCQWNNQ0VKeVlYTnBiR2xoTVFzdwpDUVlEVlFRS0RBSk5VREVNTUFvR0ExVUVDd3dEVUVWT01Sc3dHUVlEVlFRRERCSkpiblJsY205d1pYSmhZbWxzCmFXUmhaR1V3SGhjTk1UZ3dOekF5TVRVMU16VXpXaGNOTWpnd05qSTVNVFUxTXpVeldqQmNNUXN3Q1FZRFZRUUcKRXdKQ1VqRVpNQmNHQTFVRUNBd1FSR2x6ZEhKcGRHOGdSbVZrWlhKaGJERWNNQm9HQTFVRUNnd1RSR1ZtWVhWcwpkQ0JEYjIxd1lXNTVJRXgwWkRFVU1CSUdBMVVFQXd3TFZGTkZMVWhQVFU5TVQwY3dnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRHo2L1ZOZHE2aTVzNTRUMzhWMW4xeGZXVWpieXhMS25vY3V2S1UKd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeFpYYTh0Nkg4SE5hY3FtcWRHRWplOTFpNgoxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3eEZUVE5GVUpXU1pWYytiZE1pc1VxYzU1ClUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWprVXF5RjZxZkR0QmpOYjRHZVFINjBZT1AKVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MHdTNzRtWDdYeC9oWXFrOU9NUkxQcmoxUwpEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdySDBCemdSbXpBZ01CQUFHamV6QjVNQWtHCkExVWRFd1FDTUFBd0xBWUpZSVpJQVliNFFnRU5CQjhXSFU5d1pXNVRVMHdnUjJWdVpYSmhkR1ZrSUVObGNuUnAKWm1sallYUmxNQjBHQTFVZERnUVdCQlRqM2NlZ01hWFlWU3pIL3dhdDhaamQ1UGtJempBZkJnTlZIU01FR0RBVwpnQlNZM2ZqdXU5TnhPT05oK2FRZXE1T2pZQzN0dXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUt5OFFTSkswCmRmV0VlSHU2Y1ZWdTBrSmo3SGZRd1QwcGkzNkhBOWNsV3dvY2RidWRkR2NHS2JXOHJSVU1DM3h3VzJ2bHlRekoKL0RCN0p4eEphVFZycG5iMVhMRlM3ZHhCbmN0dUd1ZWMrRUNVamg5VDA1VCtTbVVmQ3I1bHBMUnR0bTBiWFlmRgpJMWVjNy90ZitQTEJMbFBMSXhvMXNoWHd4T3d0eHFUcUtMRSt0VkNPNlBUY2NON1ZsQXJTcXZ5T2NYMGE1RFpBCitIUkh1RVdkKzdUWnZJdXhHSTlMYjFDMm5GRkt1WVRMYTczOFE2QWZxT2RlS0VWUWtaMi9HNHFLdGJlK0R5L2IKK2tJK2UxTmZwSTlmQm9nK2hhWnZjZGMrajY3MmFCNWhNOTd0OHJ4ZzVFYVZLV3RIbkJFVGd6WlhLQVZHWE1PdwpsazdYd0VaTU5PRUtMQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV3QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktvd2dnU21BZ0VBQW9JQkFRRHo2L1ZOZHE2aTVzNTQKVDM4VjFuMXhmV1VqYnl4TEtub2N1dktVd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeApaWGE4dDZIOEhOYWNxbXFkR0VqZTkxaTYxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3CnhGVFRORlVKV1NaVmMrYmRNaXNVcWM1NVUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWoKa1VxeUY2cWZEdEJqTmI0R2VRSDYwWU9QVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MAp3Uzc0bVg3WHgvaFlxazlPTVJMUHJqMVNEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdyCkgwQnpnUm16QWdNQkFBRUNnZ0VCQUs5T0RUM0FKMkRpbXM5eTZ2Wko4bHduY0JIWWE3QVY5aTlCMk9nNXhrRUUKeEluaTlXZ21oaURVdzhVRmJpN1FQeXB3UlV1SUdFNS9OZzNiUzB2MGVsSFVkQldpa1A4WW5mN0pMQmNUTnVnTgpKZ1Vub2p0SkUyWjRZekduZnIzNzRNeE5JMG40TWgxV2wwMDdQVytScy9BRkIzencwS0oyMU9tRDVPWGtDVHFuCkhaTy9yUkw2UlFGaVRBeGdUQjZlVjZsclhsVHJkWEFMUGdMcmdBREErMTNjUldtZXNNL3JZWUdCWkpUdjVhVHQKNXRHZm00WWljUExlTHg3QzNmQ0Y0WlN1VEkrbmhPbjlCNXhMdmxicmdMeG1PTGV2eXZXWDREZkFNS3lYWjM1dwp4MUc1djNLaU9zcjYyczZHUG1na1V4QjI5enNmUDhyZnJDSXl2T05RcHdrQ2dZRUEreUtEM05PcmlEcVM0bmdjCjVVWUtSU0EyUlU4Wjd3TDFzYWlhcEFDT3JkYm5yL041OFNJVTBMUG02UnIxeXliYUY1Z3VOQURSZWhtN0ROZnEKT1hJUzNNT0tQOXkvNzdpdnBsMitwM3BYQnYxbU5xTWQ5T1JhNUFmcCtUNFpoUzVsbHZXV3V0b0VvRTdlaFQ4Kwo1akRFYUl6amdRVnBqd0xZdkhBeDJrYUJ4KzBDZ1lFQStLV3JrMHJSMHVTdTM3VnpnNUNVWm03U1FjaWV4aHM2CkZqQzMzQW0wTDJmT2FGbG4wSHlsQTlRL0lxcitDTVErQWlkd3JmdkZZeG51N2xhTGl1VlZSREVWNW9Vbm13ZU8KWVRoTnRiOTdaeXhWUFNzcXh6cGd4TWZ6QVhkVzAvbUFiWlZYWWNUVUVNVW9NdklJSzBlQVpCblFEZmNNYncvKwp2Sk9rbHZTczlCOENnWUVBcTVObU1hM3Y2Ry9VUUtPOVlpc2JBeVZCenRKL0xsdUFUdk9aUzJrU0VkVGNqOHF4CnlqdjFxcXp1bXQ0UGhjOHllNkkrRnN0a1VwNVh2Q3ViMjhtQzk0OGsyZ0xRbzFBenVWOGN6Y0Y0eWM3QVVaM1oKN3FGQk03L3dhNWV3eWR2c0Rsb1ZzKzBWOGd4UVhRcmJ4MXNVSlRYMGpRYU1tdWRmK2taUTJRY0l6ZlVDZ1lFQQowTW1VZkJjc2Y1RWxRcFpFRENyQVlnOFdvTVNNaGo5Z2xEZU9lOGJ1Tll4T0p4TkQrQzVpQmdnWWg4emJpWkwzCm1xbHhsYmEvTllzV05hNFllS1kvNWdYdHBPY1VyYm8zbFcxSTI1K1JTTDVTU1EzUld2K3JPREhKM09aUDA2bEQKYlVFazRlVDhTYVMwTDZ0S3JzVFlpN1dkSGN6ZjlQYVNhZGowTVFuOW5QTUNnWUVBMTBmallOT2krYWsvZ29NeQpvUnZXZEhlUkJ0SDBGcElLWUN6L1BrTTBPYWNMdDdUY29ldm04WXpESUpyTHprd3NtejFSV2pic3VGSlEyeEJhCkxwTkxIRk5Jc3NvbnhtRFVHOWdCekNMU25kbTlIK3JsS0tFTFJhYzREeVE5bUNxYmFDZlVRblpxYmpMQXJ0WTUKekY2UmRJUHRidzV4ZmNoczJHYk9Lb2JDWmc4PQotLS0tXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        - MODULO_PEN_GEARMAN_IP=
+        - MODULO_PEN_GEARMAN_PORTA=
+        - MODULO_PEN_QTD_WORKER_PROC=1
+        - MODULO_PEN_REPOSITORIO_ORIGEM=
+        - MODULO_PEN_TIPO_PROCESSO_EXTERNO=
+        - MODULO_PEN_UNIDADE_GERADORA=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_PEN=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_SEI=
+        - MODULO_PETICIONAMENTO_INSTALAR=false
+        - MODULO_PETICIONAMENTO_VERSAO=master
+        - MODULO_PETICIONAMENTO_URL=https://github.com/anatelgovbr/mod-sei-peticionamento
+        - MODULO_PI_INSTALAR=false
+        - MODULO_PI_VERSAO=master
+        - MODULO_PI_URL=https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+        - MODULO_PI_USUARIO=usuariodeconexaopi
+        - MODULO_PI_SENHA=senhadeconexaoaopi
+        - MODULO_PI_EMAIL=email@example.com
+        - MODULO_INCOM_INSTALAR=false
+        - MODULO_INCOM_VERSAO=v1.0.4
+        - MODULO_INCOM_VEICULOID=2
+        - MODULO_INCOM_SERIEID=10
+        - MODULO_INCOM_SIORG=235876
+        - MODULO_INCOM_URLWS=https://seiwsincom2.in.gov.br/seiwsincom/services/servicoIN?wsdl
+        - MODULO_INCOM_USERWS=XXX
+        - MODULO_INCOM_PASSWS=XXX
+        - MODULO_INCOM_INCLUSAOPUBLICACAO=S
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr #servicesolr
+        - jod:jod #servicejod
+        #- openldap:openldap #serviceldap
+    app:
+        image: processoeletronico/app-ci:latest
+        entrypoint: "/entrypoint.sh"
+        ports:
+            - 80:80
+        #    - 443:443
+        volumes_from:
+            - storage-app
+            - storage-certs
+        labels:
+            io.rancher.container.pull_image: always
+            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador    
+        environment:
+        - APP_PROTOCOLO=http
+        - APP_HOST=localhost
+        - APP_ORGAO=ME
+        - APP_ORGAO_DESCRICAO=Orgao Processo Eletronico - Oracle
+        - APP_NOMECOMPLEMENTO=SEI - PEN - DTH
+        - APP_MEMCACHED_HOST=memcached
+        - APP_DB_TIPO=Oracle
+        - APP_DB_HOST=db
+        - APP_DB_PORTA=1521
+        - APP_DB_SIP_BASE=sip
+        - APP_DB_SIP_USERNAME=sip
+        - APP_DB_SIP_PASSWORD=sip_user
+        - APP_DB_SEI_BASE=sei
+        - APP_DB_SEI_USERNAME=sei
+        - APP_DB_SEI_PASSWORD=sei_user
+        - APP_DB_ROOT_USERNAME=sip
+        - APP_DB_ROOT_PASSWORD=sip_user
+        - APP_SIP_CHAVE_ACESSO=d27791b894028d9e7fa34887ad6f0c9a2c559cccda5f64f4e108e3573d5db862b66fb933
+        - APP_SEI_CHAVE_ACESSO=7babf862e12bd48f3101075c399040303d94a493c7ce9306470f719bb453e0428c6135dc
+        - APP_SOLR_URL=http://solr:8983/solr
+        - APP_SOLR_CORE_PROTOCOLOS=sei-protocolos
+        - APP_SOLR_TEMPO_COMMIT_PROTOCOLOS=300
+        - APP_SOLR_CORE_BASECONHECIMENTO=sei-bases-conhecimento
+        - APP_SOLR_TEMPO_COMMIT_BASECONHECIMENTO=60
+        - APP_SOLR_CORE_PUBLICACOES=sei-publicacoes
+        - APP_SOLR_TEMPO_COMMIT_PUBLICACOES=60
+        - APP_MAIL_TIPO=2
+        - APP_MAIL_SERVIDOR=mail
+        - APP_MAIL_PORTA=25
+        - APP_MAIL_CODIFICACAO=8bit
+        - APP_MAIL_MAXDESTINATARIOS=999
+        - APP_MAIL_MAXTAMANHOANEXOSMB=999
+        - APP_MAIL_SEGURANCA=
+        - APP_MAIL_AUTENTICAR=
+        - APP_MAIL_USUARIO=
+        - APP_MAIL_SENHA=
+        - APP_MAIL_PROTEGIDO=
+        - APP_FONTES_GIT_PATH=
+        - APP_FONTES_GIT_PRIVKEY_BASE64=
+        - APP_FONTES_GIT_CHECKOUT=
+        - OPENLDAP_PRESENTE=false
+        - SERVICO_PD_INSTALAR=false
+        - SERVICO_PD_SIGLA=GOV.BR
+        - SERVICO_PD_NOME=Protocolo.GOV.BR
+        - SERVICO_PD_OPERACOES=3,2,15,0,1
+        - MODULO_ESTATISTICAS_INSTALAR=false
+        - MODULO_ESTATISTICAS_VERSAO=master
+        - MODULO_ESTATISTICAS_URL=https://estatistica.dev.processoeletronico.gov.br
+        - MODULO_ESTATISTICAS_SIGLA=SEIPUBLICO
+        - MODULO_ESTATISTICAS_CHAVE=seipublico
+        - MODULO_REST_INSTALAR=false
+        - MODULO_REST_VERSAO=master
+        - MODULO_REST_URL_NOTIFICACAO=
+        - MODULO_REST_ID_APP=
+        - MODULO_REST_CHAVE=
+        - MODULO_REST_TOKEN_SECRET=
+        - MODULO_RESPOSTA_INSTALAR=false
+        - MODULO_RESPOSTA_VERSAO=master
+        - MODULO_RESPOSTA_SISTEMA_ID=
+        - MODULO_RESPOSTA_DOCUMENTO_ID=
+        - MODULO_GESTAODOCUMENTAL_INSTALAR=false
+        - MODULO_GESTAODOCUMENTAL_VERSAO=master
+        - MODULO_LOGINUNICO_INSTALAR=false
+        - MODULO_LOGINUNICO_VERSAO=master
+        - MODULO_LOGINUNICO_CLIENTID=sistemas/homologacao/sei/controlador_externo
+        - MODULO_LOGINUNICO_SECRET=XXXX
+        - MODULO_LOGINUNICO_URLPROVIDER=https://sso.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_REDIRECTURL=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/controlador_loginunico.php
+        - MODULO_LOGINUNICO_URLLOGOUT=http://sei.xxx.nuvem.gov.br/sei/modulos/loginunico/logout.php
+        - MODULO_LOGINUNICO_SCOPE=openid+email+phone+profile+govbr_empresa+govbr_confiabilidades
+        - MODULO_LOGINUNICO_URLSERVICOS=https://api.staging.acesso.gov.br/
+        - MODULO_LOGINUNICO_URLREVALIDACAO=https://oauth.staging.acesso.gov.br/v1/
+        - MODULO_LOGINUNICO_CIENTIDVALIDACAO=sei.xxx.nuvem.gov.br/validacaosenha
+        - MODULO_LOGINUNICO_SECRETVALIDACAO=XXX
+        - MODULO_LOGINUNICO_ORGAO=0
+        - MODULO_ASSINATURAVANCADA_INSTALAR=false
+        - MODULO_ASSINATURAVANCADA_VERSAO=master
+        - MODULO_ASSINATURAVANCADA_CLIENTID=assinaturaAvancadaXXX
+        - MODULO_ASSINATURAVANCADA_SECRET=XXX
+        - MODULO_ASSINATURAVANCADA_URLPROVIDER=https://cas.staging.iti.br/oauth2.0
+        - MODULO_ASSINATURAVANCADA_URL_SERVICOS=assinatura-api.staging.iti.br/externo/v2
+        - MODULO_PEN_INSTALAR=false
+        - MODULO_PEN_VERSAO=master
+        - MODULO_PEN_WEBSERVICE=https://homolog.api.processoeletronico.gov.br/interoperabilidade/soap/v3/
+        - MODULO_PEN_CERTIFICADO_SENHA=1234
+        - MODULO_PEN_CERTIFICADO_BASE64=LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUR4akNDQXE2Z0F3SUJBZ0lDRURBd0RRWUpLb1pJaHZjTkFRRUxCUUF3Y3pFTE1Ba0dBMVVFQmhNQ1FsSXgKR1RBWEJnTlZCQWdNRUVScGMzUnlhWFJ2SUVabFpHVnlZV3d4RVRBUEJnTlZCQWNNQ0VKeVlYTnBiR2xoTVFzdwpDUVlEVlFRS0RBSk5VREVNTUFvR0ExVUVDd3dEVUVWT01Sc3dHUVlEVlFRRERCSkpiblJsY205d1pYSmhZbWxzCmFXUmhaR1V3SGhjTk1UZ3dOekF5TVRVMU16VXpXaGNOTWpnd05qSTVNVFUxTXpVeldqQmNNUXN3Q1FZRFZRUUcKRXdKQ1VqRVpNQmNHQTFVRUNBd1FSR2x6ZEhKcGRHOGdSbVZrWlhKaGJERWNNQm9HQTFVRUNnd1RSR1ZtWVhWcwpkQ0JEYjIxd1lXNTVJRXgwWkRFVU1CSUdBMVVFQXd3TFZGTkZMVWhQVFU5TVQwY3dnZ0VpTUEwR0NTcUdTSWIzCkRRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRRHo2L1ZOZHE2aTVzNTRUMzhWMW4xeGZXVWpieXhMS25vY3V2S1UKd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeFpYYTh0Nkg4SE5hY3FtcWRHRWplOTFpNgoxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3eEZUVE5GVUpXU1pWYytiZE1pc1VxYzU1ClUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWprVXF5RjZxZkR0QmpOYjRHZVFINjBZT1AKVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MHdTNzRtWDdYeC9oWXFrOU9NUkxQcmoxUwpEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdySDBCemdSbXpBZ01CQUFHamV6QjVNQWtHCkExVWRFd1FDTUFBd0xBWUpZSVpJQVliNFFnRU5CQjhXSFU5d1pXNVRVMHdnUjJWdVpYSmhkR1ZrSUVObGNuUnAKWm1sallYUmxNQjBHQTFVZERnUVdCQlRqM2NlZ01hWFlWU3pIL3dhdDhaamQ1UGtJempBZkJnTlZIU01FR0RBVwpnQlNZM2ZqdXU5TnhPT05oK2FRZXE1T2pZQzN0dXpBTkJna3Foa2lHOXcwQkFRc0ZBQU9DQVFFQUt5OFFTSkswCmRmV0VlSHU2Y1ZWdTBrSmo3SGZRd1QwcGkzNkhBOWNsV3dvY2RidWRkR2NHS2JXOHJSVU1DM3h3VzJ2bHlRekoKL0RCN0p4eEphVFZycG5iMVhMRlM3ZHhCbmN0dUd1ZWMrRUNVamg5VDA1VCtTbVVmQ3I1bHBMUnR0bTBiWFlmRgpJMWVjNy90ZitQTEJMbFBMSXhvMXNoWHd4T3d0eHFUcUtMRSt0VkNPNlBUY2NON1ZsQXJTcXZ5T2NYMGE1RFpBCitIUkh1RVdkKzdUWnZJdXhHSTlMYjFDMm5GRkt1WVRMYTczOFE2QWZxT2RlS0VWUWtaMi9HNHFLdGJlK0R5L2IKK2tJK2UxTmZwSTlmQm9nK2hhWnZjZGMrajY3MmFCNWhNOTd0OHJ4ZzVFYVZLV3RIbkJFVGd6WlhLQVZHWE1PdwpsazdYd0VaTU5PRUtMQT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0KLS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV3QUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktvd2dnU21BZ0VBQW9JQkFRRHo2L1ZOZHE2aTVzNTQKVDM4VjFuMXhmV1VqYnl4TEtub2N1dktVd0pkSklwMHFiZWZEN2pxSVo2UHF1UG1QaWVVQWcyWHlGUzlzdWlVeApaWGE4dDZIOEhOYWNxbXFkR0VqZTkxaTYxWTZXTEVPYWtWZkc0a2R0RGdFbkNJMDJjbkpDSE5DWWE0SGVyNzR3CnhGVFRORlVKV1NaVmMrYmRNaXNVcWM1NVUva3dLTWcybHlmVEZ3b2dQS0ZOOXZ2bGJCTjR2bmVnTjl2Y3ZDNWoKa1VxeUY2cWZEdEJqTmI0R2VRSDYwWU9QVWpaRUc3UGtRWGJ0OXBPL2F3MmQvU0gxVFR4ODBCM0RGeWJBdFp4MAp3Uzc0bVg3WHgvaFlxazlPTVJMUHJqMVNEQTNtZEtKY0hpTTF2dUNPSXFlbnk5cCszWk9hV1BiVEpVcU5UWmdyCkgwQnpnUm16QWdNQkFBRUNnZ0VCQUs5T0RUM0FKMkRpbXM5eTZ2Wko4bHduY0JIWWE3QVY5aTlCMk9nNXhrRUUKeEluaTlXZ21oaURVdzhVRmJpN1FQeXB3UlV1SUdFNS9OZzNiUzB2MGVsSFVkQldpa1A4WW5mN0pMQmNUTnVnTgpKZ1Vub2p0SkUyWjRZekduZnIzNzRNeE5JMG40TWgxV2wwMDdQVytScy9BRkIzencwS0oyMU9tRDVPWGtDVHFuCkhaTy9yUkw2UlFGaVRBeGdUQjZlVjZsclhsVHJkWEFMUGdMcmdBREErMTNjUldtZXNNL3JZWUdCWkpUdjVhVHQKNXRHZm00WWljUExlTHg3QzNmQ0Y0WlN1VEkrbmhPbjlCNXhMdmxicmdMeG1PTGV2eXZXWDREZkFNS3lYWjM1dwp4MUc1djNLaU9zcjYyczZHUG1na1V4QjI5enNmUDhyZnJDSXl2T05RcHdrQ2dZRUEreUtEM05PcmlEcVM0bmdjCjVVWUtSU0EyUlU4Wjd3TDFzYWlhcEFDT3JkYm5yL041OFNJVTBMUG02UnIxeXliYUY1Z3VOQURSZWhtN0ROZnEKT1hJUzNNT0tQOXkvNzdpdnBsMitwM3BYQnYxbU5xTWQ5T1JhNUFmcCtUNFpoUzVsbHZXV3V0b0VvRTdlaFQ4Kwo1akRFYUl6amdRVnBqd0xZdkhBeDJrYUJ4KzBDZ1lFQStLV3JrMHJSMHVTdTM3VnpnNUNVWm03U1FjaWV4aHM2CkZqQzMzQW0wTDJmT2FGbG4wSHlsQTlRL0lxcitDTVErQWlkd3JmdkZZeG51N2xhTGl1VlZSREVWNW9Vbm13ZU8KWVRoTnRiOTdaeXhWUFNzcXh6cGd4TWZ6QVhkVzAvbUFiWlZYWWNUVUVNVW9NdklJSzBlQVpCblFEZmNNYncvKwp2Sk9rbHZTczlCOENnWUVBcTVObU1hM3Y2Ry9VUUtPOVlpc2JBeVZCenRKL0xsdUFUdk9aUzJrU0VkVGNqOHF4CnlqdjFxcXp1bXQ0UGhjOHllNkkrRnN0a1VwNVh2Q3ViMjhtQzk0OGsyZ0xRbzFBenVWOGN6Y0Y0eWM3QVVaM1oKN3FGQk03L3dhNWV3eWR2c0Rsb1ZzKzBWOGd4UVhRcmJ4MXNVSlRYMGpRYU1tdWRmK2taUTJRY0l6ZlVDZ1lFQQowTW1VZkJjc2Y1RWxRcFpFRENyQVlnOFdvTVNNaGo5Z2xEZU9lOGJ1Tll4T0p4TkQrQzVpQmdnWWg4emJpWkwzCm1xbHhsYmEvTllzV05hNFllS1kvNWdYdHBPY1VyYm8zbFcxSTI1K1JTTDVTU1EzUld2K3JPREhKM09aUDA2bEQKYlVFazRlVDhTYVMwTDZ0S3JzVFlpN1dkSGN6ZjlQYVNhZGowTVFuOW5QTUNnWUVBMTBmallOT2krYWsvZ29NeQpvUnZXZEhlUkJ0SDBGcElLWUN6L1BrTTBPYWNMdDdUY29ldm04WXpESUpyTHprd3NtejFSV2pic3VGSlEyeEJhCkxwTkxIRk5Jc3NvbnhtRFVHOWdCekNMU25kbTlIK3JsS0tFTFJhYzREeVE5bUNxYmFDZlVRblpxYmpMQXJ0WTUKekY2UmRJUHRidzV4ZmNoczJHYk9Lb2JDWmc4PQotLS0tXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        - MODULO_PEN_GEARMAN_IP=
+        - MODULO_PEN_GEARMAN_PORTA=
+        - MODULO_PEN_QTD_WORKER_PROC=1
+        - MODULO_PEN_REPOSITORIO_ORIGEM=
+        - MODULO_PEN_TIPO_PROCESSO_EXTERNO=
+        - MODULO_PEN_UNIDADE_GERADORA=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_PEN=
+        - MODULO_PEN_UNIDADE_ASSOCIACAO_SEI=
+        - MODULO_PI_INSTALAR=false
+        - MODULO_PI_VERSAO=master
+        - MODULO_PI_URL=https://protocolointegrado.preprod.nuvem.gov.br/ProtocoloWS/integradorService?wsdl
+        - MODULO_PI_USUARIO=usuariodeconexaopi
+        - MODULO_PI_SENHA=senhadeconexaoaopi
+        - MODULO_PI_EMAIL=email@example.com
+        - MODULO_INCOM_INSTALAR=false
+        - MODULO_INCOM_VERSAO=v1.0.4
+        - MODULO_INCOM_VEICULOID=2
+        - MODULO_INCOM_SERIEID=10
+        - MODULO_INCOM_SIORG=235876
+        - MODULO_INCOM_URLWS=https://seiwsincom2.in.gov.br/seiwsincom/services/servicoIN?wsdl
+        - MODULO_INCOM_USERWS=XXX
+        - MODULO_INCOM_PASSWS=XXX
+        - MODULO_INCOM_INCLUSAOPUBLICACAO=S
+        - VIRTUAL_HOST=https://localhost/sei*,https://localhost/sip*,https://localhost/infra*,http://localhost/sei*,http://localhost/sip*,http://localhost/infra*
+        - EXCLUDE_PORTS=443
+        #- EXCLUDE_PORTS=80
+        #- EXTRA_ROUTE_SETTINGS=ssl verify none
+        - COOKIE=SRV insert indirect nocache
+        links:
+        - db:db
+        - memcached:memcached
+        - solr:solr #servicesolr
+        - jod:jod #servicejod
+        #- openldap:openldap #serviceldap
+    #balanceador: #servicebal
+    #    image: processoeletronico/haproxy:latest #servicebal
+    #    links: #servicebal
+    #        - app #servicebal
+    #        - solr #servicesolr #servicebal
+    #        - mail #servicemail #servicebal
+    #        - ldapadmin #serviceldap #servicebal
+    #        - memcachedadmin #servicememcachedadmin #servicebal
+    #        - dbadmin #servicedbadmin #servicebal
+    #    environment: #servicebal
+    #        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://localhost/sei/ if is_root #servicebal
+    #        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://localhost/sei/ if is_root #servicebal
+    #        - CERT_FOLDER=/certs #servicebal
+    #    volumes_from: #servicebal
+    #        - storage-certs #servicebal
+    #    volumes: #servicebal
+    #        - /var/run/docker.sock:/var/run/docker.sock #servicebal
+    #    ports: #servicebal
+    #        - 80:80 #servicebal
+    #        - 443:443 #servicebal

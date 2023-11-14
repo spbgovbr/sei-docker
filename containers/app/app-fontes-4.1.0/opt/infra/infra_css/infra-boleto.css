@@ -1,0 +1,268 @@
+div#container {
+    width: 700px;
+    font-family: arial;
+    font-size: 12px;
+}
+
+div#container div, div#container {
+    float: left;
+}
+
+div#ficha_compensacao {
+    margin-top: 20px;
+}
+
+#ficha_compensacao #colunaprincipal div,
+#ficha_compensacao #colunadireita div,
+#recibo .linha div {
+    height: 27px;
+    margin: 0;
+    margin-bottom: 2px;
+    float: left;
+    border-bottom: 1px solid #C0C0C0;
+}
+
+#ficha_compensacao #colunaprincipal div .item {
+    border-bottom: 0;
+}
+
+#ficha_compensacao #colunaprincipal .item,
+#ficha_compensacao #colunaprincipal .mensagens,
+#ficha_compensacao #colunadireita div,
+#recibo .item {
+    border-left: 5px solid #C0C0C0;
+    padding-left: 5px;
+    padding-right: 0px;
+}
+
+.cabecalho {
+    border-bottom: 3px solid #000000;
+    width: 690px;
+    margin-bottom: 5px;
+}
+
+.cabecalho div {
+    float: left;
+    height: 25px;
+    margin-top: 25px;
+    border: 0;
+}
+
+.cabecalho .banco_logo {
+    width: 160px;
+    height: 40px;
+    margin-top: 10px;
+}
+
+.cabecalho .banco_codigo {
+    width: 70px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    border: 0;
+    border-left: 3px solid #000000;
+    border-right: 3px solid #000000;
+}
+
+.cabecalho .linha_digitavel {
+    width: 450px;
+    font-size: 15px;
+    font-weight: bold;
+    text-align: right;
+}
+
+#ficha_compensacao #colunaprincipal {
+    border: 0;
+}
+
+#ficha_compensacao #colunaprincipal,
+#ficha_compensacao .local_pagamento, #ficha_compensacao .mensagens,
+#ficha_compensacao .cedente, #ficha_compensacao .linha {
+    width: 480px;
+}
+
+#ficha_compensacao label, #recibo label {
+    font-size: 9px;
+    display: block;
+}
+
+#ficha_compensacao .local_pagamento, #ficha_compensacao .mensagens,
+#ficha_compensacao .cedente, #ficha_compensacao .linha {
+    clear: left;
+}
+
+#ficha_compensacao #colunaprincipal .mensagens {
+    height: 147px;
+}
+
+#ficha_compensacao #colunaprincipal .data_doc {
+    width: 100px;
+}
+
+#ficha_compensacao #colunaprincipal .num_doc {
+    width: 120px;
+}
+
+#ficha_compensacao #colunaprincipal .espec_doc {
+    width: 70px;
+}
+
+#ficha_compensacao #colunaprincipal .aceite {
+    width: 40px;
+}
+
+#ficha_compensacao #colunaprincipal .dt_proc {
+    width: 90px;
+}
+
+#ficha_compensacao #colunaprincipal .uso_banco {
+    width: 100px;
+}
+
+#ficha_compensacao #colunaprincipal .carteira {
+    width: 90px;
+}
+
+#ficha_compensacao #colunaprincipal .moeda {
+    width: 40px;
+}
+
+#ficha_compensacao #colunaprincipal .qtd {
+    width: 55px;
+}
+
+#ficha_compensacao #colunaprincipal .valor {
+    width: 130px;
+}
+
+#ficha_compensacao #colunadireita {
+    width: 200px;
+}
+
+#ficha_compensacao #colunadireita div {
+    display: block;
+    width: 200px;
+}
+
+#ficha_compensacao #sacado, #ficha_compensacao #codigo_barras {
+    clear: both;
+    width: 680px;
+    height: 70px;
+    border-left: 5px solid #fff;
+    padding-left: 5px;
+}
+
+#ficha_compensacao #sacado {
+    border-bottom: 1px solid #c0c0c0;
+}
+
+#recibo div {
+    float: left
+}
+
+#recibo .linha .cedente {
+    width: 270px;
+}
+
+#recibo .linha .agencia {
+    width: 130px;
+}
+
+#recibo .linha .moeda {
+    width: 50px;
+}
+
+#recibo .linha .qtd {
+    width: 30px;
+}
+
+#recibo .linha .nosso_numero {
+    width: 160px;
+}
+
+#recibo .linha .num_doc {
+    width: 150px;
+}
+
+#recibo .linha .cpf_cnpj {
+    width: 150px;
+}
+
+#recibo .linha .vencimento {
+    width: 150px;
+}
+
+#recibo .linha .valor {
+    width: 200px;
+}
+
+#recibo .linha .descontos {
+    width: 110px;
+}
+
+#recibo .linha .outras_deducoes {
+    width: 110px;
+}
+
+#recibo .linha .multa {
+    width: 110px;
+}
+
+#recibo .linha .outros_acrescimos {
+    width: 110px;
+}
+
+#recibo .linha .sacado {
+    width: 680px;
+}
+
+#recibo .linha .demonstrativo {
+    width: 480px;
+    border-bottom: 0;
+    height: 100px;
+}
+
+#recibo .linha .autenticacao_mecanica {
+    width: 200px;
+    border-bottom: 0;
+}
+
+.linha_corte {
+    border-bottom: 1px dotted #000;
+    height: 10px;
+    width: 690px;
+}
+
+.linha_corte label, .autenticacao_mecanica label {
+    text-align: right;
+}
+
+#recibo .linha div,
+#ficha_compensacao #colunadireita div,
+#ficha_compensacao #colunaprincipal .item,
+#ficha_compensacao #colunaprincipal .mensagens {
+    border-left-color: #FF0;
+}
+
+.cabecalho, .cabecalho .banco_codigo {
+    border-color: #009;
+}
+
+#recibo div,
+#ficha_compensacao #colunaprincipal div,
+#ficha_compensacao #colunadireita div,
+#ficha_compensacao #sacado {
+    border-bottom-color: #009;
+}
+
+#ficha_compensacao {
+    color: #000;
+}
+
+#ficha_compensacao label, #recibo label {
+    color: #009;
+}
+
+.cabecalho {
+    color: #009;
+}

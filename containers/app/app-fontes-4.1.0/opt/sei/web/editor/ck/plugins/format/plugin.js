@@ -1,0 +1,10 @@
+﻿/*
+ Copyright (c) 2003-2021, CKSource - Frederico Knabben. All rights reserved.
+
+ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
+
+*/
+CKEDITOR.plugins.add("format",{requires:"richcombo",lang:"pt-br,en",init:function(a){if(!a.blockless){for(var f=a.config,c=a.lang.format,l=f.format_tags.split(";"),d={},m=0,n=[],g=0;g<l.length;g++){var h=l[g],k=new CKEDITOR.style(f["format_"+h]);if(!a.filter.customConfig||a.filter.check(k))m++,d[h]=k,d[h]._.enterMode=a.config.enterMode,n.push(k)}0!==m&&a.ui.addRichCombo("Format",{label:c.label,title:c.panelTitle,toolbar:"styles,20",allowedContent:n,panel:{css:[CKEDITOR.skin.getPath("editor")].concat(f.contentsCss),
+multiSelect:!1,attributes:{"aria-label":c.panelTitle}},init:function(){this.startGroup(c.panelTitle);for(var a in d){var e=c["tag_"+a];this.add(a,d[a].buildPreview(e),e)}},onClick:function(b){a.focus();a.fire("saveSnapshot");b=d[b];var e=a.elementPath();a.fire("stylesRemove",{type:CKEDITOR.STYLE_BLOCK});b.checkActive(e,a)||a.applyStyle(b);setTimeout(function(){a.fire("saveSnapshot")},0)},onRender:function(){a.on("selectionChange",function(b){var e=this.getValue();b=b.data.path;this.refresh();for(var c in d)if(d[c].checkActive(b,
+a)){c!=e&&this.setValue(c,a.lang.format["tag_"+c]);return}this.setValue("")},this)},onOpen:function(){this.showAll();for(var b in d)a.activeFilter.check(d[b])||this.hideItem(b)},refresh:function(){var b=a.elementPath();if(b){if(b.isContextFor("p"))for(var c in d)if(a.activeFilter.check(d[c]))return;this.setState(CKEDITOR.TRISTATE_DISABLED)}}})}}});CKEDITOR.config.format_tags="p;h1;h2;h3;h4;h5;h6;pre;address;div";CKEDITOR.config.format_p={element:"p"};CKEDITOR.config.format_div={element:"div"};
+CKEDITOR.config.format_pre={element:"pre"};CKEDITOR.config.format_address={element:"address"};CKEDITOR.config.format_h1={element:"h1"};CKEDITOR.config.format_h2={element:"h2"};CKEDITOR.config.format_h3={element:"h3"};CKEDITOR.config.format_h4={element:"h4"};CKEDITOR.config.format_h5={element:"h5"};CKEDITOR.config.format_h6={element:"h6"};

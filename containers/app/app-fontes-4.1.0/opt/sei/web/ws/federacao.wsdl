@@ -1,0 +1,710 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions
+        name="SeiFederacaoWS"
+        targetNamespace="SeiFederacao"
+        xmlns="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+        xmlns:tns="SeiFederacao">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="SeiFederacao">
+
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+      <xsd:complexType name="Orgao">
+        <xsd:all>
+          <xsd:element name="IdOrgaoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdInstalacaoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdOrgao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Descricao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Unidades" type="tns:ArrayOfUnidade" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfOrgao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Orgao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Unidade">
+        <xsd:all>
+          <xsd:element name="IdUnidadeFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdInstalacaoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUnidade" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdOrgao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Descricao" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUnidade">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Unidade[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+
+      <xsd:complexType name="Usuario">
+        <xsd:all>
+          <xsd:element name="IdUsuarioFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdInstalacaoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUsuario" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Nome" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUsuario">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Usuario[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Andamento">
+        <xsd:all>
+          <xsd:element name="DataHora" type="xsd:string" />
+          <xsd:element name="Usuario" type="tns:Usuario" />
+          <xsd:element name="Unidade" type="tns:Unidade" />
+          <xsd:element name="Descricao" type="xsd:string" />
+          <xsd:element name="SinAberto" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAndamento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Andamento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="InstalacaoFederacao">
+        <xsd:all>
+          <xsd:element name="IdInstalacaoFederacao" type="xsd:string"/>
+          <xsd:element name="SeiVersao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SeiFederacaoVersao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cnpj" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Descricao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Endereco" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaEstado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Hash" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ChavePublica" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Orgaos" type="tns:ArrayOfOrgao" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfInstalacaoFederacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:InstalacaoFederacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="TipoProcedimento">
+        <xsd:all>
+          <xsd:element name="IdTipoProcedimento" type="xsd:string" />
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Serie">
+        <xsd:all>
+          <xsd:element name="IdSerie" type="xsd:string" />
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Interessado">
+        <xsd:all>
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Nome" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfInteressado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Interessado[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Assinatura">
+        <xsd:all>
+          <xsd:element name="IdUsuario" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="CargoFuncao" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAssinatura">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Assinatura[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Publicacao">
+        <xsd:all>
+          <xsd:element name="IdPublicacao" type="xsd:string"/>
+          <xsd:element name="TextoInformativo" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Documento">
+        <xsd:all>
+          <xsd:element name="IdDocumentoFederacao" type="xsd:string"/>
+          <xsd:element name="ProtocoloFormatado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Serie" type="tns:Serie" minOccurs="0" nillable="true" />
+          <xsd:element name="Numero" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="DataGeracao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinPdf" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinZip" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Assinaturas" type="tns:ArrayOfAssinatura" minOccurs="0" nillable="true" />
+          <xsd:element name="Publicacao" type="tns:Publicacao" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDocumento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Documento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Procedimento">
+        <xsd:all>
+          <xsd:element name="IdProcedimentoFederacao" type="xsd:string"/>
+          <xsd:element name="ProtocoloFormatado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="TipoProcedimento" type="tns:TipoProcedimento" minOccurs="0" nillable="true" />
+          <xsd:element name="DataAutuacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Especificacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Interessados" type="tns:ArrayOfInteressado" minOccurs="0" nillable="true" />
+          <xsd:element name="NivelAcesso" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="VersaoAcessos" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProcedimento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Procedimento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Protocolo">
+        <xsd:all>
+          <xsd:element name="IdProtocoloFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaProtocolo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaEstado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinAcesso" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaNivelAcesso" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Documento" type="tns:Documento" minOccurs="0" nillable="true" />
+          <xsd:element name="Procedimento" type="tns:Procedimento" minOccurs="0" nillable="true" />
+          <xsd:element name="Unidade" type="tns:Unidade" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProtocolo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Protocolo[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ProtocoloFederacao">
+        <xsd:all>
+          <xsd:element name="IdProtocoloFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdInstalacaoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ProtocoloFormatado" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProtocoloFederacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ProtocoloFederacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="AcessoFederacao">
+        <xsd:all>
+          <xsd:element name="IdAcessoFederacao" type="xsd:string" />
+          <xsd:element name="IdInstalacaoFederacaoRem" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdOrgaoFederacaoRem" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUnidadeFederacaoRem" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUsuarioFederacaoRem" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdInstalacaoFederacaoDest" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdOrgaoFederacaoDest" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUnidadeFederacaoDest" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdUsuarioFederacaoDest" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdProcedimentoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdDocumentoFederacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="DthLiberacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="MotivoLiberacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="DthCancelamento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="MotivoCancelamento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaTipo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinAtivo" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAcessoFederacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:AcessoFederacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="SinalizacaoFederacao">
+        <xsd:all>
+          <xsd:element name="IdProtocoloFederacao" type="xsd:string" />
+          <xsd:element name="DthSinalizacao" type="xsd:string" />
+          <xsd:element name="StaSinalizacao" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfSinalizacaoFederacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:SinalizacaoFederacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfString">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:String[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="VisualizacaoProcesso">
+        <xsd:all>
+          <xsd:element name="Procedimento" type="tns:Procedimento" minOccurs="0" nillable="true" />
+          <xsd:element name="UnidadeOrigem" type="tns:Unidade" minOccurs="0" nillable="true" />
+          <xsd:element name="SinProtocolos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="PagProtocolos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="MaxProtocolos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="RegProtocolos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="TotProtocolos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinAndamentos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="PagAndamentos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="MaxAndamentos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="RegAndamentos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="TotAndamentos" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Protocolos" type="tns:ArrayOfProtocolo" minOccurs="0" nillable="true" />
+          <xsd:element name="Andamentos" type="tns:ArrayOfAndamento" minOccurs="0" nillable="true" />
+          <xsd:element name="Usuarios" type="tns:ArrayOfUsuario" minOccurs="0" nillable="true" />
+          <xsd:element name="Orgaos" type="tns:ArrayOfOrgao" minOccurs="0" nillable="true" />
+          <xsd:element name="Unidades" type="tns:ArrayOfUnidade" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="VisualizacaoDocumento">
+        <xsd:all>
+          <xsd:element name="Documento" type="tns:Documento" />
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Remetente">
+        <xsd:all>
+          <xsd:element name="Instalacao" type="tns:InstalacaoFederacao" />
+          <xsd:element name="Orgao" type="tns:Orgao" minOccurs="0" nillable="true" />
+          <xsd:element name="Unidade" type="tns:Unidade" minOccurs="0" nillable="true" />
+          <xsd:element name="Usuario" type="tns:Usuario" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Destinatario">
+        <xsd:all>
+          <xsd:element name="Instalacao" type="tns:InstalacaoFederacao" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Identificacao">
+        <xsd:all>
+          <xsd:element name="VersaoSei" type="xsd:string" />
+          <xsd:element name="VersaoSeiFederacao" type="xsd:string" />
+          <xsd:element name="Remetente" type="tns:Remetente" />
+          <xsd:element name="Destinatario" type="tns:Destinatario" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="solicitarRegistroRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+  </wsdl:message>
+
+  <wsdl:message name="solicitarRegistroResponse">
+    <wsdl:part name="Retorno" type="tns:InstalacaoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="liberarRegistroRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+  </wsdl:message>
+
+  <wsdl:message name="liberarRegistroResponse">
+    <wsdl:part name="Retorno" type="tns:string" />
+  </wsdl:message>
+
+  <wsdl:message name="confirmarLiberacaoRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+  </wsdl:message>
+
+  <wsdl:message name="confirmarLiberacaoResponse">
+    <wsdl:part name="Retorno" type="tns:InstalacaoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="bloquearRegistroRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+  </wsdl:message>
+
+  <wsdl:message name="bloquearRegistroResponse">
+    <wsdl:part name="Retorno" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="verificarConexaoRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+  </wsdl:message>
+
+  <wsdl:message name="verificarConexaoResponse">
+    <wsdl:part name="Retorno" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="pesquisarOrgaosUnidadesRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="PalavrasPesquisa" type="xsd:string" />
+    <wsdl:part name="StaTipoFiltro" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="pesquisarOrgaosUnidadesResponse">
+    <wsdl:part name="Retorno" type="tns:InstalacaoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="concederAcessoRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Procedimento" type="tns:Procedimento" />
+    <wsdl:part name="InstalacaoOrigem" type="tns:InstalacaoFederacao" />
+    <wsdl:part name="ProcedimentoOrigem" type="tns:Procedimento" />
+    <wsdl:part name="Acessos" type="tns:ArrayOfAcessoFederacao" />
+    <wsdl:part name="Tipo" type="xsd:string" />
+    <wsdl:part name="Motivo" type="xsd:string" />
+    <wsdl:part name="DataHora" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="concederAcessoResponse">
+    <wsdl:part name="Retorno" type="tns:ArrayOfAcessoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="visualizarProcessoRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="VisualizacaoProcesso" type="tns:VisualizacaoProcesso" />
+  </wsdl:message>
+
+  <wsdl:message name="visualizarProcessoResponse">
+    <wsdl:part name="Retorno" type="tns:VisualizacaoProcesso" />
+  </wsdl:message>
+
+  <wsdl:message name="visualizarDocumentoRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Procedimento" type="tns:Procedimento" />
+    <wsdl:part name="Documento" type="tns:Documento" />
+  </wsdl:message>
+
+  <wsdl:message name="visualizarDocumentoResponse">
+    <wsdl:part name="Retorno" type="tns:VisualizacaoDocumento" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarPdfRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Procedimento" type="tns:Procedimento" />
+    <wsdl:part name="Protocolos" type="tns:ArrayOfProtocolo" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarPdfResponse">
+    <wsdl:part name="Retorno" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarZipRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Procedimento" type="tns:Procedimento" />
+    <wsdl:part name="Protocolos" type="tns:ArrayOfProtocolo" />
+  </wsdl:message>
+
+  <wsdl:message name="gerarZipResponse">
+    <wsdl:part name="Retorno" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarAcessosRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Procedimento" type="tns:Procedimento" />
+    <wsdl:part name="Acessos" type="tns:ArrayOfAcessoFederacao" />
+    <wsdl:part name="Instalacoes" type="tns:ArrayOfInstalacaoFederacao" />
+    <wsdl:part name="Orgaos" type="tns:ArrayOfOrgao" />
+    <wsdl:part name="Unidades" type="tns:ArrayOfUnidade" />
+    <wsdl:part name="Usuarios" type="tns:ArrayOfUsuario" />
+    <wsdl:part name="ProtocolosFederacao" type="tns:ArrayOfProtocoloFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarAcessosResponse">
+    <wsdl:part name="Retorno" type="tns:ArrayOfAcessoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarSinalizacoesRequest">
+    <wsdl:part name="Identificacao" type="tns:Identificacao" />
+    <wsdl:part name="Sinalizacao" type="tns:ArrayOfSinalizacaoFederacao" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarSinalizacoesResponse">
+    <wsdl:part name="Retorno" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:portType name="SeiFederacaoPortType">
+
+    <wsdl:operation name="solicitarRegistro">
+      <wsdl:documentation>Solicitacao de Registro pela Instalacao Local</wsdl:documentation>
+      <wsdl:input message="tns:solicitarRegistroRequest"/>
+      <wsdl:output message="tns:solicitarRegistroResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="liberarRegistro">
+      <wsdl:documentation>Liberacao de Registro pela Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:liberarRegistroRequest"/>
+      <wsdl:output message="tns:liberarRegistroResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="confirmarLiberacao">
+      <wsdl:documentation>Confirmar Liberacao de Registro pela Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:confirmarLiberacaoRequest"/>
+      <wsdl:output message="tns:confirmarLiberacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearRegistro">
+      <wsdl:documentation>Bloqueio de Registro pela Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:bloquearRegistroRequest"/>
+      <wsdl:output message="tns:bloquearRegistroResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="verificarConexao">
+      <wsdl:documentation>Verificacao da Conexao da Instalacao Local com a Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:verificarConexaoRequest"/>
+      <wsdl:output message="tns:verificarConexaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="pesquisarOrgaosUnidades">
+      <wsdl:documentation>Pesquisa de orgaos/unidades disponiveis para envio de processo na Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:pesquisarOrgaosUnidadesRequest"/>
+      <wsdl:output message="tns:pesquisarOrgaosUnidadesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="concederAcesso">
+      <wsdl:documentation>Concessao de acesso para a Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:concederAcessoRequest"/>
+      <wsdl:output message="tns:concederAcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="visualizarProcesso">
+      <wsdl:documentation>Visualizacao de processo da Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:visualizarProcessoRequest"/>
+      <wsdl:output message="tns:visualizarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="visualizarDocumento">
+      <wsdl:documentation>Visualizacao de documento da Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:visualizarDocumentoRequest"/>
+      <wsdl:output message="tns:visualizarDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarPdf">
+      <wsdl:documentation>Geracao de PDF na Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:gerarPdfRequest"/>
+      <wsdl:output message="tns:gerarPdfResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarZip">
+      <wsdl:documentation>Geracao de ZIP na Instalacao Remota</wsdl:documentation>
+      <wsdl:input message="tns:gerarZipRequest"/>
+      <wsdl:output message="tns:gerarZipResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarAcessos">
+      <wsdl:documentation>Replicacao de acessos nas Instalacoes Remotas</wsdl:documentation>
+      <wsdl:input message="tns:replicarAcessosRequest"/>
+      <wsdl:output message="tns:replicarAcessosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarSinalizacoes">
+      <wsdl:documentation>Replicacao de sinalizacoes em Protocolos</wsdl:documentation>
+      <wsdl:input message="tns:replicarSinalizacoesRequest"/>
+      <wsdl:output message="tns:replicarSinalizacoesResponse"/>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="SeiFederacaoBinding" type="tns:SeiFederacaoPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="solicitarRegistro">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="liberarRegistro">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="confirmarLiberacao">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearRegistro">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="verificarConexao">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="pesquisarOrgaosUnidades">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="concederAcesso">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="visualizarProcesso">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="visualizarDocumento">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarPdf">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarZip">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarAcessos">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarSinalizacoes">
+      <soap:operation soapAction="SeiFederacaoAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiFederacao" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="SeiFederacaoService">
+    <wsdl:port name="SeiFederacaoPortService" binding="tns:SeiFederacaoBinding">
+      <soap:address location="[servidor]/ws/FederacaoWS.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

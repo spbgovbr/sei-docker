@@ -1,0 +1,24 @@
+tr.trVermelha {
+    background-color: #FFBFBF;
+}
+
+tr.trAmarela {
+    background-color: yellow;
+}
+
+tr.trLaranja {
+    background-color: #FFC964;
+}
+
+tr.trAzul {
+    background-color: #01A0E2;
+}
+
+a.ancoraSigla {
+    text-decoration: none;
+    font-size: 1em;
+}
+
+a.ancoraSigla:hover {
+    text-decoration: underline;
+}

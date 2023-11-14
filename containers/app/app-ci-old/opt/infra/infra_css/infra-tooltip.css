@@ -1,0 +1,40 @@
+div.infraTooltip{
+position:absolute;
+top:0;
+left:0;
+visibility:hidden;
+color: #000000;
+z-index:999;
+background:#ffffaa;
+padding: .4em;
+border: .2em solid #d9d9d9;
+border-radius: 4px;  
+box-shadow: 0 0 5px #a0a0a0;
+/*filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffb5', endColorstr='#ffffaa',GradientType=0 );*/ 
+/* background: linear-gradient(to bottom, #ffffb5 0%, #ffffaa 100%) repeat scroll 0 0 transparent; */
+/*border: 0 solid black; */  
+}
+
+div.infraTooltipTitulo{
+font-size:1em; 
+font-weight:bold;
+background-color:#FFFFE1; /* #FFCC66;  */
+border-bottom:.1em solid black;
+padding:.2em;
+background-color:transparent; 
+}
+
+
+div.infraTooltipTexto{
+font-size:1em; 
+padding:.1em;
+}
+
+div.infraTooltipTexto b{
+font-weight:bold;
+}
+
+div.infraTooltipTexto i{
+font-style:italic;
+}
+

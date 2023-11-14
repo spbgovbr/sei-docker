@@ -1,0 +1,30 @@
+TABLE {
+	font-family: Times, Verdana, Arial, Helvetica, Sans-Serif;	
+  font-size: 10pt;
+}
+
+P.quebrapagina {
+  page-break-before: always;
+}
+
+.div_separador {
+	border-top: dashed 0pt;
+	line-height: 1pt;
+	border-bottom: dashed 2pt;
+}
+
+.tr_resultado_impar {
+	background-color: white;
+}
+
+.tr_resultado_par {
+	background-color: white;
+}
+
+.td_resultado {
+	border: 1pt solid #a0a0a0;
+}
+
+.tab_resultado {
+	border: 1pt solid #a0a0a0;
+}

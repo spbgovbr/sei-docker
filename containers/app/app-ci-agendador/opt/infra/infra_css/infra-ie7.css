@@ -1,0 +1,14 @@
+/* Hacks IE 7 */
+body {font-size:62.5%;overflow-y:auto;}
+div.infraAcaoBarraSistema img {padding-bottom:.2em;}
+div.infraMenu ul li a{height:1%;}
+div.infraMenu ul li{float:left; width:100%;}
+img.infraImg,img.infraImgNormal{filter:alpha(opacity=100);}
+img.infraImg:hover,img.infraImgNormal:hover{filter:alpha(opacity=30);}
+img.infraImgOpaca{filter:alpha(opacity=30);}
+img.infraImgOrdenacao,img.infraImgOrdenacaoNormal{filter:alpha(opacity=100);}
+img.infraImgOrdenacao:hover,img.infraImgOrdenacaoOpaca{filter:alpha(opacity=30);}
+table.infraTableOrdenacao tr td{padding:.1em;}
+div.infraArvore img {filter:alpha(opacity=100);}
+div.infraArvore img:hover{filter:alpha(opacity=30);}
+

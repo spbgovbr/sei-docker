@@ -1,0 +1,116 @@
+@import "~bootstrap/scss/bootstrap";
+//@import "~material-icons/iconfont/material-icons.css"; //
+@import "~tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4";
+@import "~bootstrap-select/dist/css/bootstrap-select";
+@import "fix-tempusdominos-fa-material";
+@import "bootstrap-select";
+@import "~bootstrap-fileinput/css/fileinput.css";
+@import "hint";
+
+.input-group-sm .input-group-text .material-icons {
+    font-size: 18px; //todo param
+}
+
+.btn-outline-primary {
+    border-color: #b7b7b7;
+}
+
+
+//CSS
+.slider-selection, .multi-slider-selection {
+    height: 14%;
+    top: 7px;
+    position: absolute;
+    transition: none
+}
+
+.range-control {
+    position: relative;
+}
+
+input[type=range] {
+    width: 100%;
+}
+
+output {
+    visibility: hidden;
+    position: absolute;
+    top: -32px;
+    margin-left: -20px;
+    display: block;
+    min-width: 40px;
+    height: 24px;
+    padding: 2px;
+    padding-bottom: 23px;
+    border: 1px solid #e2e2e2;
+    background-color: #007BFF;
+    border-radius: 5px;
+    color: white;
+    font-size: .8em;
+    line-height: 24px;
+    text-align: center;
+    font-weight: bolder;
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: 23px;
+        left: 12px;
+        border-width: 7px;
+        border-style: solid;
+        border-color: #007BFF transparent transparent transparent;
+    }
+}
+
+//multi-range
+.range-slider {
+    margin-top: 45px;
+
+    input[type="range"] {
+        pointer-events: none;
+        position: absolute;
+        -webkit-appearance: none;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        border: none;
+        overflow: hidden;
+        left: 0;
+        outline: none;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+        pointer-events: all;
+        position: relative;
+        z-index: 1;
+        outline: 0;
+        -webkit-appearance: none;
+        border: none;
+    }
+
+    input[type="range"]::-ms-thumb {
+        pointer-events: all;
+        position: relative;
+        z-index: 10;
+        -ms-appearance: none;
+    }
+
+    input[type=range]::-moz-range-track {
+        position: relative;
+        z-index: -1;
+        background-color: rgba(0, 0, 0, 1);
+        border: 0;
+    }
+
+    input[type=range]:last-of-type::-moz-range-track {
+        -moz-appearance: none;
+        background: none transparent;
+        border: 0;
+    }
+
+    input[type=range]::-moz-focus-outer {
+        border: 0;
+    }
+}
+
+.rangeValues {
+    margin-top: 36px;
+}

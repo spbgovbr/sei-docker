@@ -1,0 +1,376 @@
+:root {
+    --dark-gray: #363636;
+}
+
+#txtPesquisaRapida{
+    color:white;
+    background-color: black;
+    border:1px solid white !important;
+}
+
+#txtPesquisaRapida::-webkit-input-placeholder { /* Edge */
+    color: white;
+}
+
+#txtPesquisaRapida:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#txtPesquisaRapida::placeholder {
+    color: white;
+}
+
+/*** VISUALIZAR DOCUMENTOS ****************************************************/
+#ifrArvoreHtml, #ifrTarjasAssinatura { /* Documento visualizado dentro do iframe */
+    background-color: white;
+    filter: brightness(90%);
+}
+
+#divArvoreConteudo{
+    padding:0 !important;
+    color:white !important;
+    background-color: black !important;
+}
+
+#divArvoreInformacao{
+  color:white;
+  background-color: black;
+}
+
+#tblTipoProcedimento, #tblSeries {
+    background-color: black !important;
+}
+
+table.pesquisaResultado td.pesquisaSnippet,
+table.pesquisaResultado td.pesquisaMetatag,
+table.pesquisaResultado td.pesquisarMetatag * {
+    background-color: inherit !important;
+}
+
+table.pesquisaResultado td.pesquisaTituloEsquerda,
+table.pesquisaResultado td.pesquisaTituloDireita{
+    background-color: var(--dark-gray);
+}
+
+.totalEstatisticas {
+    background-color: darkblue !important;
+}
+
+a.ancoraPadraoPreta, a.processoVisualizado {
+    color: inherit;
+}
+
+a.processoVisitado {
+    color: #a1ba20 !important;
+}
+a.ancoraSigla, a.ancoraHistoricoProcesso {
+    color: yellow;
+}
+
+a.ancoraSigla:focus{
+    outline: 1px dotted yellow;
+}
+
+a.ancoraPadraoAzul {
+    color: yellow;
+}
+
+a.ancoraPadraoVermelha {
+    color: orangered;
+}
+
+a.ancoraPadraoAzul:focus, a.ancoraPadraoPreta:focus, a.ancoraPadraoVermelha:focus{
+    outline: 1px dotted white;
+}
+
+a.ancoraOpcao {
+    color: inherit;
+}
+
+a.processoVisitado {
+    color:#3ca9ff;
+}
+
+a.processoVisitadoSigiloso {
+    background-color:#3ca9ff;
+}
+
+a.processoVisitadoCredencialAssinatura {
+    border:1px solid #3ca9ff;
+}
+
+.noVisitado{
+    color:#a1ba20 !important;
+}
+
+div.barraBotoesSEI{
+    background-color: #555 !important;
+}
+
+div.barraBotoesSEI img:hover{
+    border: 1px solid white;
+}
+
+/*** ARVORE DE PROCESSOS ****************************************************/
+
+#ifrArvoreHtml { /* Documento visualizado dentro do iframe */
+    background-color: white;
+    filter: brightness(90%);
+}
+
+body.infraArvore, body.infraArvore span{
+    background-color: black !important;
+}
+
+span.infraArvoreNoSelecionado {
+    color:yellow;
+}
+
+#divInfraAreaTelaD{
+    background-color: black !important;
+}
+
+#divArvore {
+    border-bottom-color: white !important;
+}
+
+#divArvoreHtml {
+    background-color: black !important;
+}
+
+#divConsultarAndamento,
+#divRelacionados {
+    border-top-color: white !important;
+}
+
+a.ancoraRelacionadosParcial {
+    color: white !important;
+}
+
+/*** Histórico do Processo **************************************************/
+.andamentoConcluido {background-color: black !important;}
+.andamentoAberto {background-color: darkgoldenrod !important;}
+.andamentoAberto td {color: black;}
+.andamentoAberto td a {color: yellow;}
+
+
+img[src*="aguarde.gif"],
+img[src*="aguarde_pequeno.gif"],
+img[src*="ajuda.gif"],
+img[src*="federacao.svg"],
+img[src*="assinatura1.svg"],
+img[src*="assinatura2.svg"],
+img[src*="autenticacao1.svg"],
+img[src*="autenticacao2.svg"],
+img[src*="processo_andamentos.svg"],
+img[src*="avaliacao_eliminado.svg"],
+img[src*="arquivo_eliminado.svg"],
+img[src*="historico.svg"]
+{
+    filter: invert(100%);
+}
+
+a:focus img[src*="aguarde.gif"],
+a:focus img[src*="aguarde_pequeno.gif"],
+a:focus img[src*="ajuda.gif"],
+a:focus img[src*="federacao.svg"],
+a:focus img[src*="assinatura1.svg"],
+a:focus img[src*="assinatura2.svg"],
+a:focus img[src*="autenticacao1.svg"],
+a:focus img[src*="autenticacao2.svg"],
+a:focus img[src*="processo_andamentos.svg"],
+a:focus img[src*="avaliacao_eliminado.svg"],
+a:focus img[src*="arquivo_eliminado.svg"]{
+    outline: 1px dotted black !important;
+}
+
+img[src*="ciencia.svg"]{
+    filter: invert(20%);
+}
+
+img[src*="marcador_branco.svg"],
+img[src*="marcador_preto.svg"]{
+    filter: invert(30%);
+}
+
+/*** E-MAIL *****************************************************************/
+#s2id_hdnDestinatario ul.select2-choices, li.select2-search-choice {
+    background-image: none !important;
+}
+#s2id_hdnDestinatario *,#select2-drop, li.select2-search-choice,
+li.select2-search-choice *, li.select2-no-results, li.select2-searching {
+    background-color: black !important;
+}
+
+div.tituloProcessoDocumento, div.tituloProcessoDocumento label {
+    background-color: var(--dark-gray);
+    color: white;
+    border-bottom-color: black;
+}
+
+tr.trVermelha {
+    background-color: #550000;
+}
+
+/*** CKEditor *****************************************************************/
+.cke_dialog_contents_body input, .cke_dialog_contents_body select {
+    background-color: white !important;
+}
+
+/*** scayt.css ****************************************************************/
+
+.scayt-misspell-word {
+    color: inherit;
+}
+
+
+th.tituloControleExterno {
+    background-color: unset;
+}
+
+/*** PUBLICAÇÕES ELETRONICAS ************************************************/
+tr.trEspacoPublicacao,
+tr.trEspacoPublicacao td{
+    background-color: black !important;
+}
+
+/*** SEI NOVIDADES **********************************************************/
+
+#frmNovidadeMostrar{
+    background-color: black;
+}
+
+
+/*** Ajuda da busca ***********************************************************/
+
+#bodyAjuda *{
+    color:white;
+    background-color: black;
+}
+
+div.cardPainel{
+    background-color: black;
+    border-color: white;
+}
+
+div.cardTituloPainel,
+div.cardTextoPainel{
+    color:white !important;
+}
+
+div.cardPainel div.progress {
+    background-color: black !important;
+    border:1px solid white;
+}
+
+a.protocoloNormal:focus,
+a.protocoloAberto:focus,
+a.protocoloFechado:focus,
+a.processoNaoVisualizado:focus,
+a.processoNaoVisualizadoSigiloso:focus,
+a.processoVisualizadoSigiloso:focus,
+a.linkFuncionalidade:focus{
+    outline: 1px dotted white;
+}
+
+a.processoNaoVisualizadoSigiloso,
+a.processoVisualizadoSigiloso{
+    border:1px solid white !important;
+}
+
+a.ancMarcador div{
+    color:white !important;
+}
+
+a.ancMarcador{
+    background-color: black !important;
+}
+
+a.processoVisualizado:focus{
+    outline: 1px dotted white;
+}
+
+
+.clipboard-icon-focus span{
+    color: white;
+    background-color: black;
+}
+
+.clipboard-icon-focus:hover span{
+    color: black;
+    background-color: #E0E0E0 !important;
+}
+
+.custom-popover .list-group-item{
+    background-color: black;
+}
+
+.li-fechar{
+    border-top: 1px solid white !important;
+}
+
+.clipboard-icon-img{
+    filter: invert(100%);
+}
+
+.clipboard-icon-focus:hover img{
+    filter: none;
+}
+
+.clipboard-icon-focus:focus,.clipboard-icon-focus:hover{
+    border: 1px dotted white !important;
+    /* background-color:  #E0E0E0;*/
+    text-decoration: none;
+}
+
+.caixaFiltroControle{
+    background-color: black !important;
+    border:1px solid white;
+    box-shadow: none;
+}
+
+.cardPainel a:hover {
+    outline: 1px dotted darkblue;
+    box-shadow: none;
+}
+
+.cardPainel a:focus {
+    outline: 2px solid white;
+    box-shadow: none;
+}
+
+.cke_dialog_ui_fieldset,
+.cke_dialog_ui_input_textarea{
+    background-color: white !important;
+}
+
+#tblComentarios{background-color: black !important;}
+#tblComentarios tr.trComentario td,
+#tblComentarios tr.trSeparadorComentario td{
+    background-color: black !important;
+}
+
+#divSeiConteudoCabecalho {background-color: black !important;}
+#divSeiConteudoAcoes img[src*="documento_assinar.svg"]{filter: invert(100%);}
+#ifrSeiConteudo {background-color: white;filter: brightness(90%);}
+
+div.cardBodyRelacionado{
+    background-color: black;
+    border-radius:.25rem;
+}
+
+#divArvoreConteudoIfr{
+  background-color: black !important;
+    padding: 0px !important;
+}
+
+.ifrVisualizacao{
+    background-color: black !important;
+    filter: brightness(90%);
+}
+
+.ifrVisualizacaoContraste{
+    background-color: white !important;
+}
+
+span.spanRealce {color:black;background-color:yellow;}

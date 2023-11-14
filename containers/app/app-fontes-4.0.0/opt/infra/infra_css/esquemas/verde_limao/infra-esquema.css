@@ -1,0 +1,20 @@
+div.infraAreaGlobal{
+border-left:.2em solid #8fc68d;
+}
+
+hr{
+border-bottom:solid #8fc68d .1em;
+}
+
+.infraCorBarraSistema {
+background-color:#8fc68d !important;
+}
+
+label.infraLabelTitulo {
+font-size:1.4em;
+color:white;
+padding:.1em 0 .1em .3em;
+font-weight: bold;
+background-color:#8fc68d;
+width:99%;
+}

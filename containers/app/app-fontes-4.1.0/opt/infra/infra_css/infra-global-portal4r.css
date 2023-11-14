@@ -1,0 +1,341 @@
+/*************************SELETORES HTML*/
+* {
+    border: 0;
+    font-family: Verdana, Arial;
+    font-style: normal;
+    font-weight: normal;
+    margin: 0 auto;
+    padding: 0;
+}
+
+a:link, a:visited, a:active, a:hover {
+    color: #477657;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+b {
+    font-weight: bold;
+}
+
+body {
+    font-size: 12px;
+}
+
+hr {
+    border: 0px solid #000;
+    border-bottom: 1px solid #79A584;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+html {
+    overflow-y: scroll;
+}
+
+i {
+    font-style: italic;
+}
+
+li {
+    letter-spacing: 0.5px;
+    list-style-type: square;
+    margin-left: 10px;
+}
+
+strong {
+    font-weight: bold;
+}
+
+ol {
+    margin-left: 14px;
+}
+
+ol li {
+    list-style-type: decimal;
+}
+
+ul {
+    margin-left: 14px;
+}
+
+/*************************FIM DOS SELETORES HTML*/
+
+/*************************SELETORES ESTRUTURAIS*/
+div.areaGlobalConteudo {
+    border: 0px solid #000;
+    clear: both;
+    margin-top: 0px;
+    margin-bottom: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 1000px;
+    -moz-box-shadow: 0px 5px 15px #CDCDCD;
+    -webkit-box-shadow: 0px 5px 15px #CDCDCD;
+    box-shadow: 0px 10px 15px #CDCDCD;
+}
+
+div.areaGlobalTopo {
+    border: 0px solid #000;
+    clear: both;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    padding: 0px;
+    width: 1000px;
+}
+
+div.caixaLateralAzul {
+    background-color: #FFF;
+    border: 1px solid #222E78;
+    width: 170px;
+}
+
+div.caixaLateralVerde {
+    background-color: #FFF;
+    border: 1px solid #477657;
+    width: 170px;
+}
+
+div.colunaDireita {
+    border: 0px solid #000;
+    float: left;
+    font-size: 10px;
+    margin: 30px 0px 10px 15px;
+    padding: 0px;
+    width: 180px;
+}
+
+div.conteudo {
+    border: 0px solid #000;
+    clear: both;
+    float: left;
+    line-height: 130%;
+    margin: 30px 0px 10px 0px;
+    padding: 0px;
+    padding-right: 20px;
+    width: 780px;
+}
+
+div.rodape {
+    border: 0px solid #000;
+    color: #666666;
+    float: left;
+    font-size: 9px;
+    margin-right: 25px;
+    width: 140px;
+}
+
+/*************************FIM DOS SELETORES ESTRUTURAIS*/
+
+/*************************TOPO*/
+div.bannerTopo {
+    clear: both;
+}
+
+div.linkOrgaoTopo {
+    float: left;
+    margin-right: 2px;
+}
+
+div.botoesAcessibilidade {
+    clear: both;
+    float: left;
+    padding-top: 3px;
+    text-align: right;
+    width: 104px;
+}
+
+.controleFonte {
+    color: #2D2D2D;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+div.controleFonte a:link, a:visited, a:active, a:hover {
+    color: #2D2D2D;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/*************************FIM DO TOPO*/
+
+/*************************MENU*/
+div.botaoMenu {
+    background-color: #DBDBDB;
+    border: 0px solid #DBDBDB;
+    cursor: pointer;
+    font-size: 12px;
+    height: 25px;
+    padding: 0px;
+    position: absolute;
+    margin-right: 4px;
+    z-index: 999;
+}
+
+div.botaoMenu a:link, a:visited, a:active, a:hover {
+    color: #2D2D2D;
+    font-weight: normal;
+    text-decoration: none;
+
+}
+
+div.dadosMenu {
+    background-color: #E1E9DE;
+    border: 0px solid #C1D2BB;
+    color: #2D2D2D;
+    font-size: 11px;
+    position: absolute;
+    visibility: hidden;
+    z-index: 998;
+    -moz-box-shadow: 3px 3px 4px #DBDBDB;
+    -webkit-box-shadow: 3px 3px 4px #DBDBDB;
+    box-shadow: 3px 3px 4px #DBDBDB;
+}
+
+div.dadosMenu a:link, a:visited, a:active, a:hover {
+    color: #477657;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+ul {
+    margin-left: 14px;
+}
+
+.itensMenu li {
+    letter-spacing: 0.5px;
+    list-style-type: none;
+    margin-left: 0px;
+    margin-top: 10px;
+}
+
+.itensMenu ul li {
+    margin-top: 0px;
+}
+
+/*************************FIM DO MENU*/
+
+/*************************SELETORES GENÉRICOS*/
+.botao {
+    background: url('/trf4/imagens/fundo_botao.gif');
+    border: 1px solid #000;
+    font-size: 12px;
+    height: 18px;
+}
+
+.fonte9 {
+    font-size: 9px;
+}
+
+.fonte10 {
+    font-size: 10px;
+}
+
+.fonte11 {
+    font-size: 11px;
+}
+
+.fonte12Azul {
+    color: #222E78;
+    font-size: 12px;
+}
+
+.formulario input, textarea, select {
+    border: 1px solid #000;
+}
+
+hr.linhaCinza {
+    border: 0px solid #000;
+    border-bottom: 1px solid #BEBDBD;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    width: 100%;
+}
+
+.negrito {
+    color: #2D2D2D;
+    font-weight: bold;
+}
+
+.tabela {
+    border-collapse: collapse;
+    font-size: 1em;
+}
+
+.tabela tr td {
+    border: 1px solid #B0B0B0;
+    padding: 2px;
+    margin: 0px;
+}
+
+.tabela th {
+    border: 1px solid #B0B0B0;
+    padding: 2px;
+    margin: 0px;
+    text-align: center;
+    color: #336699;
+    font-weight: bold;
+    background-color: #D4D4D4;
+}
+
+.tituloColunaDireita {
+    color: #79A584;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.tituloPagina {
+    color: #222E78;
+    font-family: Calibri;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+div.corpoCaixaLateral {
+    color: #2D2D2D;
+    padding: 5px;
+}
+
+div.infraFundoTransparente {
+    z-index: 998;
+    visibility: hidden;
+    position: absolute;
+    overflow: hidden;
+    width: 1px;
+    height: 1px;
+    left: 0;
+    top: 0;
+    background: transparent url('/trf4/imagens/fndtransp.gif');
+    background-repeat: repeat;
+}
+
+div.infraAviso {
+    position: absolute;
+    padding: .4em;
+    border: .2em solid;
+    border-color: #f7f7f7 #000 #000 #f7f7f7;
+    background-color: #dfdfdf;
+    z-index: 999;
+}
+
+div.tituloCaixaLateralAzul {
+    background-color: #222E78;
+    color: #FFF;
+    font-weight: bold;
+    /*height:14px;*/
+    padding: 5px;
+    width: 160px;
+}
+
+div.tituloCaixaLateralVerde {
+    background-color: #477657;
+    color: #FFF;
+    font-weight: bold;
+    /*height:14px;*/
+    padding: 5px;
+    width: 160px;
+}
+
+/*************************FIM DOS SELETORES GENÉRICOS*/

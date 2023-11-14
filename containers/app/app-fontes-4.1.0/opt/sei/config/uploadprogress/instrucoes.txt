@@ -1,0 +1,26 @@
+Instruções para compilar a extensão uploadprogress corrigida no PHP 7
+
+extrair o arquivo uploadprogress.tgz
+
+	$ tar -zxvf uploadprogress.tgz
+	$ cd uploadprogress
+	$ phpize
+	$ ./configure --enable-uploadprogress
+	$ make
+	$ make test
+
+a extensão compilada estará em modules/uploadprogress.so
+
+caso não tenha uma versão anterior instalada:
+	$ [sudo] make install
+	
+
+
+se for atualização do módulo já instalado é só substituir a biblioteca do PHP
+no caso do CENTOS 7, fica em /usr/lib64/php/modules/uploadprogress.so
+
+reiniciar o apache
+
+	# systemctl restart httpd
+	
+

@@ -1,0 +1,455 @@
+*{ 
+font-family:arial,verdana,helvetica,sans-serif;
+font-style:normal;
+font-weight:normal;
+color:#000;
+}
+
+body{
+font-size:10px;
+text-align:center;
+overflow-y:scroll;
+}
+
+/*
+input,textarea,select,label,legend,caption,a,div{
+text-align:left;
+}
+*/
+
+div,legend,caption{
+text-align:left;
+}
+
+div{
+margin:0 auto 0 auto; 
+}
+
+img{
+/* background-color:#fff; */ 
+cursor:pointer;
+}
+
+hr{
+height:0.1em;
+}
+
+div.infraAreaGlobal{
+display:table;
+clear:both;
+}
+
+div.infraBarraSeguranca{
+ padding:.2em;
+ display:block;
+ background-color: red;
+ text-align: center;
+}
+
+div.infraBarraSeguranca span{
+ color:white;
+ font-weight: bold;
+}
+
+div.infraBarraAcesso {
+ padding: 2px;
+ text-align:right;
+}
+
+div.infraBarraAcesso span{
+ font-size: 1.2em;
+ font-weight: bold;
+}
+
+div.infraBarraAcesso a{
+ text-decoration:none;
+ font-size: 1em;
+ font-weight: bold;
+}
+
+div.infraBarraAcesso a:hover{
+ text-decoration:underline;
+}
+
+div.infraBarraTribunal{
+display:block;
+overflow:hidden;
+}
+
+div.infraBarraTribunalD{
+float:right;
+text-align:right;
+}
+
+div.infraBarraTribunalE{
+float:left;
+text-align:left;
+}
+
+
+div.infraBarraSistema{
+display:block;
+overflow:hidden;
+}
+
+div.infraBarraSistemaD{
+float:right;
+text-align:right;
+}
+
+div.infraBarraSistemaE{
+float:left;
+text-align:left;
+}
+	
+div.infraAreaTela{
+display:block;
+/* overflow:hidden; */
+overflow:visible;
+} 
+
+div.infraAreaTelaE{
+float:left;
+}
+
+div.infraAreaTelaD{
+float:right;
+} 
+
+div.infraBarraLocalizacao{
+border-left:0.2em solid white;
+border-top:0.2em solid white;
+}
+
+div.infraBarraComandos{
+text-align:right;
+clear:both;
+}
+
+div.infraAreaDados{
+position:relative;
+clear:both;
+border-bottom:0.2em solid white;
+overflow:auto;
+}
+
+div.infraAreaTabela{
+clear:both;
+display:table;
+width:100%; 
+overflow:auto;
+}
+
+div.infraAreaDadosDinamica{
+clear:both;
+display:block;
+}
+
+
+div.infraBarraSistema img.infraImgNormal{
+width:1.2em;
+height:1.2em;
+}
+
+div.infraBarraSistema img.infraImgOpaca{
+width:1.2em;
+height:1.2em;
+}
+
+
+div.infraAreaDados img.infraImgNormal{
+width:1.5em;
+height:1.5em;
+}
+
+div.infraAreaDados img.infraImgOpaca{
+width:1.5em;
+height:1.5em;
+}
+
+
+div.infraAreaPaginacao img.infraImgNormal{
+width:1.3em;
+height:1.3em;
+}
+
+div.infraAreaPaginacao img.infraImgOpaca{
+width:1.3em;
+height:1.3em;
+}
+
+
+div.infraAreaTabela img.infraImgNormal{
+width:1.1em;
+height:1.1em;
+}
+
+div.infraAreaTabela img.infraImgOpaca{
+width:1.1em;
+height:1.1em;
+}
+
+img.infraImgNormal{
+width:1.1em;
+height:1.1em;
+opacity:1;
+border-width:0;
+}
+
+img.infraImgOpaca{
+width:1.1em;
+height:1.1em;
+opacity:0.3;
+border-width:0;
+}
+
+table.infraTableOrdenacao{
+width:95%;
+}
+
+table.infraTableOrdenacao tr{
+line-height:.75em;
+}
+
+table.infraTableOrdenacao tr td{
+padding:0 .1em 0 .1em;
+font-size:.85em; 
+font-weight:bold;
+text-align:left;
+}
+
+img.infraImgOrdenacaoNormal{
+width:0.5em;
+height:0.5em;
+opacity:1;
+border-width:0;
+}
+
+img.infraImgOrdenacaoOpaca{
+width:0.5em;
+height:0.5em;
+opacity:0.3;
+border-width:0;
+}
+
+
+/*
+img.infraImgNormal{
+opacity:1;
+border-width:0;
+}
+
+img.infraImgOpaca{
+opacity:0.3;
+border-width:0;
+}
+
+img.infraImgOrdenacaoNormal{
+opacity:1;
+border-width:0;
+}
+
+img.infraImgOrdenacaoOpaca{
+opacity:0.3;
+border-width:0;
+}
+*/
+
+div.infraAreaDebug{
+overflow:auto;
+display:table;
+white-space:pre-wrap; 
+width:100%;
+}
+
+div.infraAutoCompletar{
+border:1px solid #9F9F9F;
+background-color:#F3F3F3;
+padding:3px;
+font-size:10px; 
+/* font-family:Verdana, Arial, Helvetica, sans-serif;  */
+color:#000000; 
+display:none; 
+position:absolute; 
+z-index:999;
+}
+
+div.infraAutoCompletar ul {
+list-style:none;
+margin:0;
+padding:0;
+}
+
+div.infraAutoCompletar ul li{
+display:block;
+}
+
+div.infraAutoCompletar a{
+color:#000000;
+text-decoration:none;
+}
+
+div.infraAutoCompletar a:hover{
+color:#000000;
+}
+
+div.infraAutoCompletar li.selected{
+background-color:#7d95ae; 
+color:#000000;
+}
+
+select.infraSelect{
+display:block;
+}
+
+select.infraSelectOculto{
+display:none;
+}
+
+div.infraAreaPaginacao{
+padding:.2em;
+height:1.2em;
+text-align:center;
+clear:both;
+}
+
+td.infraTd{
+}
+
+td.infraTd b{
+font-weight:bold;
+}
+
+td.infraTd i{
+font-style:italic;
+}
+
+div.infraBarraCategoria{
+display:block;
+overflow:hidden;
+padding:0.2em;
+}
+
+div.infraAviso {
+position:absolute;
+/*
+left:41%;
+top:30%;
+width:18%;
+*/
+padding:.4em;
+border:.1em solid black;
+background-color:#dfdfdf;
+z-index:999;
+}
+
+div.infraAviso span{
+/* font-family:Verdana, Arial, Helvetica, sans-serif;  */
+font-weight:bold;
+font-size:1.2em;
+}
+
+div.infraFundoTransparente{
+z-index:997;
+visibility:hidden;
+position:absolute;
+overflow:hidden;
+width:1px;
+height:1px;
+left:0;
+top:0;
+background:transparent url("/infra_css/imagens/fndtransp.gif");
+background-repeat:repeat;
+}
+
+label.infraLabelRadio{
+margin-bottom:.2em;
+cursor:pointer;
+}
+
+label.infraLabelCheckbox {
+margin-bottom:.2em;
+cursor:pointer;
+}
+
+tr.infraTrClara,
+td.infraTdClara{
+background-color:#fff; 
+}
+
+tr.infraTrEscura,
+td.infraTdEscura{
+background-color:#dfdfdf;
+}
+
+tr.infraTrAcessada,
+td.infraTdAcessada {
+background-color:#ffff66;
+}
+
+tr.infraTrMarcada,
+td.infraTdMarcada {
+background-color:#79e5e5;
+}
+
+tr.infraTrSelecionada,
+td.infraTdSelecionada{
+background-color:#b0b0b0;
+}
+
+div.infraAreaGlobal a {
+cursor:pointer;
+}
+
+.infraReadOnly{
+ border:.1em solid #c0c0c0;
+}
+
+input.infraAutoCompletar{
+  border:.1em solid #666;
+}
+
+div.infraImpressao table{
+background-color:#dfdfdf;
+}
+
+div.infraImpressao table th{
+background-color:white;
+background-image:none;
+}
+
+div.infraImpressao table th,
+div.infraImpressao table td{
+border:1px solid #dfdfdf;
+}
+
+div.infraImpressao table.infraTableOrdenacao {
+background-color:white;
+}
+
+div.infraImpressao table.infraTableOrdenacao td {
+border:0;
+}
+
+button.infraButton:focus{
+background-color:#f0f7e2;
+}
+
+button.infraButton:hover {
+background-color: #e0e0e0;
+}
+
+div.infraExcecao span{
+font-size: 1.4em;
+color: red;
+}
+
+div.infraDetalhesExcecao{
+width:100%;
+overflow:hidden;
+display:table;	
+}
+
+div.infraDetalhesExcecao b{
+font-weight:bold;	
+}

@@ -1,0 +1,67 @@
+<?
+
+class ConfiguracaoSip extends InfraConfiguracao  {
+
+ 	private static $instance = null;
+
+ 	public static function getInstance(){
+ 	  if (ConfiguracaoSip::$instance == null) {
+ 	    ConfiguracaoSip::$instance = new ConfiguracaoSip();
+ 	  }
+ 	  return ConfiguracaoSip::$instance;
+ 	}
+
+ 	public function getArrConfiguracoes(){
+ 	  return array(
+ 	      'Sip' => array(
+ 	          'URL' => getenv("SIP_URL"),
+ 	          'Producao' => getenv("SIP_PRODUCAO")),
+ 	       
+ 	      'PaginaSip' => array('NomeSistema' => 'SIP'),
+
+ 	      'SessaoSip' => array(
+ 	          'SiglaOrgaoSistema' => getenv("SIP_SIGLA_ORGAO_SISTEMA"),
+ 	          'SiglaSistema' => 'SIP',
+ 	          'PaginaLogin' => 'getenv(SIP_PAGINA_LOGIN)',
+ 	          'SipWsdl' => getenv("SIP_WSDL"),
+ 	          'ChaveAcesso' => getenv("SIP_CHAVE_ACESSO"), //ATEN��O: gerar uma nova chave para o SIP ap�s a instala��o (ver documento de instala��o)
+ 	          'https' => getenv("SIP_HTTPS")),
+ 	       
+ 	      'BancoSip'  => array(
+ 	          'Servidor' => getenv("SIP_DB_SERVIDOR"),
+ 	          'Porta' => 'getenv("SIP_DB_PORTA")',
+ 	          'Banco' => getenv("SIP_DB_BANCO"),
+ 	          'Usuario' => getenv("SIP_DB_USUARIO"),
+ 	          'Senha' => getenv("SIP_DB_SENHA"),
+ 	          'Tipo' => getenv("SIP_DB_TIPO")), //MySql, SqlServer, Oracle ou PostgreSql
+
+        /*
+ 	      'BancoAuditoriaSip'  => array(
+ 	          'Servidor' => '[Servidor BD]',
+ 	          'Porta' => '',
+ 	          'Banco' => '',
+ 	          'Usuario' => '',
+ 	          'Senha' => '',
+ 	          'Tipo' => ''), //MySql, SqlServer, Oracle ou PostgreSql
+        */
+
+				'CacheSip' => array('Servidor' => getenv("SIP_CACHE_SERVIDOR"),
+						                'Porta' => getenv("SIP_CACHE_PORTA")),
+
+				'InfraMail' => array(
+						'Tipo' => getenv("SIP_INFRAMAIL_TIPO"), //1 = sendmail (neste caso n�o � necess�rio configurar os atributos abaixo), 2 = SMTP
+						'Servidor' => getenv("SIP_INFRAMAIL_SERVIDOR"),
+						'Porta' => getenv("SIP_INFRAMAIL_PORTA"),
+						'Codificacao' => getenv("SIP_INFRAMAIL_CODIFICACAO"), //8bit, 7bit, binary, base64, quoted-printable
+						'MaxDestinatarios' => getenv("SIP_INFRAMAIL_MAX_DESTINATARIOS"), //numero maximo de destinatarios por mensagem
+						'MaxTamAnexosMb' => getenv("SIP_INFRAMAIL_MAXTAMANEXOSMB"), //tamanho maximo dos anexos em Mb por mensagem
+						'Seguranca' => gentenv("SIP_INFRAMAIL_SEGURANCA"), //TLS, SSL ou vazio
+						'Autenticar' => getenv("SIP_INFRAMAIL_AUTENTICAR"), //se true ent�o informar Usuario e Senha
+						'Usuario' => getenv("SIP_INFRAMAIL_USUARIO"),
+						'Senha' => getenv("SIP_INFRAMAIL_SENHA"),
+						'Protegido' => '' //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substitu�do por este valor (evita envio incorreto de email)
+				)
+ 	  );
+ 	}
+}
+?>

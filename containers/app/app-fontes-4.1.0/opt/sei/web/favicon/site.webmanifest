@@ -1,0 +1,19 @@
+{
+    "name": "Sistema Eletrônico de Informações",
+    "short_name": "SEI",
+    "icons": [
+        {
+            "src": "/favicon/android-icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/favicon/android-icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#0994dc",
+    "background_color": "#0994dc",
+    "display": "standalone"
+}

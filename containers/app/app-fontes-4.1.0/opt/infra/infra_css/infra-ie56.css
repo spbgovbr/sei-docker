@@ -1,0 +1,71 @@
+/* Hacks IE 5 e 6 */
+body {
+    font-size: 62.5%;
+    behavior: url("css/csshover2.htc");
+    overflow-y: auto;
+}
+
+div.infraBarraTribunal {
+    height: 1%;
+}
+
+div.infraBarraSistema {
+    height: 1%;
+}
+
+div.infraAcaoBarraSistema img {
+    padding-bottom: .2em;
+}
+
+div.infraMenu ul li a {
+    height: 1%;
+}
+
+div.infraMenu ul li {
+    float: left;
+    width: 100%;
+}
+
+img.infraImg, img.infraImgNormal {
+    filter: alpha(opacity=100);
+}
+
+img.infraImg:hover, img.infraImgNormal:hover {
+    filter: alpha(opacity=30);
+}
+
+img.infraImgOpaca {
+    filter: alpha(opacity=30);
+}
+
+img.infraImgOrdenacao, img.infraImgOrdenacaoNormal {
+    filter: alpha(opacity=100);
+}
+
+img.infraImgOrdenacao:hover, img.infraImgOrdenacaoOpaca {
+    filter: alpha(opacity=30);
+}
+
+table.infraTableOrdenacao tr td {
+    padding: .1em
+}
+
+div.infraAreaDebug {
+    word-wrap: break-word
+}
+
+;
+span.infraDetalhesExcecao {
+    word-wrap: break-word
+}
+
+;
+iframe.infraFundoIE {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 998;
+    filter: mask();
+    width: 100%;
+    height: 100%;
+}

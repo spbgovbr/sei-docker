@@ -6,6 +6,7 @@
 ################################################################################
 
 ARG IMAGEM_BASE=processoeletronico/base-oracle11g:latest
+#ARG IMAGEM_BASE=quay.io/stanaka-redhat/sei-redhat-oracle-base:4.0.0
 
 FROM ${IMAGEM_BASE}
 

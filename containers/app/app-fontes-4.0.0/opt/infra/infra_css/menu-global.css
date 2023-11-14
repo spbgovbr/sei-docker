@@ -1,0 +1,116 @@
+div.infraMenu{
+height:100%; 
+width:100%;
+}
+
+div.infraMenu ul{
+list-style:none;
+margin:0;
+border:0;
+padding:0;
+}
+
+div.infraMenu ul li{
+position:relative;
+width:100%;
+}
+
+div.infraMenu a{
+display:block;
+margin:0;
+text-decoration:none;
+left:0;
+cursor:pointer;
+}
+
+div.infraItemMenu{
+display:table;
+overflow:hidden;
+height:1%;
+width:95%;
+}
+
+div.infraRotuloMenu{
+float:left;
+font-weight:bold;	
+width:87%;
+}
+
+div.infraSetaMenu{
+float:right;
+font-weight:bold;
+}
+
+div.infraSetaMenu img{
+border-width:0;
+width:1em;
+height:1em;
+}
+
+div.infraMenu ul ul{
+position:absolute;
+top:0;
+left:100%;
+width:100%;
+}
+
+
+div.infraMenu ul ul,
+div.infraMenu ul li:hover ul ul,
+div.infraMenu ul ul li:hover ul ul,
+div.infraMenu ul ul ul li:hover ul ul,
+div.infraMenu ul ul ul ul li:hover ul ul{
+display:none;
+}
+
+div.infraMenu ul li:hover ul,
+div.infraMenu ul ul li:hover ul,
+div.infraMenu ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul ul li:hover ul{
+display: block;
+}
+
+div.infraBotaoMenu{
+position:absolute;
+border:1px solid black;
+overflow:hidden;
+}
+
+div.infraBotaoMenu ul{
+list-style:none;
+margin:0;
+border:0;
+padding:0;
+}
+
+div.infraBotaoMenu a{
+display:block;
+margin:0;
+text-decoration:none;
+left:0;
+cursor:pointer;
+color:#000;
+border:0.1em solid #ccc; 
+padding:0.15em 0.25em;
+background:#dfdfdf;
+width:100%;
+}
+
+div.infraBotaoMenu a:link, 
+div.infraBotaoMenu a:active, 
+div.infraBotaoMenu a:visited{
+color:#000;
+} 
+
+div.infraBotaoMenu a:hover,div.infraBotaoMenu a:focus{ 
+color:#a00;
+background:#fff;
+}
+
+img.infraImgBotaoMenu{
+width:1em;
+height:1em;
+border-width:0;
+}
+

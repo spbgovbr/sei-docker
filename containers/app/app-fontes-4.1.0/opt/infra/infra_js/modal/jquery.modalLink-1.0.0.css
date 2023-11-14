@@ -1,0 +1,82 @@
+﻿.sparkling-modal-container { }
+
+.sparkling-modal-overlay {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.sparkling-modal-frame {
+    background: #fff;
+    border: 0px solid #000;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px;
+    -ms-box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px;
+    box-shadow: rgba(0, 0, 0, 0.2) 0 0 10px;
+}
+
+.sparkling-modal-title {
+    height: 35px;
+    background: #202340;
+}
+
+.sparkling-modal-title span {
+	font-size: 20px;
+	padding: 20px;
+	float: left;
+	line-height: 20px;
+}
+
+.sparkling-modal-title img{
+  height: 24px;
+}
+
+.sparkling-modal-title img:focus {
+  outline: 1px dotted white;
+}
+
+.sparkling-modal-close {
+    position: absolute;
+    right: 0px;
+    top:0px;
+    margin: 4px 10px 2px 2px;
+}
+
+.sparkling-modal-size {
+  position: absolute;
+  right: 40px;
+  top:2px;
+    margin: 2px;
+}
+
+
+.sparkling-modal-content { padding: 0px; }
+
+.i-close {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform: rotate(45deg);
+}
+
+.i-close-h {
+    position: relative;
+    height: 1px;
+    width: 19px;
+    background: #777;
+    top: 50%;
+    left: 50%;
+    margin-left: -9px;
+}
+
+.i-close-v {
+    position: relative;
+    height: 19px;
+    width: 1px;
+    background: #777;
+    top: 50%;
+    margin-top: -10px;
+    left: 50%;
+}
+
+.ui-icon-gripsmall-diagonal-se{
+    right: -5px;
+    bottom: -5px;
+}

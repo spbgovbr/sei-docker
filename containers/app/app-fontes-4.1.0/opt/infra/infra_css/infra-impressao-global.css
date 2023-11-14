@@ -1,0 +1,40 @@
+body {
+    font-size: 8px;
+    display: inline;
+    overflow: visible;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+div.infraImpressao {
+    display: inline;
+    overflow: visible;
+    width: auto;
+}
+
+table {
+    overflow: visible;
+    width: 96%;
+    height: 100%;
+    margin: 0 2%;
+    border-collapse: collapse;
+}
+
+tr, td, th {
+    height: 100%;
+    page-break-inside: avoid;
+}
+
+p.infraQuebraPagina {
+    page-break-before: always;
+}
+
+.infraNaoImprimir {
+    display: none !important;
+}
+
+div.infraDivSetaOrdenacao {
+    display: none !important;
+}
+
+

@@ -1,0 +1,58 @@
+div.infraArvore {
+white-space: nowrap;
+line-height:0;
+}
+
+div.infraArvore img {
+vertical-align:text-bottom;
+border:0;
+opacity:1;
+}
+
+div.infraArvore img:hover{
+opacity:0.3;
+}
+
+div.infraArvore a {
+color: #000;
+text-decoration: none;
+}
+
+div.infraArvore span {
+font-size:1.2em;
+margin-left:.2em;
+}
+
+div.infraArvore span:hover {
+text-decoration:underline;
+}
+
+span.infraArvoreNoSelecionado {
+color:white;
+background-color:#0A246A;
+}
+
+span.infraArvoreNoVisitado {
+color:black;
+background-color:#D4D0C8;
+}
+
+div.infraArvore img.testeArvore{
+border:1px solid red;
+float: right;
+display:inline;
+}
+
+a.infraArvoreInformacao:hover span{
+text-decoration:none !important;
+background-color: #ccc;
+}
+
+a.infraArvoreInformacao span{
+border:1px solid #ccc;
+padding: 2px;
+font-size:9px !important;
+-moz-border-radius: 2px;
+border-radius: 2px;
+-webkit-border-radius: 2px;
+}

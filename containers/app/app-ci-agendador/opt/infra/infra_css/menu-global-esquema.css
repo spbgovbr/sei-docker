@@ -1,0 +1,96 @@
+div.infraMenu{
+    height:100%;
+    width:100%;
+    padding:.2em 0 1.2em 0;
+    font-weight: normal;
+    /* margin: .7em 0em 0em .5em; */
+    color: #666;
+}
+
+div.infraMenu ul{
+    list-style:none;
+    margin:0;
+    border:0;
+    padding:0;
+}
+
+div.infraMenu ul li{
+    position:relative;
+    width:100%;
+    padding: 0;
+}
+
+div.infraMenu a{
+    display:block;
+    margin:0;
+    text-decoration:none;
+    left:0;
+    cursor:pointer;
+    border: 0.1em solid #fff;
+    padding: 0.15em 0.45em;
+    background-color: #fff;
+}
+
+div.infraItemMenu{
+    display:table;
+    overflow:hidden;
+    height:1%;
+    width:95%;
+}
+
+div.infraRotuloMenu{
+    float:left;
+    font-weight:normal;
+    width:87%;
+    font-size: 1.1em;
+    color: #666;
+}
+
+div.infraSetaMenu{
+    float:right;
+    font-weight:normal;
+}
+
+div.infraSetaMenu img{
+    border-width:0;
+    width:1em;
+    height:1em;
+}
+
+div.infraMenu ul ul{
+    position:absolute;
+    top:0;
+    left:100%;
+    width:100%;
+    border:.1em solid #dfdfdf;
+}
+
+div.infraMenu a:hover{
+    background-color: #e0e0e0;
+}
+
+div.infraMenu ul ul,
+div.infraMenu ul li:hover ul ul,
+div.infraMenu ul ul li:hover ul ul,
+div.infraMenu ul ul ul li:hover ul ul,
+div.infraMenu ul ul ul ul li:hover ul ul{
+    display:none;
+}
+
+div.infraMenu ul li:hover ul,
+div.infraMenu ul ul li:hover ul,
+div.infraMenu ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul ul li:hover ul{
+    display: block;
+    background-color: #ccc;
+}
+
+div.infraMenu a:link,
+div.infraMenu a:active,
+div.infraMenu a:visited{
+    font-weight: normal;
+    color: #666;
+}
+
+
