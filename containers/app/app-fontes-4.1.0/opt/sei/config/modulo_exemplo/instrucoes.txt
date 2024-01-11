@@ -1,0 +1,16 @@
+Instruções para instalação do módulo de exemplo
+
+1 - extrair o arquivo abc.zip dentro do diretório de módulos, ex.:
+
+    unzip /opt/sei/config/modulo_exemplo/abc.zip -d /opt/sei/web/modulos
+
+2 - ativar o módulo na chave Modulos do arquivo ConfiguracaoSEI.php
+
+ 	      'SEI' => array(
+
+ 	          /* ... outras chaves ... */
+
+            'Modulos' => array(
+                 'MdAbcExemploIntegracao' => 'abc/exemplo'
+                 )
+         ),

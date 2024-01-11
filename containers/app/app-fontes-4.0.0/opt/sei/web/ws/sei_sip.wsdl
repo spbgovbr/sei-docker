@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions 
+   name="SeiSipWS" 
+   targetNamespace="SeiSip"
+   xmlns="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+   xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+   xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+   xmlns:tns="SeiSip">
+
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="SeiSip">
+
+      <xsd:complexType name="Orgao">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" />
+          <xsd:element name="IdOrgao" type="xsd:string" />
+          <xsd:element name="Sigla" type="xsd:string" />
+          <xsd:element name="Descricao" type="xsd:string" />
+          <xsd:element name="SinAtivo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:element name="ArrayOfOrgaos">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="Orgao" nillable="true" type="tns:Orgao" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:complexType name="Usuario">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" />
+          <xsd:element name="IdUsuario" type="xsd:string" />
+          <xsd:element name="IdOrigem" type="xsd:string" />
+          <xsd:element name="IdOrgao" type="xsd:string" />
+          <xsd:element name="Sigla" type="xsd:string" />
+          <xsd:element name="Nome" type="xsd:string" />
+          <xsd:element name="Cpf" type="xsd:string" />
+          <xsd:element name="Email" type="xsd:string" />
+          <xsd:element name="SinAtivo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:element name="ArrayOfUsuarios">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="Usuario" nillable="true" type="tns:Usuario" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <xsd:complexType name="Unidade">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" />
+          <xsd:element name="IdUnidade" type="xsd:string" />
+          <xsd:element name="IdOrigem" type="xsd:string" />
+          <xsd:element name="IdOrgao" type="xsd:string" />
+          <xsd:element name="Sigla" type="xsd:string" />
+          <xsd:element name="Descricao" type="xsd:string" />
+          <xsd:element name="SinAtivo" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:element name="ArrayOfUnidades">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="Unidade" nillable="true" type="tns:Unidade" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+
+      <!--
+      <xsd:complexType name="Permissao">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" />
+          <xsd:element name="IdSistema" type="xsd:string" />
+          <xsd:element name="IdUsuario" type="xsd:string" />
+          <xsd:element name="IdUnidade" type="xsd:string" />
+          <xsd:element name="IdPerfil" type="xsd:string" />
+          <xsd:element name="DtaInicio" type="xsd:string" />
+          <xsd:element name="DtaFim" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:element name="ArrayOfPermissoes">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element minOccurs="0" maxOccurs="unbounded" name="Permissao" nillable="true" type="tns:Permissao" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      -->
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="replicarUsuarioRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="Usuarios" type="tns:ArrayOfUsuarios"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarUsuarioResponse">
+  <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarUnidadeRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="Unidades" type="tns:ArrayOfUnidades"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarUnidadeResponse">
+  <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarOrgaoRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="Orgaos" type="tns:ArrayOfOrgaos"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarOrgaoResponse">
+  <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarAssociacaoUsuarioUnidadeRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="StaOperacao" type="xsd:string" />
+    <wsdl:part name="IdUsuario" type="xsd:string" />
+    <wsdl:part name="IdUnidade" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarAssociacaoUsuarioUnidadeResponse">
+    <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarRegraAuditoriaRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="StaOperacao" type="xsd:string" />
+    <wsdl:part name="IdRegraAuditoria" type="xsd:string" />
+    <wsdl:part name="Descricao" type="xsd:string" />
+    <wsdl:part name="SinAtivo" type="xsd:string" />
+    <wsdl:part name="Recursos" type="tns:ArrayOfRecurso" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarRegraAuditoriaResponse">
+  <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <!--
+  <wsdl:message name="replicarPermissaoRequest">
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+    <wsdl:part name="Permissoes" type="tns:ArrayOfPermissoes"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarPermissaoResponse">
+    <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+  -->
+
+  <wsdl:portType name="SeiSipPortType">
+    <wsdl:operation name="replicarUsuario">
+       <wsdl:input message="tns:replicarUsuarioRequest"/>
+       <wsdl:output message="tns:replicarUsuarioResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarUnidade">
+       <wsdl:input message="tns:replicarUnidadeRequest"/>
+       <wsdl:output message="tns:replicarUnidadeResponse"/>
+    </wsdl:operation>
+    
+    <wsdl:operation name="replicarOrgao">
+       <wsdl:input message="tns:replicarOrgaoRequest"/>
+       <wsdl:output message="tns:replicarOrgaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarAssociacaoUsuarioUnidade">
+      <wsdl:input message="tns:replicarAssociacaoUsuarioUnidadeRequest"/>
+      <wsdl:output message="tns:replicarAssociacaoUsuarioUnidadeResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarRegraAuditoria">
+       <wsdl:input message="tns:replicarRegraAuditoriaRequest"/>
+       <wsdl:output message="tns:replicarRegraAuditoriaResponse"/>
+    </wsdl:operation>
+
+    <!--
+    <wsdl:operation name="replicarPermissao">
+      <wsdl:input message="tns:replicarPermissaoRequest"/>
+      <wsdl:output message="tns:replicarPermissaoResponse"/>
+    </wsdl:operation>
+    -->
+
+  </wsdl:portType>
+  
+  
+  <wsdl:binding name="SeiSipBinding" type="tns:SeiSipPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>    
+    
+    <wsdl:operation name="replicarUsuario">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarUnidade">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+    
+    <wsdl:operation name="replicarOrgao">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarAssociacaoUsuarioUnidade">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarRegraAuditoria">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <!--
+    <wsdl:operation name="replicarPermissao">
+      <soap:operation soapAction="SeiSipAction"/>
+      <wsdl:input>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="SeiSip" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+    -->
+
+  </wsdl:binding>
+  
+  <wsdl:service name="SeiSipService">
+    <wsdl:port name="SeiSipPortService" binding="tns:SeiSipBinding">
+      <soap:address location="[servidor]/ws/SeiSipWS.php"/>
+    </wsdl:port>
+  </wsdl:service>
+  
+</wsdl:definitions>

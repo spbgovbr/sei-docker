@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<wsdl:definitions name="SipWS" targetNamespace="sipns"
+                  xmlns="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:tns="sipns">
+  <wsdl:types>
+    <xsd:schema targetNamespace="sipns">
+
+      <xsd:complexType name="Usuario">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" />
+          <xsd:element name="IdOrigem" type="xsd:string" />
+          <xsd:element name="IdOrgao" type="xsd:string" />
+          <xsd:element name="Sigla" type="xsd:string" />
+          <xsd:element name="Nome" type="xsd:string" />
+          <xsd:element name="NomeSocial" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cpf" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Email" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUsuarios">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Usuario[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Permissao">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string"  minOccurs="0"/>
+          <xsd:element name="IdSistema" type="xsd:string" />
+          <xsd:element name="IdOrgaoUsuario" type="xsd:string" />
+          <xsd:element name="IdUsuario" type="xsd:string" />
+          <xsd:element name="IdOrigemUsuario" type="xsd:string" />
+          <xsd:element name="IdOrgaoUnidade" type="xsd:string" />
+          <xsd:element name="IdUnidade" type="xsd:string" />
+          <xsd:element name="IdOrigemUnidade" type="xsd:string" />
+          <xsd:element name="IdPerfil" type="xsd:string" />
+          <xsd:element name="DataInicial" type="xsd:string" />
+          <xsd:element name="DataFinal" type="xsd:string" />
+          <xsd:element name="SinSubunidades" type="xsd:string" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfPermissoes">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Permissao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoAutenticarCompleto">
+        <xsd:all>
+          <xsd:element name="IdSistema" type="xsd:string"/>
+          <xsd:element name="IdContexto" type="xsd:string"/>
+          <xsd:element name="IdUsuario" type="xsd:string"/>
+          <xsd:element name="IdLogin" type="xsd:string"/>
+          <xsd:element name="HashAgente" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdPerfil">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfNomeRecurso">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="validarLoginRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdLogin" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+    <wsdl:part name="IdUsuario" type="xsd:long" />
+    <wsdl:part name="HashAgente" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="validarLoginResponse">
+    <wsdl:part name="returnLogin" />
+  </wsdl:message>
+
+  <wsdl:message name="loginUnificadoRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="SiglaOrgaoSistema" type="xsd:string" />
+    <wsdl:part name="SiglaSistema" type="xsd:string" />
+    <wsdl:part name="Link" type="xsd:string" />
+    <wsdl:part name="HashAgente" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="loginUnificadoResponse">
+    <wsdl:part name="returnLoginUnificado" />
+  </wsdl:message>
+
+  <wsdl:message name="removerLoginRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="SiglaOrgaoSistema" type="xsd:string" />
+    <wsdl:part name="SiglaSistema" type="xsd:string" />
+    <wsdl:part name="Link" type="xsd:string" />
+    <wsdl:part name="IdUsuario" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="removerLoginResponse">
+    <wsdl:part name="returnRemoverLogin" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarOrgaosRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarOrgaosResponse">
+    <wsdl:part name="returnOrgaos" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUnidadesRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+    <wsdl:part name="IdUsuario" type="xsd:long" />
+    <wsdl:part name="IdUnidade" type="xsd:long" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUnidadesResponse">
+    <wsdl:part name="returnUnidades" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUsuariosRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+    <wsdl:part name="IdUnidade" type="xsd:long" />
+    <wsdl:part name="Recurso" type="xsd:string" />
+    <wsdl:part name="Perfil" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUsuariosResponse">
+    <wsdl:part name="returnUsuarios" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUsuarioRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:string" />
+    <wsdl:part name="TipoServidorAutenticacao" type="xsd:string" />
+    <wsdl:part name="IdOrgaoUsuario" type="xsd:string" />
+    <wsdl:part name="SiglaUsuario" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarUsuarioResponse">
+    <wsdl:part name="returnCarregarUsuario" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarPerfisRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+    <wsdl:part name="IdUsuario" type="xsd:long" />
+    <wsdl:part name="IdUnidade" type="xsd:long" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarPerfisResponse">
+    <wsdl:part name="returnPerfis" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarRecursosRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:string" />
+    <wsdl:part name="Perfis" type="tns:ArrayOfIdPerfil" />
+    <wsdl:part name="Recursos" type="tns:ArrayOfNomeRecurso" />
+  </wsdl:message>
+
+  <wsdl:message name="carregarRecursosResponse">
+    <wsdl:part name="returnRecursos" />
+  </wsdl:message>
+
+  <wsdl:message name="listarAcessosRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:long" />
+    <wsdl:part name="IdUsuario" type="xsd:long" />
+  </wsdl:message>
+
+  <wsdl:message name="listarAcessosResponse">
+    <wsdl:part name="returnAcessos" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarUsuarioRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="Usuarios" type="tns:ArrayOfUsuarios"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarUsuarioResponse">
+    <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="autenticarRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdOrgao" type="xsd:string" />
+    <wsdl:part name="IdContexto" type="xsd:string" />
+    <wsdl:part name="Sigla" type="xsd:string" />
+    <wsdl:part name="Senha" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="autenticarResponse">
+    <wsdl:part name="returnAutenticar" />
+  </wsdl:message>
+
+  <wsdl:message name="autenticarCompletoRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdOrgao" type="xsd:string" />
+    <wsdl:part name="IdContexto" type="xsd:string" />
+    <wsdl:part name="Sigla" type="xsd:string" />
+    <wsdl:part name="Senha" type="xsd:string" />
+    <wsdl:part name="SiglaSistema" type="xsd:string" />
+    <wsdl:part name="SiglaOrgaoSistema" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="autenticarCompletoResponse">
+    <wsdl:part name="returnAutenticarCompleto" type="tns:RetornoAutenticarCompleto" />
+  </wsdl:message>
+
+  <wsdl:message name="pesquisarUsuarioRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="TipoServidorAutenticacao" type="xsd:string" />
+    <wsdl:part name="IdOrgao" type="xsd:string" />
+    <wsdl:part name="Sigla" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="pesquisarUsuarioResponse">
+    <wsdl:part name="returnPesquisarUsuario" />
+  </wsdl:message>
+
+  <wsdl:message name="replicarPermissaoRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="Permissoes" type="tns:ArrayOfPermissoes"/>
+  </wsdl:message>
+
+  <wsdl:message name="replicarPermissaoResponse">
+    <wsdl:part name="ret" type="xsd:boolean" />
+  </wsdl:message>
+
+  <wsdl:message name="listarPermissaoRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdSistema" type="xsd:string" />
+    <wsdl:part name="IdOrgaoUsuario" type="xsd:string" />
+    <wsdl:part name="IdUsuario" type="xsd:string" />
+    <wsdl:part name="IdOrigemUsuario" type="xsd:string" />
+    <wsdl:part name="IdOrgaoUnidade" type="xsd:string" />
+    <wsdl:part name="IdUnidade" type="xsd:string" />
+    <wsdl:part name="IdOrigemUnidade" type="xsd:string" />
+    <wsdl:part name="IdPerfil" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="listarPermissaoResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfPermissoes"/>
+  </wsdl:message>
+
+  <wsdl:message name="validarReplicacaoRequest">
+    <wsdl:part name="ChaveAcesso" type="xsd:string" />
+    <wsdl:part name="IdReplicacao" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="validarReplicacaoResponse">
+    <wsdl:part name="ret" type="xsd:boolean"/>
+  </wsdl:message>
+
+  <wsdl:portType name="sipPortType">
+
+    <wsdl:operation name="validarLogin">
+      <wsdl:input message="tns:validarLoginRequest"/>
+      <wsdl:output message="tns:validarLoginResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="loginUnificado">
+      <wsdl:input message="tns:loginUnificadoRequest"/>
+      <wsdl:output message="tns:loginUnificadoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerLogin">
+      <wsdl:input message="tns:removerLoginRequest"/>
+      <wsdl:output message="tns:removerLoginResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarOrgaos">
+      <wsdl:input message="tns:carregarOrgaosRequest"/>
+      <wsdl:output message="tns:carregarOrgaosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUnidades">
+      <wsdl:input message="tns:carregarUnidadesRequest"/>
+      <wsdl:output message="tns:carregarUnidadesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUsuarios">
+      <wsdl:input message="tns:carregarUsuariosRequest"/>
+      <wsdl:output message="tns:carregarUsuariosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUsuario">
+      <wsdl:input message="tns:carregarUsuarioRequest"/>
+      <wsdl:output message="tns:carregarUsuarioResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarPerfis">
+      <wsdl:input message="tns:carregarPerfisRequest"/>
+      <wsdl:output message="tns:carregarPerfisResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarRecursos">
+      <wsdl:input message="tns:carregarRecursosRequest"/>
+      <wsdl:output message="tns:carregarRecursosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAcessos">
+      <wsdl:input message="tns:listarAcessosRequest"/>
+      <wsdl:output message="tns:listarAcessosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarUsuario">
+      <wsdl:input message="tns:replicarUsuarioRequest"/>
+      <wsdl:output message="tns:replicarUsuarioResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="autenticar">
+      <wsdl:input message="tns:autenticarRequest"/>
+      <wsdl:output message="tns:autenticarResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="autenticarCompleto">
+      <wsdl:input message="tns:autenticarCompletoRequest"/>
+      <wsdl:output message="tns:autenticarCompletoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="pesquisarUsuario">
+      <wsdl:input message="tns:autenticarRequest"/>
+      <wsdl:output message="tns:autenticarResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarPermissao">
+      <wsdl:input message="tns:replicarPermissaoRequest"/>
+      <wsdl:output message="tns:replicarPermissaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarPermissao">
+      <wsdl:input message="tns:listarPermissaoRequest"/>
+      <wsdl:output message="tns:listarPermissaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="validarReplicacao">
+      <wsdl:input message="tns:validarReplicacaoRequest"/>
+      <wsdl:output message="tns:validarReplicacaoResponse"/>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="sipBinding" type="tns:sipPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="validarLogin">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="loginUnificado">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerLogin">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarOrgaos">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUnidades">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUsuarios">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarUsuario">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarPerfis">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="carregarRecursos">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAcessos">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarUsuario">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="autenticar">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="autenticarCompleto">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="pesquisarUsuario">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="replicarPermissao">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarPermissao">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="validarReplicacao">
+      <soap:operation soapAction="sipnsAction"/>
+      <wsdl:input>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="sipns" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="sipService">
+    <wsdl:port name="sipPortType" binding="tns:sipBinding">
+      <soap:address location="[servidor]/ws/SipWS.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,1 @@
+<a href="#{{ $id }}" class="showcase-navigator card-header-link material-icons">link</a>

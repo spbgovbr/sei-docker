@@ -38,7 +38,7 @@ if [ -z "$APP_PROTOCOLO" ] || \
     echo "APP_ORGAO=$APP_ORGAO"
     echo "APP_ORGAO_DESCRICAO=$APP_ORGAO_DESCRICAO"
     echo "APP_NOMECOMPLEMENTO=$APP_NOMECOMPLEMENTO"
-    echo "APP_DB_TIPO=$APP_DB_TIPO (deve ser MySql, Sqlserver ou Oracle)"
+    echo "APP_DB_TIPO=$APP_DB_TIPO"
     echo "APP_DB_PORTA=$APP_DB_PORTA"
     echo "APP_DB_SIP_BASE=$APP_DB_SIP_BASE"
     echo "APP_DB_SEI_BASE=$APP_DB_SEI_BASE"
@@ -76,22 +76,16 @@ else
 
     echo "Fazendo o clone dos fontes. Aguarde..."
     export GIT_SSH=/tmp/gitwrap.sh
-    git clone $APP_FONTES_GIT_PATH spe
+    git clone $APP_FONTES_GIT_PATH
     export GIT_SSH=ssh
 
     echo "Fazendo a copia dos fontes. Aguarde..."
-    cd spe
+    cd super
     git checkout $APP_FONTES_GIT_CHECKOUT
-    if [ -d "src" ] ; then
-        cd src
-    fi
-    cp -R * /opt/
+    cp -R src/* /opt/
     cd /
-    rm -rf /tmp/sei /tmp/lhave.key
+    rm -rf /tmp/super /tmp/lhave.key
 fi
-
-#todo melhorar isso
-mkdir -p /opt/sip/config ; mkdir -p /opt/sei/config
 
 APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
@@ -139,7 +133,6 @@ mkdir -p /opt/sei/temp
 mkdir -p /opt/sip/temp
 chmod -R 777 /opt/sei/temp
 chmod -R 777 /opt/sip/temp
-mkdir -p /opt/sei/web/modulos/
 
 # Ver issue #19
 if [ "$APP_DB_TIPO" = "SqlServer" ]; then
@@ -175,62 +168,21 @@ echo "***************************************************"
 
 # Atualização do endereço de host da aplicação
 echo "Atualizando Banco de Dados com as Configuracoes Iniciais..."
-if [ "$APP_DB_TIPO" == "MySql" ]; then
-    echo "Atualizando MySql..."
-    MYSQL_CMD="mysql --host $APP_DB_HOST --user $APP_DB_ROOT_USERNAME --password=$APP_DB_ROOT_PASSWORD"
-    $MYSQL_CMD -e "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" sip
-    $MYSQL_CMD -e "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" sei
-    $MYSQL_CMD -e "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';" sip
-    $MYSQL_CMD -e "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';" sip
-fi
+php -r "
+    require_once '/opt/sip/web/Sip.php';
+    \$conexao = BancoSip::getInstance();
+    \$conexao->abrirConexao();
+    \$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'\");
+    \$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP'\");
+    \$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI'\");
+";
 
-if [ "$APP_DB_TIPO" == "Oracle" ]; then
-    echo "Atualizando Oracle..."
-    echo "alter user sip identified by sip_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "alter user sei identified by sei_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" | sqlplus64 sei/sei_user@$APP_DB_HOST
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-fi
-
-if [ "$APP_DB_TIPO" == "SqlServer" ]; then
-    echo "Atualizando SqlServer..."
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-
-
-    echo "use sei" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_SEI_USERNAME -P $APP_DB_SEI_PASSWORD
-
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-fi
-
-if [ "$APP_DB_TIPO" == "PostgreSql" ]; then
-    echo "Atualizando Postgres..."
-
-    PSQL_CMD="psql -h $APP_DB_HOST -U $APP_DB_ROOT_USERNAME "
-    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';"
-    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sei -c "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';"
-    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';"
-    PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';"
-fi
+php -r "
+    require_once '/opt/sei/web/SEI.php';
+    \$conexao = BancoSEI::getInstance();
+    \$conexao->abrirConexao();
+    \$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'\");
+";
 
 echo "***************************************************"
 echo "***************************************************"
@@ -281,6 +233,12 @@ cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
 update-ca-trust extract
 update-ca-trust enable
 
+echo "***************************************************"
+echo "***************************************************"
+echo "**ATUALIZACAO DE SEQUENCES*************************"
+echo "***************************************************"
+echo "***************************************************"
+
 if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 
     echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
@@ -288,6 +246,27 @@ if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 
 fi
 
+echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+# copiado do sei-vagrant do guilhermao
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sip/web/Sip.php';
+    \$conexao = BancoSip::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();
+"
+
+echo "atualizar sequences do SEI"
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sei/web/SEI.php';
+    \$conexao = BancoSEI::getInstance();
+    \$conexao->setBolScript(true);
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();
+"
+echo "Finalizacao de atualizacao de sequences"
 
 echo "***************************************************"
 echo "***************************************************"
@@ -380,6 +359,28 @@ if [ "$OPENLDAP_PRESENTE" == "true" ]; then
 
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap.php
 
+        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+        # copiado do sei-vagrant do guilhermao
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sip/web/Sip.php';
+            \$conexao = BancoSip::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        "
+
+        echo "atualizar sequences do SEI"
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sei/web/SEI.php';
+            \$conexao = BancoSEI::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        "
+        echo "Finalizacao de atualizacao de sequences"
+
         echo ""
     else
 
@@ -400,6 +401,28 @@ else
         echo "ATENCAO: USUARIO E SENHA TERAO O MESMO VALOR !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
         php /sei/files/scripts-e-automatizadores/openldap/sip-config-openldap-desligar.php
+
+        echo "Atualizar sequences! todo ajeitar a base de ref e retirar isso"
+        # copiado do sei-vagrant do guilhermao
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sip/web/Sip.php';
+            \$conexao = BancoSip::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        "
+
+        echo "atualizar sequences do SEI"
+        # Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+        php -r "
+            require_once '/opt/sei/web/SEI.php';
+            \$conexao = BancoSEI::getInstance();
+            \$conexao->setBolScript(true);
+            \$objScriptRN = new ScriptRN();
+            \$objScriptRN->atualizarSequencias();
+        "
+        echo "Finalizacao de atualizacao de sequences"
 
 
     else
@@ -499,19 +522,19 @@ fi
 
 echo "***************************************************"
 echo "***************************************************"
-echo "**CONFIGURANDO MODULO REST************************"
+echo "**CONFIGURANDO MODULO WSSUPER************************"
 echo "***************************************************"
 echo "***************************************************"
-if [ "$MODULO_REST_INSTALAR" == "true" ]; then
+if [ "$MODULO_WSSUPER_INSTALAR" == "true" ]; then
 
-    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-rest.ok ]; then
+    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-wssuper.ok ]; then
 
-        if [ -z "$MODULO_REST_VERSAO" ] || \
-           [ -z "$MODULO_REST_URL_NOTIFICACAO" ] || \
-	       [ -z "$MODULO_REST_ID_APP" ] || \
-	       [ -z "$MODULO_REST_CHAVE" ]; then
+        if [ -z "$MODULO_WSSUPER_VERSAO" ] || \
+           [ -z "$MODULO_WSSUPER_URL_NOTIFICACAO" ] || \
+	       [ -z "$MODULO_WSSUPER_ID_APP" ] || \
+	       [ -z "$MODULO_WSSUPER_CHAVE" ]; then
             echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_REST_VERSAO, MODULO_REST_URL_NOTIFICACAO, MODULO_REST_ID_APP, MODULO_REST_CHAVE"
+            echo "MODULO_WSSUPER_VERSAO, MODULO_WSSUPER_URL_NOTIFICACAO, MODULO_WSSUPER_ID_APP, MODULO_WSSUPER_CHAVE"
 
         else
 
@@ -522,8 +545,8 @@ if [ "$MODULO_REST_INSTALAR" == "true" ]; then
 
             cp -Rf /sei-modulos/mod-wssei /opt/sei/web/modulos/
             cd /opt/sei/web/modulos/mod-wssei/
-            git checkout $MODULO_REST_VERSAO
-            echo "Versao do WSSEI é agora: $MODULO_REST_VERSAO"
+            git checkout $MODULO_WSSUPER_VERSAO
+            echo "Versao do WSSEI é agora: $MODULO_WSSUPER_VERSAO"
 
             \cp envs/mysql.env .env
             \cp envs/modulo.env .modulo.env
@@ -550,28 +573,28 @@ if [ "$MODULO_REST_INSTALAR" == "true" ]; then
 
             cd /opt/sei/config/mod-wssei/
             cp -f /opt/sei/web/modulos/mod-wssei.old/src/config/ConfiguracaoMdWSSEI.php .
-            sed -i "s#MOD_WSSEI_URL_SERVICO_NOTIFICACAO#MODULO_REST_URL_NOTIFICACAO#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_ID_APP#MODULO_REST_ID_APP#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_CHAVE_AUTORIZACAO#MODULO_REST_CHAVE#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_REST_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_URL_SERVICO_NOTIFICACAO#MODULO_WSSUPER_URL_NOTIFICACAO#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_ID_APP#MODULO_WSSUPER_ID_APP#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_CHAVE_AUTORIZACAO#MODULO_WSSUPER_CHAVE#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_WSSUPER_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
             
             cd /opt/sei/scripts/mod-wssei/
             echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_wssei.php
 
             rm -rf /opt/sei/web/modulos/mod-wssei.old
-            touch /sei/controlador-instalacoes/instalado-modulo-rest.ok
+            touch /sei/controlador-instalacoes/instalado-modulo-wssuper.ok
 
         fi
 
     else
 
-        echo "Arquivo de controle do Modulo REST encontrado pulando configuracao do modulo"
+        echo "Arquivo de controle do Modulo WSSUPER encontrado pulando configuracao do modulo"
 
     fi
 
 else
 
-    echo "Variavel MODULO_REST_INSTALAR nao setada para true, pulando configuracao..."
+    echo "Variavel MODULO_WSSUPER_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
 
@@ -1054,159 +1077,6 @@ else
 
 fi
 
-echo "***************************************************"
-echo "***************************************************"
-echo "********MODULO PROTOCOLO INTEGRADO*****************"
-echo "***************************************************"
-echo "***************************************************"
-
-if [ "$MODULO_PI_INSTALAR" == "true" ]; then
-
-    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-pi.ok ]; then
-
-        if [ -z "$MODULO_PI_VERSAO" ] || \
-           [ -z "$MODULO_PI_URL" ] || \
-           [ -z "$MODULO_PI_USUARIO" ] || \
-           [ -z "$MODULO_PI_SENHA" ] || \
-           [ -z "$MODULO_PI_EMAIL" ]; then
-            echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_PI_VERSAO, MODULO_PI_URL, MODULO_PI_USUARIO, MODULO_PI_SENHA, MODULO_PI_EMAIL"
-
-        else
-
-                echo "Sincronizando nova versão do módulo pi"
-                rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado /opt/sei/web/modulos/protocolo-integrado
-
-                cd /sei-modulos/mod-sei-protocolo-integrado
-                git pull
-
-                cd /opt/sei/web/modulos
-                cp -R /sei-modulos/mod-sei-protocolo-integrado mod-sei-protocolo-integrado
-
-                cd mod-sei-protocolo-integrado
-                git checkout $MODULO_PI_VERSAO
-                echo "Versao do PEN agora: $MODULO_PI_VERSAO"
-                
-                make clean
-                make dist
-                cd dist
-                files=( *.zip )
-                f="${files[0]}"
-                mkdir -p temp
-                cp $f temp/
-                cd temp/
-                yes | unzip $f
-                \cp -Rf sei/* /opt/sei/
-                \cp -Rf sip/* /opt/sip/
-
-                cd /opt/sei/web/modulos
-                mv mod-sei-protocolo-integrado mod-sei-protocolo-integrado.old
-
-                cd /opt/sei/config/mod-protocolo-integrado/
-                mv ./ConfiguracaoModProtocoloIntegrado.exemplo.php ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"WebService\" => \"\"#'WebService' => \"$MODULO_PI_URL\"#g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"UsuarioWebService\" => \"\"#'UsuarioWebService' => \"$MODULO_PI_USUARIO\"#g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s|\"SenhaWebService\" => \"\"|'SenhaWebService' => \"$MODULO_PI_SENHA\"|g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"PublicarProcessosRestritos\" => false#'PublicarProcessosRestritos' => true#g" ConfiguracaoModProtocoloIntegrado.php
-
-                # adiciona config
-                cd /opt/sei
-                sed -i "s#/\*novomodulo\*/#'ProtocoloIntegradoIntegracao' => 'protocolo-integrado', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-
-                cd /opt
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-protocolo-integrado/sip_atualizar_versao_modulo_protocolo_integrado.php
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-protocolo-integrado/sei_atualizar_versao_modulo_protocolo_integrado.php
-                
-                rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado.old
-                
-                touch /sei/controlador-instalacoes/instalado-modulo-pi.ok
-
-        fi
-
-    else
-
-        echo "Arquivo de controle do Modulo PROTOCOLO INTEGRADO encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
-
-    fi
-
-else
-
-    echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
-
-fi
-
-echo "***************************************************"
-echo "***************************************************"
-echo "********MODULO INCOM*******************************"
-echo "***************************************************"
-echo "***************************************************"
-
-if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
-
-    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-incom.ok ]; then
-
-        if [ -z "$MODULO_INCOM_VERSAO" ]; then
-            echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_INCOM_VERSAO"
-
-        else
-
-                echo "Sincronizando nova versão do modulo incom"
-                rm -rf /opt/sei/web/modulos/mod-sei-incom /opt/sei/web/modulos/incom
-
-                cd /sei-modulos/mod-sei-incom
-                git pull
-
-                cd /opt/sei/web/modulos
-                cp -R /sei-modulos/mod-sei-incom mod-sei-incom
-
-                cd mod-sei-incom
-                git checkout $MODULO_INCOM_VERSAO
-                echo "Versao do Incom agora: $MODULO_INCOM_VERSAO"
-
-                make clean
-                make dist
-                cd dist
-                files=( *.zip )
-                f="${files[0]}"
-                mkdir -p temp
-                cp $f temp/
-                cd temp/
-                yes | unzip $f
-                \cp -Rf sei/* /opt/sei/
-                \cp -Rf sip/* /opt/sip/
-
-                cd /opt/sei/web/modulos
-                mv mod-sei-incom mod-sei-incom.old
-
-                # adiciona config
-                cd /opt/sei
-                sed -i "s#/\*novomodulo\*/#'MdIncomIntegracao' => 'incom', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-
-                cd /opt
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-incom/sip_atualizar_versao_modulo_incom.php
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-incom/sei_atualizar_versao_modulo_incom.php
-
-                echo "Rodando configuracoes"
-                php /sei/files/scripts-e-automatizadores/modulos/mod-sei-incom/mod-sei-incom.php
-
-                rm -rf /opt/sei/web/modulos/mod-sei-incom.old
-
-                touch /sei/controlador-instalacoes/instalado-modulo-incom.ok
-
-        fi
-
-    else
-
-        echo "Arquivo de controle do Modulo INCOM encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
-
-    fi
-
-else
-
-    echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
-
-fi
 
 
 touch /sei/controlador-instalacoes/instalado.ok

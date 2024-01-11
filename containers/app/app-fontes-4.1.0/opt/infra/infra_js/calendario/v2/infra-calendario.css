@@ -1,0 +1,194 @@
+div.infraCalendario {
+    position: absolute;
+    width: auto;
+    border: 1px solid #ced4da;
+    border-radius: .2rem;
+    padding: 0;
+    background-color: #FFF;
+    font-family: arial;
+    font-size: .875rem;
+    padding-bottom: 25px;
+    visibility: hidden;
+    margin-left: 24px;
+}
+
+div.infraCalendario span, div.infraCalendario img {
+    float: left;
+}
+
+div.infraCalendario img {
+    height: 24px !important;
+}
+
+div.infraCalendario img:hover {
+    opacity: 0.3;
+}
+
+div.infraCalendario .selectBox,
+div.infraCalendario .selectBoxOver {
+    line-height: .75rem;
+    padding: 0;
+    cursor: pointer;
+}
+
+div.infraCalendario table {
+    padding: 2px;
+}
+
+div.infraCalendario td {
+    text-align: center;
+    padding: 3px;
+    margin: 0;
+    font-size: .875rem;
+    border: 1px solid white;
+    border-radius: .2rem;
+}
+
+div.infraCalendario td.day:hover {
+    cursor: pointer;
+    border: 1px solid #317082;
+}
+
+div.infraCalendario td.activeDay:hover {
+    cursor: pointer;
+    border: 1px solid #c0c0c0;
+}
+
+div.infraCalendario .selectBox {
+    border-radius: .2rem;
+    color: white;
+    position: relative;
+    padding-left: 4px;
+}
+
+
+div.infraCalendario .selectBox img,
+div.infraCalendario .selectBoxOver img {
+    margin-top: -2px;
+}
+
+div.infraCalendario .selectBoxOver {
+    border-radius: .2rem;
+    color: white;
+    position: relative;
+    padding-left: 4px;
+    opacity: 0.3;
+}
+
+#todaysDate:hover {
+    opacity: 0.3;
+}
+
+.selectBox span, .selectBoxOver span {
+    margin-top: 4px;
+}
+
+div.infraCalendario .topBar,
+div.infraCalendario .bottomBar {
+    height: 26px;
+    line-height: 22px;
+    padding: 2px;
+    color: white;
+    background-color: #317082;
+    text-align: center;
+}
+
+div.infraCalendario .activeDay {
+    color: white;
+    background-color: #317082;
+    text-align: center;
+}
+
+div.infraCalendario .topBar {
+    border-radius: .2rem;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.infraCalendario .bottomBar {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    border-radius: .2rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+div.infraCalendario .bottomBar div {
+    text-align: center;
+    font-size: .75rem;
+}
+
+div.infraCalendario .timeBar {
+    position: absolute;
+    right: 0;
+    margin-right: 0 !important;
+}
+
+div.infraCalendario .timeBar div {
+    float: left;
+    margin-right: 1px;
+}
+
+div.infraCalendario .monthYearPicker {
+    background-color: #E2EBED;
+    border: 1px solid #AAAAAA;
+    border-radius: .2rem;
+    position: absolute;
+    color: #317082;
+    left: 0px;
+    top: 15px;
+    z-index: 1000;
+    display: none;
+    width: 80px;
+}
+
+div.infraCalendario #monthSelect {
+    width: 120px;
+}
+
+div.infraCalendario .monthYearPicker div {
+    float: none;
+    clear: both;
+    padding: 1px;
+    margin: 1px;
+    cursor: pointer;
+}
+
+div.infraCalendario .monthYearActive {
+    background-color: #317082;
+    color: #E2EBED;
+}
+
+div.infraCalendario .topBar img,
+div.infraCalendario .bottomBar img {
+    cursor: pointer;
+    height: 100%;
+}
+
+div.infraCalendario .topBar div,
+div.infraCalendario .bottomBar div {
+    float: left;
+    margin: 1px 5px 0 0;
+    height: 21px;
+}
+
+div.infraCalendario .topBar span,
+div.infraCalendario .bottomBar span {
+    font-size: .875rem;
+}
+
+div.infraCalendario tr.calendar_week_row td {
+    font-weight: bold;
+}
+
+div.infraCalendario .btnEsquerda,
+div.infraCalendario .btnDireita {
+    margin-top: -2px;
+}
+
+div.infraCalendario .btnFechar {
+    margin-top: -1px;
+    right: 4px;
+}
+

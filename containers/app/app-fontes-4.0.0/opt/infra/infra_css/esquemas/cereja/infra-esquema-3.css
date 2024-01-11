@@ -1,0 +1,27 @@
+.infraCorBarraSuperior{background-color: #9c2855;}
+.infraCorBarraSistema{background-color: #f397ad;}
+.infraCorMenu{background-color: #2b1b1e;}
+
+hr {border-bottom-color: #9c2855;}
+
+.divInfraAreaTelaE,#divInfraPesquisarMenu { background-color: #2b1b1e;}
+
+div.infraSidebarMenu a:focus{ border:1px solid #f397ad;}
+
+input.infraButton:hover, input.infraButton:hover span, button.infraButton:hover, button.infraButton:hover span{color: white; background-color: #f397ad;border-color: #9c2855;}
+
+.sparkling-modal-title {background-color: #9c2855 !important;}
+
+div.pesquisaPaginaSelecionada {background-color: #9c2855 !important;}
+
+div.pesquisaPaginas a:hover { border:1px solid #9c2855 !important;}
+
+legend.infraLegend, table.infraTable thead tr,table.infraTable tr > th.infraTh {color: #ECF0F1;background: #9c2855;}
+
+label.infraLabelTitulo {background: #f397ad;}
+
+div.infraTooltipTitulo{ color:white; background-color: #9c2855; }
+
+.infraCheckboxDiv input:checked + label::before, .infraRadioDiv > input:checked + label{ background: #f397ad; border-color: #f397ad;}
+
+div.infraCalendario .topBar, div.infraCalendario .bottomBar, div.infraCalendario .activeDay {background-color: #9c2855;}

@@ -1,0 +1,10 @@
+<svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+  <path
+      d="m4.2222222 2h15.5555558c1.227299 0 2.222222.9949228 2.222222 2.2222222v15.5555558c0 1.227299-.994923 2.222222-2.222222 2.222222h-15.5555558c-1.2272994 0-2.2222222-.994923-2.2222222-2.222222v-15.5555558c0-1.2272994.9949228-2.2222222 2.2222222-2.2222222z"
+      fill="#4baf4f" stroke-width="1.111111"/>
+  <text fill="#fff" font-family="Verdana" font-size="17.490093" stroke-width=".145744"
+        transform="scale(1.0596821 .94367923)" x="3.954059" y="19.074278">
+    <tspan fill="#fff" font-family="Verdana" font-size="17.490093" stroke-width=".145744" x="3.954059" y="19.074278">M
+    </tspan>
+  </text>
+</svg>

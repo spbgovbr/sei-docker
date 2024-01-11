@@ -1,0 +1,97 @@
+<?
+/*
+ * TRIBUNAL REGIONAL FEDERAL DA 4ª REGIÃO
+ * 
+ * 12/11/2007 - criado por MGA
+ *
+ */
+
+require_once dirname(__FILE__).'/SEI.php';
+
+class FeedSEIProtocolos {
+	
+ 	private static $instance = null;
+ 	private $arrObjInfraIFeed = null;
+ 	private $bolAcumularFeeds = false;
+  private $bolIgnorarFeeds = false;
+ 	
+ 	public static function getInstance() { 
+	    if (self::$instance == null) { 
+        self::$instance = new FeedSEIProtocolos();
+	    } 
+	    return self::$instance; 
+	} 
+ 	 
+	private function __construct(){
+	  $this->arrObjInfraIFeed = array();
+
+	  $objFeedSolrProtocolos = new FeedSolrProtocolos();
+    if ($objFeedSolrProtocolos->getStrServidor()!=null) {
+      $this->arrObjInfraIFeed[] = $objFeedSolrProtocolos;
+    }
+	}
+	
+	public function adicionarFeed(InfraFeedDTO $objInfraFeedDTO){
+    if (!$this->bolIgnorarFeeds) {
+      foreach ($this->arrObjInfraIFeed as $objInfraIFeed) {
+        $objInfraIFeed->adicionar($objInfraFeedDTO);
+      }
+    }
+	}
+	
+	public function removerFeed(InfraFeedDTO $objInfraFeedDTO){
+    if (!$this->bolIgnorarFeeds) {
+      foreach ($this->arrObjInfraIFeed as $objInfraIFeed) {
+        $objInfraIFeed->remover($objInfraFeedDTO);
+      }
+    }
+	}
+	
+ 	public function setBolAcumularFeeds($bolAcumularFeeds){
+ 		$this->bolAcumularFeeds = $bolAcumularFeeds;
+ 	}
+ 	
+ 	public function isBolAcumularFeeds(){
+ 		return $this->bolAcumularFeeds;
+ 	}
+
+  public function setBolIgnorarFeeds($bolIgnorarFeeds){
+    $this->bolIgnorarFeeds = $bolIgnorarFeeds;
+  }
+
+  public function isBolIgnorarFeeds(){
+    return $this->bolIgnorarFeeds;
+  }
+
+	public function indexarFeeds(){
+	  
+		if ($this->bolAcumularFeeds){
+			return;
+		}
+		
+		foreach($this->arrObjInfraIFeed as $objInfraIFeed){
+
+		  if (ConfiguracaoSEI::getInstance()->getValor('Solr', 'LogarFeeds', false) === true){
+	      $objFeedDTO = new FeedDTO();
+        $objFeedDTO->setStrConteudo(get_class($objInfraIFeed).':'.$objInfraIFeed->__toString());
+	      
+	      $objFeedRN = new FeedRN();
+	      $objFeedRN->cadastrar($objFeedDTO);
+		  }
+
+		  try{
+
+        $objInfraIFeed->indexar();
+
+		  }catch(Exception $e){
+
+        $objInfraIFeed->limpar();
+
+		    //apenas logar erros de indexação
+		    LogSEI::getInstance()->gravar(InfraException::inspecionar($e));
+
+		  }
+		}
+	}
+}
+?>

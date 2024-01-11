@@ -1,0 +1,189 @@
+
+#infraMenu{
+  padding-left: 0px;
+  list-style: none;
+}
+
+#divInfraPesquisarMenu{
+  height: 3em;
+  width:100%;
+  padding:5px;
+  text-align: center;
+  top: 0;
+  position: -webkit-sticky;
+  position: sticky;
+  z-index: 1;
+  background-color: transparent;
+}
+
+.infraPesquisarMenu{
+  padding: 6px;
+  font-size: 14px;
+  line-height: 1.5;
+  border-radius: 0.2rem;
+  background-color: #fff;
+  border: 1px solid #ced4da;
+  width:98%;
+  height:100%;
+}
+
+div.infraSidebarMenu {
+  left: 0;
+  z-index: 10;
+  overflow-y: auto;
+}
+
+div.infraSidebarMenu > ul{
+  top: 0;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  padding-left:0px;
+  margin-top: 0;
+  margin-bottom: 1rem;
+  box-sizing: border-box;
+}
+
+div.infraSidebarMenu li{
+  line-height: 24px;
+  box-sizing: border-box;
+  list-style: none;
+  color:rgba(0,0,0,0.8);
+}
+
+div.infraSidebarMenu li a:hover{
+  background:rgba(0,0,0,0.1)
+}
+
+div.infraSidebarMenu li a:hover{
+  text-decoration:none;
+  background:rgba(255,255,255,0.2);
+  webkit-transition: all .15s ease-in;
+  transition: all .15s ease-in;
+}
+
+div.infraSidebarMenu li a,
+div.infraSidebarMenu li a:active,
+div.infraSidebarMenu li a:focus{
+  position:relative;
+  text-decoration:none;
+}
+
+div.infraSidebarMenu span{
+  color: #fff !important;
+  flex-grow: 1;
+  font-size: 14px;
+}
+
+div.infraSidebarMenu a {
+  font-family:"Roboto",sans-serif;
+  font-size:14px;
+  font-weight:300;
+  color: #E7E7E7 !important;
+  display: flex;
+  padding: 4px 0;
+  align-items: center;
+  text-decoration: none;
+  text-align: left;
+  border:1px solid transparent;
+  background-color: transparent;
+  box-sizing: border-box;
+  display: -webkit-flex; /* Safari */
+  -webkit-flex-direction: row; /* Safari 6.1+ */
+  flex-direction: row;
+  margin: 0px 7px;
+  border-radius: 4px;
+}
+
+div.infraSidebarMenu a:focus {
+  border: 1px solid #5E9ED6;
+}
+
+div.infraSidebarMenu img{
+  margin-right: 5px;;
+  transition: all 200ms ease;
+}
+
+div.infraSidebarMenu li  ul{
+  background: rgba(255, 255, 255, 0.07);
+  margin-bottom: 0;
+  margin-top: 0;
+  box-sizing: border-box;
+  line-height: 16px;
+  list-style: none;
+  padding-left: 0px;
+}
+
+.infraSubmenu{
+  /* display:none;*/
+}
+
+a.infraAnchorMenu[aria-expanded=true] img.infraImgSetaMenu {
+  transform: rotate(180deg);
+}
+
+@media screen and (min-width: 768px) {
+  div.infraAreaTelaEExibeGrande {
+    width: 20%;
+    min-width: 20%;
+    max-width: 20%;
+
+    overflow-y: auto;
+  }
+  div.infraAreaTelaEEscondeGrande{
+    width: 0px;
+    min-width: 0px;
+    max-width: 0px;
+    overflow-y: hidden;
+  }
+  div.infraAreaTelaEExibePequeno {
+  }
+  div.infraAreaTelaEEscondePequeno{
+  }
+  div.infraAreaTelaDEscondePequeno{
+  }
+}
+
+@media screen and (max-width: 767.99px)  {
+  div.infraAreaTelaEExibeGrande {
+  }
+  div.infraAreaTelaEEscondeGrande{
+  }
+  div.infraAreaTelaEExibePequeno {
+    width: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    overflow-y: auto;
+  }
+
+  div.infraAreaTelaEEscondePequeno{
+    width:0%;
+    min-width: 0%;
+    max-width: 0%;
+    overflow-y: hidden;
+  }
+  div.infraAreaTelaDEscondePequeno{
+    width:0%;
+    min-width: 0%;
+    max-width: 0%;
+    padding-left: 0px !important;
+    display: none !important;
+
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .infraMenuAnimacao {
+    transition:  width 0.35s ease, min-width 0.35s ease, max-width 0.35s ease;
+  }
+}
+
+.infraMenuAnimacao {
+  transition:  width 0.35s ease, min-width 0.35s ease, max-width 0.35s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapsing {
+    transition: height 0.35s ease;
+  }
+}

@@ -1,0 +1,123 @@
+/*************************SELETORES HTML*/
+* {
+  border:0;
+	font-family:Verdana,Arial;
+	font-style:normal;
+	font-weight:normal;
+	margin:0 auto;
+	padding:0;
+}
+
+a:link, a:visited, a:active, a:hover {
+  color:#477657;
+  font-weight:bold;
+  text-decoration:none;
+}
+
+b {
+  font-weight:bold;
+}
+
+body {
+	font-size:12px;
+}
+
+hr {
+  border:0px solid #000;
+  border-bottom:1px solid #79A584;
+	margin-top:4px;
+	margin-bottom:4px;
+	width:100%;
+}
+
+html {
+  overflow-y:scroll;
+}
+
+i {
+  font-style:italic;
+}
+
+strong {
+  font-weight:bold;
+}
+/*************************FIM DOS SELETORES HTML*/
+
+/*************************SELETORES ESTRUTURAIS*/
+div.areaGlobal {
+  border:0px solid #000;
+	clear:both;
+	margin-top:0px;
+	width:960px;
+}
+
+div.areaConteudo {
+  border:0px solid #000;
+  clear:both;
+  line-height:130%;
+  margin:20px 0px 10px 20px;
+  padding:0px;
+  width:920px;
+}
+
+div.areaRodape {
+  border:0px solid #000;
+  text-align:center;
+  width:100%;
+}
+
+div.barraAzulTopo {
+  background-color:#204b9a;
+  height:10px;
+  width:100%
+}
+
+div.barraVerdeTopo {
+  background-color:#66b32f;
+  height:5px;
+  width:100%
+}
+
+div.itemMenu {
+  height:41px;
+  float:left;
+}
+/*************************FIM DOS SELETORES ESTRUTURAIS*/
+
+/*************************SELETORES GENÉRICOS*/
+.formulario input, textarea, select {
+  border: 1px solid #000;
+}
+
+.negrito {
+  color:#2D2D2D;
+  font-weight:bold;
+}
+.tabela {
+	border-collapse: collapse;
+	font-size: 1em;
+}
+
+.tabela tr td {
+	border: 1px solid #B0B0B0;
+	padding: 2px;
+	margin: 0px;
+}
+
+.tabela th {
+  border: 1px solid #B0B0B0;
+  padding: 2px;
+  margin: 0px;
+  text-align: center;
+  color: #336699;
+  font-weight: bold;
+  background-color: #D4D4D4;
+}
+
+.tituloPagina {
+  color:#222E78;
+  font-family:Calibri;
+  font-size:22px;
+  font-weight:bold;
+}
+/*************************FIM DOS SELETORES GENÉRICOS*/

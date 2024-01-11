@@ -1,0 +1,77 @@
+div.infraArvore {
+    white-space: nowrap;
+    line-height: 0;
+}
+
+div.infraArvore img {
+    border: 0;
+    opacity: 1;
+    margin: 0 .1em;
+}
+
+div.infraArvore img:hover {
+    opacity: 0.3;
+}
+
+div.infraArvore a {
+    color: #000;
+    text-decoration: none;
+}
+
+div.infraArvore span:hover {
+    text-decoration: underline;
+}
+
+a.infraArvoreNo {
+    vertical-align: text-top;
+    font-size: .875rem;
+    margin: 0;
+}
+
+a.infraArvoreNo:focus span {
+    outline: 1px dotted black;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+}
+
+a.infraArvoreNo span {
+    font-size: .875rem;
+    padding: 1px 3px;
+    border-radius: .2rem;
+    -webkit-border-radius: .2rem;
+}
+
+span.infraArvoreNoSelecionado {
+    color: white;
+    background-color: #0A246A;
+}
+
+span.infraArvoreNoVisitado {
+    color: black;
+    background-color: #D4D0C8;
+}
+
+a.infraArvoreInformacao {
+    vertical-align: text-top;
+    margin: 0 2px;
+    padding-left: 1px;
+}
+
+a.infraArvoreInformacao:focus span {
+    background-color: #ccc;
+}
+
+a.infraArvoreInformacao:hover span {
+    text-decoration: none !important;
+    background-color: #ccc;
+}
+
+a.infraArvoreInformacao span {
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    padding: 2px;
+    font-size: 9px !important;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    -webkit-border-radius: 2px;
+}

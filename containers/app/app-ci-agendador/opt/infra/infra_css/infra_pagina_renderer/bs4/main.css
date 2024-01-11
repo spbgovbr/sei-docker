@@ -1,0 +1,23 @@
+.pagination select, .pagination .dropdown-toggle {
+	border-radius: 0 !important;
+}
+
+.setas-ordenacao-bs4 {
+	height: 8px;
+	overflow: hidden;
+	text-align: center;
+}
+
+.setas-ordenacao-bs4 i {
+	margin-top: -8px;
+	font-size: 1.6rem;
+	height: 8px;
+}
+
+.infraAreaPaginacao .page-item.disabled .page-link {
+	color: #dedede;
+}
+
+span.tooltip-trigger {
+	border-bottom: 2px dotted #aaa;
+}

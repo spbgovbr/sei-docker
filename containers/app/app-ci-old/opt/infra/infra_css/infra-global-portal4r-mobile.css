@@ -1,0 +1,15 @@
+body {
+	font-size:32px;
+}
+
+div.conteudo {
+  width:100%;
+}
+
+.formulario input, textarea, select {
+  font-size:36px;
+}
+
+.botao {
+	height:42px;
+}

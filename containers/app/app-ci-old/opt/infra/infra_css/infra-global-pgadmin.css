@@ -1,0 +1,136 @@
+* {
+  border:0;
+	font-family:Verdana,Arial;
+	font-style:normal;
+	font-weight:normal;
+	margin:0 auto;
+	padding:0;
+}
+html {
+  overflow-y:scroll;
+}
+body {
+  background-color:#f6f5f5;
+	font-size:13px;
+}
+.divTopo {
+  background-image: url("../dirjud/imagens/fundo-1px-topo.png");
+  height:180px;
+  width:100%;
+}
+.divLinha1Topo {
+  height:26px;
+  width:100%;
+}
+.divLinha2Topo {
+  clear:both;
+  height:4px;
+  width:100%;
+}
+.divLinha3Topo {
+  clear:both;
+  height:30px;
+  width:100%;
+}
+.divLinha4Topo {
+	clear:both;
+	height:90px;
+	padding:0px;
+  width:960px;
+}
+.divNomeUnidade {
+  color:#fff;
+  float:left;
+  font-family:Arial;
+  font-size:40px;
+  margin-top:22px;
+}
+.divLogoJF {
+  float:left;
+  margin-top:10px;
+}
+.divLogoTRF4 {
+  float:right;
+}
+.divLinha5Topo {
+	clear:both;
+	height:28px;
+	padding:0px;
+  width:960px;
+}
+.divConteudo {
+  clear:both;
+	padding:20px 0px 20px 0px;
+  width:960px;
+}
+.divLinha1Rodape {
+  background-color:#f47c20;
+  clear:both;
+  height:4px;
+  width:100%;
+}
+.divLinha2Rodape {
+  background-color:#c5c5c5;
+  clear:both;
+  width:100%;
+}
+.divLinha3Rodape {
+  background-color:#252525;
+  clear:both;
+  width:100%;
+}
+.divLinha3ConteudoRodape {
+	height:90px;
+	padding:0px;
+  width:960px;
+}
+
+/*****************************MENU*/
+.drop_menu {
+  padding:2px 6px 0px 0px;
+  margin:0;
+  list-style-type:none;
+}
+
+.drop_menu li {
+  float:left;
+  list-style-type:none;
+  margin-left:0px;
+}
+
+.drop_menu li a {
+  padding:2px 10px;
+  display:block;
+  color:#000;
+  text-decoration:none;
+}
+ 
+.drop_menu ul {
+  position:absolute;
+  left:-9999px;
+  top:-9999px;
+  list-style-type:none;
+}
+.drop_menu li:hover {
+  position:relative;
+  background:#D8D8D8; 
+}
+.drop_menu li:hover ul {
+  left:0px;
+  top:20px;
+  padding:0px;
+  margin-left:0px;
+}
+ 
+.drop_menu li:hover ul li a {
+  padding:5px;
+  display:block;
+  width:300px;
+  text-indent:15px;
+  background-color:#D8D8D8;
+  
+}
+.drop_menu li:hover ul li a:hover { 
+  background-color:#C5C5C5;
+}
+/*****************************FIM DO MENU*/

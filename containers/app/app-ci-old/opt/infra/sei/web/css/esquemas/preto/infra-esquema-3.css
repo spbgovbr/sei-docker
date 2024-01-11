@@ -1,0 +1,214 @@
+:root {
+    --dark-gray: #363636;
+}
+
+#txtPesquisaRapida{
+    color:white;
+    background-color: black;
+    border:1px solid white !important;
+}
+
+#txtPesquisaRapida::-webkit-input-placeholder { /* Edge */
+    color: white;
+}
+
+#txtPesquisaRapida:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: white;
+}
+
+#txtPesquisaRapida::placeholder {
+    color: white;
+}
+
+/*** VISUALIZAR DOCUMENTOS ****************************************************/
+#ifrArvoreHtml { /* Documento visualizado dentro do iframe */
+    background-color: white;
+    filter: brightness(90%);
+}
+
+#divArvoreConteudo{
+    padding:0 !important;
+    color:white !important;
+    background-color: black !important;
+}
+
+#divArvoreInformacao{
+  color:white;
+  background-color: black;
+}
+
+#tblTipoProcedimento, #tblSeries {
+    background-color: black !important;
+}
+
+table.pesquisaResultado td.pesquisaSnippet,
+table.pesquisaResultado td.pesquisaMetatag,
+table.pesquisaResultado td.pesquisarMetatag * {
+    background-color: inherit !important;
+}
+
+table.pesquisaResultado td.pesquisaTituloEsquerda,
+table.pesquisaResultado td.pesquisaTituloDireita{
+    background-color: var(--dark-gray);
+}
+
+.totalEstatisticas {
+    background-color: darkblue !important;
+}
+
+a.ancoraPadraoPreta, a.processoVisualizado {
+    color: inherit;
+}
+
+a.processoVisitado {
+    color: #a1ba20 !important;
+}
+a.ancoraSigla, a.ancoraHistoricoProcesso {
+    color: yellow;
+}
+
+a.ancoraPadraoAzul {
+    color: yellow;
+}
+
+a.ancoraPadraoVermelha {
+    color: orangered;
+}
+
+a.ancoraOpcao {
+    color: inherit;
+}
+
+a.processoVisitado {
+    color:#3ca9ff;
+}
+
+a.processoVisitadoSigiloso {
+    background-color:#3ca9ff;
+}
+
+a.processoVisitadoCredencialAssinatura {
+    border:1px solid #3ca9ff;
+}
+
+.noVisitado{
+    color:#a1ba20 !important;
+}
+
+div.barraBotoesSEI{
+    background-color: #555 !important;
+}
+
+div.barraBotoesSEI img:hover{
+    border: 1px solid white;
+}
+
+/*** ARVORE DE PROCESSOS ****************************************************/
+
+#ifrArvoreHtml { /* Documento visualizado dentro do iframe */
+    background-color: white;
+    filter: brightness(90%);
+}
+
+body.infraArvore, body.infraArvore span{
+    background-color: black !important;
+}
+
+span.infraArvoreNoSelecionado {
+    color:yellow;
+}
+
+#divInfraAreaTelaD{
+    background-color: black !important;
+}
+
+#divArvore {
+    border-bottom-color: white !important;
+}
+
+#divArvoreHtml {
+    background-color: black !important;
+}
+
+#divConsultarAndamento,
+#divRelacionados {
+    border-top-color: white !important;
+}
+
+a.ancoraRelacionadosParcial {
+    color: white !important;
+}
+
+/*** Histórico do Processo **************************************************/
+.andamentoConcluido {background-color: black !important;}
+.andamentoAberto {background-color: darkgoldenrod !important;}
+.andamentoAberto td {color: black;}
+.andamentoAberto td a {color: yellow;}
+
+
+img[src*="aguarde.gif"],
+img[src*="aguarde_pequeno.gif"],
+img[src*="ajuda.gif"],
+img[src*="assinatura1.svg"],
+img[src*="assinatura2.svg"],
+img[src*="autenticacao1.svg"],
+img[src*="autenticacao2.svg"],
+img[src*="processo_andamentos.svg"]{
+    filter: invert(100%);
+}
+
+/*** E-MAIL *****************************************************************/
+#s2id_hdnDestinatario ul.select2-choices, li.select2-search-choice {
+    background-image: none !important;
+}
+#s2id_hdnDestinatario *,#select2-drop, li.select2-search-choice,
+li.select2-search-choice *, li.select2-no-results, li.select2-searching {
+    background-color: black !important;
+}
+
+div.tituloProcessoDocumento, div.tituloProcessoDocumento label {
+    background-color: var(--dark-gray);
+    color: white;
+    border-bottom-color: black;
+}
+
+tr.trVermelha {
+    background-color: #550000;
+}
+
+/*** CKEditor *****************************************************************/
+.cke_dialog_contents_body input, .cke_dialog_contents_body select {
+    background-color: white !important;
+}
+
+/*** scayt.css ****************************************************************/
+
+.scayt-misspell-word {
+    color: inherit;
+}
+
+
+th.tituloControleExterno {
+    background-color: unset;
+}
+
+/*** PUBLICAÇÕES ELETRONICAS ************************************************/
+tr.trEspacoPublicacao,
+tr.trEspacoPublicacao td{
+    background-color: black !important;
+}
+
+/*** SEI NOVIDADES **********************************************************/
+
+#frmNovidadeMostrar{
+    background-color: black;
+}
+
+
+/*** Ajuda da busca ***********************************************************/
+
+#bodyAjuda *{
+    color:white;
+    background-color: black;
+}
+

@@ -12,15 +12,15 @@ chmod +x /command.sh
 yum -y update
 
 
-yum install -y http://li.nux.ro/download/nux/dextop/el7/x86_64/nux-dextop-release-0-5.el7.nux.noarch.rpm
-
-# Instalação de ferramentas utilitárias e dependências do SEI
-yum install -y build-essential libmcrypt httpd memcached openssl wget curl unzip gcc java-1.8.0-openjdk \
-               libxml2 crontabs mysql netstat net-tools vim git nc libgearman-dev libgearman-devel ffmpeg
+dnf install --nogpgcheck https://mirrors.rpmfusion.org/free/el/rpmfusion-free-release-8.noarch.rpm -y
+dnf install --nogpgcheck https://mirrors.rpmfusion.org/nonfree/el/rpmfusion-nonfree-release-8.noarch.rpm -y
+# Instalação de ferramentas utilitárias e dependências do SUPER
+yum install -y libmcrypt httpd memcached openssl wget curl unzip gcc java-1.8.0-openjdk \
+               libxml2 crontabs mysql net-tools vim git nc ffmpeg
 
 
 # Instalação do XDebug, versão 3
-pecl install xdebug-3.0.4   
+pecl install xdebug-3.0.4
 
 # Configuração de permissão do diretório de arquivos
 mkdir -p /var/sei/arquivos

@@ -16,6 +16,6 @@ curl -L -O \
     -O \
     https://github.com/spbgovbr/sei-docker-binarios/raw/main/pacoteslinux/uploadprogress.tgz \
     -O \
-    https://github.com/spbgovbr/sei-docker-binarios/raw/main/pacoteslinux/wkhtmltox-0.12.6-1.centos7.x86_64.rpm 
+    https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox-0.12.6-1.centos8.x86_64.rpm
 
 cd -

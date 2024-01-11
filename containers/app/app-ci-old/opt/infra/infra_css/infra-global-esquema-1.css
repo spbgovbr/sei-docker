@@ -1,0 +1,33 @@
+div.infraBarraSistema{
+position:relative; 
+float:left;
+width:18%;
+overflow:hidden; 
+}
+
+div.infraBarraSistemaE{
+position:absolute;
+top:25%;
+left:3%;
+}
+
+div.infraBarraSistemaE img.infraImg,
+div.infraBarraSistemaE img.infraImgNormal,
+div.infraBarraSistemaE img.infraImgOpaca{
+width:1.4em;
+height:1.4em;
+}
+
+
+div.infraBarraSistemaD{
+position:absolute;
+top:25%;
+left:15%;
+height:100%;
+}
+
+div.infraBarraSistemaD label{
+font-size: 1.4em;
+font-weight: bold;
+color: #fff;
+}

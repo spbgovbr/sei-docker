@@ -1,0 +1,85 @@
+{
+	"name": "trf4/ui-showcase",
+	"description": "Projeto que serve como showcase do trf4/ui (componentes de interface)",
+	"authors": [
+		{
+			"name": "bxo",
+			"email": "bxo@trf4.jus.br"
+		}
+	],
+	"type": "project",
+	"keywords": [
+		"framework",
+		"laravel"
+	],
+	"repositories": [
+		{
+			"type": "path",
+			"url": "../lib",
+			"options": {
+				"symlink": true
+			}
+		}
+	],
+	"license": "MIT",
+	"require": {
+		"php": "^7.2.0",
+		"ext-json": "*",
+		"facade/ignition": "^2.0",
+		"fideloper/proxy": "^4.0",
+		"gajus/dindent": "^2.0",
+		"laravel/framework": "^7.0",
+		"laravel/tinker": "^2.0",
+		"nunomaduro/collision": "^4.1",
+		"phpunit/phpunit": "^8.5",
+		"sebastian/comparator": "^3.0",
+		"silber/page-cache": "^1.0",
+		"yonas/directory-hash-php": "dev-master"
+	},
+	"require-dev": {
+		"laravel/dusk": "^6.11",
+		"mockery/mockery": "^1.0",
+		"overtrue/phplint": "^1.1"
+	},
+	"config": {
+		"optimize-autoloader": true,
+		"preferred-install": "dist",
+		"sort-packages": true,
+		"gitlab-domains": [
+			"git.trf4.jus.br"
+		]
+	},
+	"extra": {
+		"laravel": {
+			"dont-discover": []
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"App\\": "app/",
+			"Tests\\": [
+				"../../../tests/",
+				"tests/"
+			]
+		},
+		"classmap": [
+			"database/seeds",
+			"database/factories"
+		]
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"scripts": {
+		"update-php-assets": "php composer.php update-php-assets",
+		"post-autoload-dump": [
+			"Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+			"@php artisan package:discover --ansi"
+		],
+		"post-root-package-install": [
+			"@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+		],
+		"post-create-project-cmd": [
+			"@php artisan key:generate --ansi"
+		]
+	}
+}

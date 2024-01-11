@@ -1,0 +1,84 @@
+<?
+
+class ConfiguracaoSEI extends InfraConfiguracao  {
+
+ 	private static $instance = null;
+
+ 	public static function getInstance(){
+ 	  if (ConfiguracaoSEI::$instance == null) {
+ 	    ConfiguracaoSEI::$instance = new ConfiguracaoSEI();
+ 	  }
+ 	  return ConfiguracaoSEI::$instance;
+ 	}
+
+ 	public function getArrConfiguracoes(){
+ 	  return array(
+
+ 	      'SEI' => array(
+ 	          'URL' => getenv("SEI_URL"),
+ 	          'Producao' => getenv("SEI_PRODUCAO"),
+ 	          'RepositorioArquivos' => getenv("SEI_STORAGE")),
+
+ 	      'PaginaSEI' => array(
+ 	          'NomeSistema' => 'SEI',
+ 	          'NomeSistemaComplemento' => '',
+ 	          'LogoMenu' => ''),
+ 	       
+ 	      'SessaoSEI' => array(
+ 	          'SiglaOrgaoSistema' => getenv("SEI_SIGLA_ORGAO_SISTEMA"),
+ 	          'SiglaSistema' => 'SEI',
+ 	          'PaginaLogin' => getenv("SEI_PAGINA_LOGIN"),
+ 	          'SipWsdl' => getenv("SEI_WSDL"),
+ 	          'ChaveAcesso' => getenv("SEI_CHAVE_ACESSO"), //ATEN��O: gerar uma nova chave para o SEI ap�s a instala��o (ver documento de instala��o)
+ 	          'https' => getenv("SEI_HTTPS")),
+ 	       
+ 	      'BancoSEI'  => array(
+ 	          'Servidor' => getenv("SEI_DB_SERVIDOR"),
+ 	          'Porta' => getenv("SEI_DB_PORTA"),
+ 	          'Banco' => getenv("SEI_DB_BANCO"),
+ 	          'Usuario' => getenv("SEI_DB_USUARIO"),
+ 	          'Senha' => getenv("SEI_DB_SENHA"),
+ 	          'Tipo' => getenv("SEI_DB_TIPO")), //MySql, SqlServer, Oracle ou PostgreSql
+
+ 	      /*
+        'BancoAuditoriaSEI'  => array(
+ 	          'Servidor' => '[servidor BD]',
+ 	          'Porta' => '',
+ 	          'Banco' => '',
+ 	          'Usuario' => '',
+ 	          'Senha' => '',
+ 	          'Tipo' => ''), //MySql, SqlServer, Oracle ou PostgreSql
+        */
+
+  			'CacheSEI' => array('Servidor' => getenv("SEI_CACHE_SERVIDOR"),
+					                	'Porta' => getenv("SEI_CACHE_PORTA")),
+
+        'Federacao' => array(
+          'Habilitado' => getenv("SEI_FEDERACAO")
+         ),
+
+ 	      'JODConverter' => array('Servidor' => getenv("SEI_JOD_URL")),
+
+ 	      'Solr' => array(
+ 	          'Servidor' => getenv("SEI_SOLR_SERVIDOR"),
+ 	          'CoreProtocolos' => getenv("SEI_SOLR_CORE_PROTOCOLOS"),
+ 	          'CoreBasesConhecimento' => getenv("SEI_SOLR_CORE_BASE_CONHECIMENTO"),
+ 	          'CorePublicacoes' => getenv("SEI_SOLR_CORE_PUBLICACOES")),
+
+ 	      'InfraMail' => array(
+						'Tipo' => '1', //1 = sendmail (neste caso n�o � necess�rio configurar os atributos abaixo), 2 = SMTP
+						'Servidor' => '[Servidor E-Mail]',
+						'Porta' => '25',
+						'Codificacao' => '8bit', //8bit, 7bit, binary, base64, quoted-printable
+						'MaxDestinatarios' => 999, //numero maximo de destinatarios por mensagem
+						'MaxTamAnexosMb' => 999, //tamanho maximo dos anexos em Mb por mensagem
+						'Seguranca' => 'TLS', //TLS, SSL ou vazio
+						'Autenticar' => false, //se true ent�o informar Usuario e Senha
+						'Usuario' => 'aaa',
+						'Senha' => 'aaa',
+						'Protegido' => '' //campo usado em desenvolvimento, se tiver um email preenchido entao todos os emails enviados terao o destinatario ignorado e substitu�do por este valor evitando envio incorreto de email
+				)
+ 	  );
+ 	}
+}
+?>

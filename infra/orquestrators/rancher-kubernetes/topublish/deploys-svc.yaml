@@ -1,0 +1,320 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: memcached
+  namespace: sei-prodesp
+spec:
+  ports:
+  - name: tcp
+    port: 11211
+    protocol: TCP
+    targetPort: 11211
+  selector:
+    servico: memcached
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 86400
+  type: ClusterIP
+  
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: memcached
+  namespace: sei-prodesp
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: memcached
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: memcached
+    spec:
+      containers:
+      - image: processoeletronico/memcached:latest
+        imagePullPolicy: Always
+        name: memcached
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: jod
+  namespace: sei-prodesp
+spec:
+  clusterIP: None
+  ports:
+  - name: default
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    servico: jod
+  sessionAffinity: None
+  type: ClusterIP
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jod
+  namespace: sei-prodesp
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: jod
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: jod
+    spec:
+      containers:
+      - image: processoeletronico/jod:latest
+        imagePullPolicy: Always
+        name: jod
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: sei-app
+  namespace: sei-prodesp
+spec:
+  clusterIP: None
+  ports:
+  - name: https
+    port: 443
+    protocol: TCP
+    targetPort: 443
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    servico: app
+  sessionAffinity: None
+  type: ClusterIP
+
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sei-app
+  namespace: sei-prodesp
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: app
+    spec:
+      containers:
+      - command:
+        - /entrypoint.sh
+        envFrom:
+        - configMapRef:
+            name: sei-app
+            optional: false
+        - secretRef:
+            name: sei-secret1
+            optional: false
+        image: processoeletronico/app-ci:latest
+        imagePullPolicy: Always
+        name: sei-app
+        livenessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl -s -L localhost/sei | grep frmLogin
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 20
+        readinessProbe:
+          exec:
+            command:
+            - sh
+            - -c
+            - curl -s -L localhost/sei | grep frmLogin
+          failureThreshold: 5
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          successThreshold: 1
+          timeoutSeconds: 20
+        startupProbe:
+          exec:
+            command:
+              - sh
+              - '-c'
+              - ls /sei/controlador-instalacoes/instalado.ok
+          failureThreshold: 100
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /opt/
+          name: vol1
+        - mountPath: /sei/arquivos_externos_sei/
+          name: vol2
+        - mountPath: /sei/controlador-instalacoes
+          name: vol3
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-fontes
+      - name: vol2
+        persistentVolumeClaim:
+          claimName: vol-sei-arquivosexternos
+      - name: vol3
+        persistentVolumeClaim:
+          claimName: vol-sei-controladorinstalacao
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sei-app-agendador
+  namespace: sei-prodesp
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      servico: app-agendador
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        servico: app-agendador
+    spec:
+      containers:
+      - command:
+        - /entrypoint-agendador.sh
+        envFrom:
+        - configMapRef:
+            name: sei-app
+            optional: false
+        - secretRef:
+            name: sei-secret1
+            optional: false
+        image: processoeletronico/app-ci-agendador:latest
+        imagePullPolicy: Always
+        name: sei-app
+        resources:
+          limits:
+            cpu: 500m
+            memory: 1Gi
+          requests:
+            cpu: 500m
+            memory: 1Gi
+        stdin: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        tty: true
+        volumeMounts:
+        - mountPath: /opt/
+          name: vol1
+        - mountPath: /sei/arquivos_externos_sei/
+          name: vol2
+        - mountPath: /sei/controlador-instalacoes
+          name: vol3
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: vol1
+        persistentVolumeClaim:
+          claimName: vol-sei-fontes
+      - name: vol2
+        persistentVolumeClaim:
+          claimName: vol-sei-arquivosexternos
+      - name: vol3
+        persistentVolumeClaim:
+          claimName: vol-sei-controladorinstalacao

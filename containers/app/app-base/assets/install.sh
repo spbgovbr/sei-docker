@@ -8,6 +8,15 @@ set -e
 yum clean all
 yum -y update
 
+#yum -y install epel-release
+#subscription-manager repos --enable rhel-*-optional-rpms \
+#                           --enable rhel-*-extras-rpms \
+#                           --enable rhel-ha-for-rhel-*-server-rpms
+
+#yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+
+
 # Instalação dos componentes básicos do servidor web apache
 yum -y install \
     httpd \
@@ -26,10 +35,20 @@ yum -y install \
     fontconfig \
     mod_ssl
 
+openssl req -newkey rsa:2048 -nodes -keyout /etc/pki/tls/private/localhost.key -x509 -days 365 -out /etc/pki/tls/certs/localhost.crt \
+  -subj "/C=BR/ST=Brasilia/L=Brasilia/O=TESTE/OU=MGI/CN=localhost"
+
+
 # Instalação do PHP e demais extenções necessárias para o projeto
-yum install -y epel-release yum-utils
-yum install -y http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+yum install -y yum-utils dnf-plugins-core
+yum install -y http://rpms.remirepo.net/enterprise/remi-release-8.rpm
+yum module reset php -y
+#yum module enable php:remi-7.3 -y
+yum install yum-utils
 yum-config-manager --enable remi-php73
+dnf module install php:remi-7.3
+
+dnf config-manager --set-enabled powertools
 yum -y update
 
 # Instalação do PHP e demais extenções necessárias para o projeto
@@ -65,26 +84,16 @@ yum -y install \
     php-pecl-zip \
     gearmand \
     libgearman \
-    libgearman-devel \
     php-pecl-gearman \
-    vixie-cron \
+    cronie \
     php-sodium \
-    git \
-    gearmand \
-    libgearman-dev \
-    libgearman-devel
-
-cd /tmp/assets/
-cp ca-certIN.pem /etc/pki/ca-trust/source/anchors/
-update-ca-trust extract
-update-ca-trust enable
+    git
 
 cd /tmp/assets/pacotes
 
 # Configuração do pacote de línguas pt_BR
-localedef pt_BR -i pt_BR -f ISO-8859-1
-localedef pt_BR.ISO-8859-1 -i pt_BR -f ISO-8859-1
-localedef pt_BR.ISO8859-1 -i pt_BR -f ISO-8859-1
+dnf install glibc-locale-source glibc-langpack-br -y
+localedef -c -i pt_BR -f ISO-8859-1 pt_BR.ISO-8859-1
 
 # Instalação do componentes UploadProgress
 tar -zxvf uploadprogress.tgz
@@ -97,7 +106,7 @@ echo "extension=uploadprogress.so" > /etc/php.d/uploadprogress.ini
 cd -
 
 # wkhtml
-rpm -Uvh wkhtmltox-0.12.6-1.centos7.x86_64.rpm
+rpm -Uvh wkhtmltox-0.12.6-1.centos8.x86_64.rpm
 
 # fonts libraries
 rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
@@ -111,9 +120,9 @@ fi
 if [ "$IMAGEM_APP_PACOTESQLSERVER_PRESENTE" == "true" ]; then
 
     # Instalação dos componentes de conexão do SQL Server
-    curl https://packages.microsoft.com/config/rhel/7/prod.repo > /etc/yum.repos.d/mssql-release.repo
+    curl https://packages.microsoft.com/config/rhel/8/prod.repo > /etc/yum.repos.d/mssql-release.repo
     ACCEPT_EULA=Y yum install -y msodbcsql17
-    yum install -y libtool-ltdl-devel libodbc1 unixODBC unixODBC-devel php-mssql php-pdo
+    yum install -y libtool-ltdl-devel unixODBC unixODBC-devel php-pdo
     pecl channel-update pecl.php.net
     pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1
     printf "; priority=20\nextension=sqlsrv.so\n" > /etc/php.d/20-sqlsrv.ini
@@ -129,7 +138,7 @@ fi
 if [ "$IMAGEM_APP_PACOTEORACLE_PRESENTE" == "true" ]; then
 
     # ORACLE oci
-
+    yum install -y libnsl
     yum install -y \
         oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm \
         oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm \
@@ -139,18 +148,11 @@ if [ "$IMAGEM_APP_PACOTEORACLE_PRESENTE" == "true" ]; then
     ldconfig
 
     # Install Oracle extensions
-    yum install -y php-dev php-pear build-essential systemtap-sdt-devel
+    yum install -y gcc gcc-c++ make php-devel php-pear systemtap-sdt-devel
     pecl channel-update pecl.php.net
     export PHP_DTRACE=yes && pecl install oci8-2.2.0 && unset PHP_DTRACE
 
     echo "extension=oci8.so" > /etc/php.d/oci8.ini
-
-fi
-
-if [ "$IMAGEM_APP_PACOTEPOSTGRES_PRESENTE" == "true" ]; then
-
-   yum install -y https://download.postgresql.org/pub/repos/yum/reporpms/EL-7-x86_64/pgdg-redhat-repo-latest.noarch.rpm
-   yum install -y postgresql15 postgresql15-libs php-pgsql php-pecl-pq
 
 fi
 

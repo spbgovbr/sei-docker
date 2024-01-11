@@ -1,0 +1,1 @@
+﻿(function(){CKEDITOR.plugins.add("autotexto",{requires:["dialog"],init:function(a){a.addCommand("autotexto",new CKEDITOR.dialogCommand("autotexto"));a.config.ignoreConfirmCancel=!0;a.ui.addButton("autotexto",{label:"AutoTexto",command:"autotexto",icon:this.path+"autotexto.gif"});CKEDITOR.dialog.add("autotexto",this.path+"dialogs/autotexto.js")}})})();

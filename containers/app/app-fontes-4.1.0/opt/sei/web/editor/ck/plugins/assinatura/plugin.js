@@ -1,0 +1,2 @@
+﻿CKEDITOR.plugins.add("assinatura",{init:function(a){a.addCommand("assinatura",{exec:function(a){a.getCommand("save").state===CKEDITOR.TRISTATE_ENABLED?confirm("Deseja salvar as alterações e assinar?")&&(a.execCommand("save"),window.bolAssinar=!0):infraAbrirJanelaModal(window.strLinkAssinatura,700,450,false)}});a.ui.addButton("assinatura",{label:"Assinar",command:"assinatura",icon:this.path+"assinatura.gif"});a.setKeystroke(CKEDITOR.CTRL+
+CKEDITOR.SHIFT+65,"assinatura")}});

@@ -1,0 +1,81 @@
+:root {
+    --infra-esquema-cor-barra-superior: #00697a;
+    --infra-esquema-cor-barra-sistema: #00b0cc;
+    --infra-esquema-cor-clara: #00b0cc;
+    --infra-esquema-cor-escura: #00697a;
+}
+
+.infraCorBarraSuperior {
+    background-color: #00697a !important;
+}
+
+.infraCorBarraSistema {
+    background-color: #00b0cc !important;
+}
+
+.infraCorMenu {
+    background-color: #002930 !important;
+}
+
+hr {
+    border-bottom-color: #00697a;
+}
+
+.divInfraAreaTelaE, #divInfraPesquisarMenu {
+    background-color: #002930;
+}
+
+div.infraSidebarMenu a:focus {
+    border: 1px solid #00b0cc;
+}
+
+input.infraButton:hover, input.infraButton:hover span, button.infraButton:hover, button.infraButton:hover span {
+    color: white;
+    background-color: #00b0cc;
+    border-color: #00697a;
+}
+
+.sparkling-modal-title {
+    background-color: #00697a !important;
+}
+
+div.pesquisaPaginaSelecionada {
+    background-color: #00697a !important;
+}
+
+div.pesquisaPaginas a:hover {
+    border: 1px solid #00697a !important;
+}
+
+legend.infraLegend, table.infraTable thead tr, table.infraTable tr > th.infraTh {
+    color: #ECF0F1;
+    background: #00697a;
+}
+
+label.infraLabelTitulo {
+    background: #00b0cc;
+}
+
+div.infraTooltipTitulo {
+    color: white;
+    background-color: #00697a;
+}
+
+.infraCheckboxDiv input:checked + label::before, .infraRadioDiv > input:checked + label {
+    background: #00b0cc;
+    border-color: #00b0cc;
+}
+
+div.infraCalendario .topBar, div.infraCalendario .bottomBar, div.infraCalendario .activeDay {
+    background-color: #00697a;
+}
+
+button:focus {
+    outline: 1px solid #00697a;
+}
+
+.infraLabelInputFile:hover {
+    color: white;
+    background-color: #00b0cc;
+    border-color: #00697a;
+}

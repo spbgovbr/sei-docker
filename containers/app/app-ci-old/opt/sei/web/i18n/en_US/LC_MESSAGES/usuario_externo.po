@@ -1,0 +1,285 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-02-28 11:40-0300\n"
+"PO-Revision-Date: 2020-02-28 11:41-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: usuario_externo_formulario.php\n"
+
+#: usuario_externo_formulario.php:58
+msgid "Cadastro de Usuário Externo"
+msgstr "External User Form"
+
+#: usuario_externo_formulario.php:69
+msgid "Código de confirmação inválido."
+msgstr "Authentication Code invalid."
+
+#: usuario_externo_formulario.php:88
+msgid "Já existem "
+msgstr "Already exist "
+
+#: usuario_externo_formulario.php:88
+msgid " cadastros relacionados com este email."
+msgstr " registrations related to this email."
+
+#: usuario_externo_formulario.php:92
+msgid "Já existe cadastro pendente relacionado com este email."
+msgstr "A pending record related to this email already exists."
+
+#: usuario_externo_formulario.php:96
+msgid "Já existe usuário cadastrado com este email."
+msgstr "A registered user with this email already exists."
+
+#: usuario_externo_formulario.php:147
+msgid ""
+"IMPORTANTE: As instruções para ativar o seu cadastro foram encaminhadas para "
+"o seu e-mail."
+msgstr ""
+"IMPORTANT: The instructions for activating your registration have been "
+"forwarded to your email."
+
+#: usuario_externo_formulario.php:165
+msgid "Ação '"
+msgstr "Action '"
+
+#: usuario_externo_formulario.php:165
+msgid "' não reconhecida."
+msgstr "' not recognized."
+
+#: usuario_externo_formulario.php:317
+msgid "Informe o Nome do Representante."
+msgstr "Enter your Name."
+
+#: usuario_externo_formulario.php:323
+msgid "Informe o CPF."
+msgstr "Enter your CPF."
+
+#: usuario_externo_formulario.php:329
+msgid "CPF Inválido."
+msgstr "Invalid CPF."
+
+#: usuario_externo_formulario.php:335
+msgid "Informe o RG."
+msgstr "Enter your RG."
+
+#: usuario_externo_formulario.php:341
+msgid "Informe o Órgão Expedidor."
+msgstr "Enter Issuing Agency."
+
+#: usuario_externo_formulario.php:347
+msgid "Informe o Número do Passaporte."
+msgstr "Enter your Passaport Number."
+
+#: usuario_externo_formulario.php:352
+msgid "Selecione um País de Emissão."
+msgstr "Choose an Issuing Country."
+
+#: usuario_externo_formulario.php:358
+msgid "É necessário informar pelo menos um número de telefone."
+msgstr "You must enter at least one phone number."
+
+#: usuario_externo_formulario.php:364
+msgid "Informe o Endereço Residencial."
+msgstr "Enter your Home Adress."
+
+#: usuario_externo_formulario.php:370
+msgid "Selecione um País."
+msgstr "Choose a Country."
+
+#: usuario_externo_formulario.php:377
+msgid "Selecione um Estado."
+msgstr "Choose a State."
+
+#: usuario_externo_formulario.php:383
+msgid "Selecione uma Cidade."
+msgstr "Choose a City."
+
+#: usuario_externo_formulario.php:389
+msgid "Informe a Cidade."
+msgstr "Enter your City."
+
+#: usuario_externo_formulario.php:396
+msgid "Informe o CEP."
+msgstr "Enter your Postal Code."
+
+#: usuario_externo_formulario.php:402
+msgid "Informe o E-mail pessoal."
+msgstr "Enter your personal E-mail."
+
+#: usuario_externo_formulario.php:408
+msgid "E-mail pessoal Inválido."
+msgstr "Invalid E-mail."
+
+#: usuario_externo_formulario.php:414
+msgid "Informe a Senha."
+msgstr "Enter the Password."
+
+#: usuario_externo_formulario.php:420
+msgid "A Senha deve ter pelo menos "
+msgstr "Password must have at least "
+
+#: usuario_externo_formulario.php:420
+msgid " caracteres."
+msgstr " characters."
+
+#: usuario_externo_formulario.php:426
+msgid "Repita a Senha."
+msgstr "Repeat Password."
+
+#: usuario_externo_formulario.php:432
+msgid "Confirmação de Senha não confere."
+msgstr "Password Confirmation does not match."
+
+#: usuario_externo_formulario.php:438
+msgid "Informe o código de confirmação."
+msgstr "Enter Verification Code."
+
+#: usuario_externo_formulario.php:557
+msgid "Dados Cadastrais"
+msgstr "Registration Data"
+
+#: usuario_externo_formulario.php:560
+msgid "Nome do Representante:"
+msgstr "Name:"
+
+#: usuario_externo_formulario.php:565
+msgid "Estrangeiro"
+msgstr "Foreigner"
+
+#: usuario_externo_formulario.php:571
+msgid "Nome Social do Representante:"
+msgstr "Social Name (optional, gender identity - <a target=\"_blank\" href=\"http://www.planalto.gov.br/ccivil_03/_ato2015-2018/2016/decreto/D8727.htm\" style=\"font-size:1em\">Decree nº 8.727/2016</a>):"
+
+#: usuario_externo_formulario.php:574
+msgid "CPF:"
+msgstr "CPF:"
+
+#: usuario_externo_formulario.php:577
+msgid "RG:"
+msgstr "RG:"
+
+#: usuario_externo_formulario.php:580
+msgid "Órgão Expedidor:"
+msgstr "Issuing Authority:"
+
+#: usuario_externo_formulario.php:585
+msgid "Número do Passaporte:"
+msgstr "Passport Number:"
+
+#: usuario_externo_formulario.php:588
+msgid "País de Emissão:"
+msgstr "Issuing Country:"
+
+#: usuario_externo_formulario.php:595
+msgid "Telefone Comercial:"
+msgstr "Work Phone:"
+
+#: usuario_externo_formulario.php:598
+msgid "Telefone Celular:"
+msgstr "Cell Phone:"
+
+#: usuario_externo_formulario.php:601
+msgid "Telefone Residencial:"
+msgstr "Home Phone:"
+
+#: usuario_externo_formulario.php:606
+msgid "Endereço Residencial:"
+msgstr "Home Address:"
+
+#: usuario_externo_formulario.php:611
+msgid "Complemento:"
+msgstr "Address Complement:"
+
+#: usuario_externo_formulario.php:614
+msgid "Bairro:"
+msgstr "District:"
+
+#: usuario_externo_formulario.php:619
+msgid "País:"
+msgstr "Country:"
+
+#: usuario_externo_formulario.php:624
+msgid "Estado:"
+msgstr "State:"
+
+#: usuario_externo_formulario.php:630
+msgid "Cidade:"
+msgstr "City:"
+
+#: usuario_externo_formulario.php:636
+msgid "CEP:"
+msgstr "Postal Code:"
+
+#: usuario_externo_formulario.php:640
+msgid "Dados de Autenticação"
+msgstr "Authentication Data"
+
+#: usuario_externo_formulario.php:644
+msgid "E-mail pessoal:"
+msgstr "Personal E-mail:"
+
+#: usuario_externo_formulario.php:647
+msgid "Senha (no mínimo "
+msgstr "Password (at least "
+
+#: usuario_externo_formulario.php:647
+msgid " caracteres com letras e números):"
+msgstr " characters with letters and numbers):"
+
+#: usuario_externo_formulario.php:650
+msgid "Confirmar Senha:"
+msgstr "Confirm Password:"
+
+#: usuario_externo_formulario.php:653
+msgid "Digite o código da imagem ao lado considerando maiúsculas e minúsculas"
+msgstr "Enter the code of the image on the side considering upper and lower case"
+
+#: usuario_externo_formulario.php:654
+msgid "Não foi possível carregar a imagem de confirmação"
+msgstr "Could not load confirmation image"
+
+#: usuario_externo_formulario.php:657
+msgid "Enviar"
+msgstr "Submit"
+
+#: usuario_externo_formulario.php:658
+msgid "Voltar"
+msgstr "Back"
+
+#~ msgid "Sinalizador de usuário estrangeiro não informado."
+#~ msgstr "Foreigner user flag not informed."
+
+#~ msgid "Sinalizador de usuário estrangeiro inválido."
+#~ msgstr "Invalid foreigner user flag."
+
+#~ msgid "Número do Passaporte não informado."
+#~ msgstr "Passport Number not informed."
+
+#~ msgid "Número do Passaporte possui caracteres inválidos."
+#~ msgstr "Passport number has invalid characters."
+
+#~ msgid "País de Emissão não selecionado."
+#~ msgstr "Issuing Country not informed."
+
+#~ msgid "Número de CPF inválido."
+#~ msgstr "Invalid CPF."
+
+#~ msgid "RG não informado."
+#~ msgstr "RG not informed."
+
+#~ msgid "Órgão Expedidor não informado."
+#~ msgstr "Issuing Agency not informed."
+
+#~ msgid "Órgão Expedidor possui tamanho superior a 50 caracteres."
+#~ msgstr "Issuing Authority is over 50 characters long."
+
+#~ msgid "Erro cadastrando Usuário Externo."
+#~ msgstr "Error registering External User."

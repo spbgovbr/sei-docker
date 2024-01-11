@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2020-02-28 11:41-0300\n"
+"PO-Revision-Date: 2020-02-28 11:41-0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.3\n"
+"X-Poedit-Basepath: ../../..\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+"X-Poedit-SearchPath-0: documento_validacao_externa.php\n"
+
+#: documento_validacao_externa.php:40
+msgid "Conferência de Autenticidade de Documentos"
+msgstr "Conferencia de Autenticidad del Documento"
+
+#: documento_validacao_externa.php:52
+msgid "Código de confirmação inválido."
+msgstr "Código de confirmación inválido."
+
+#: documento_validacao_externa.php:73
+msgid "Documento não possui assinatura."
+msgstr "Documento sin firma."
+
+#: documento_validacao_externa.php:76
+msgid "Clique"
+msgstr "Clic"
+
+#: documento_validacao_externa.php:76 documento_validacao_externa.php:94
+msgid "aqui"
+msgstr "aquí"
+
+#: documento_validacao_externa.php:79
+msgid "para visualizar o documento."
+msgstr "para ver el documento."
+
+#: documento_validacao_externa.php:81
+msgid "para download do documento."
+msgstr "para descargar el documento."
+
+#: documento_validacao_externa.php:94
+msgid "Para validação da assinatura digital faça download do conteúdo clicando "
+msgstr "Para validación de la firma digital, descargar el contenido haciendo clic "
+
+#: documento_validacao_externa.php:97
+msgid "Tabela de Assinaturas"
+msgstr "Gráfico de firmas"
+
+#: documento_validacao_externa.php:98
+msgid "Lista de Assinaturas"
+msgstr "Lista de firmas"
+
+#: documento_validacao_externa.php:98
+msgid "registro"
+msgid_plural "registros"
+msgstr[0] "registro"
+msgstr[1] "registros"
+
+#: documento_validacao_externa.php:100
+msgid "Assinante"
+msgstr "Abonado"
+
+#: documento_validacao_externa.php:101
+msgid "Cargo/Função"
+msgstr "Puesto/Función"
+
+#: documento_validacao_externa.php:102
+msgid "Data/Hora"
+msgstr "Fecha/Hora"
+
+#: documento_validacao_externa.php:103
+msgid "Tipo"
+msgstr "Tipo"
+
+#: documento_validacao_externa.php:128
+msgid "Certificado Digital"
+msgstr "Certificado Digital"
+
+#: documento_validacao_externa.php:128
+msgid "Login/Senha"
+msgstr "Login/contraseña"
+
+#: documento_validacao_externa.php:132
+msgid "Download do arquivo PKCS #7 para validação da assinatura digital"
+msgstr "Descargar el archivo PKCS #7 para la validación de la firma digital"
+
+#: documento_validacao_externa.php:157
+msgid "Documento não encontrado."
+msgstr "Documento no encontrado."
+
+#: documento_validacao_externa.php:160
+msgid "Link para download inválido."
+msgstr "Link no válido para descargar."
+
+#: documento_validacao_externa.php:176
+msgid "Assinatura não encontrada."
+msgstr "No se encuentra la firma."
+
+#: documento_validacao_externa.php:208
+msgid "Documento não possui conteúdo."
+msgstr "Documento no tiene contenido."
+
+#: documento_validacao_externa.php:222
+#, php-format
+msgid "Ação '%s' não reconhecida."
+msgstr "Acción '%s' no reconocida."
+
+#: documento_validacao_externa.php:280
+msgid "Informe o Código Verificador."
+msgstr "Informe el Código Verificador."
+
+#: documento_validacao_externa.php:285
+msgid "Informe o Código CRC."
+msgstr "Informe el Código CRC."
+
+#: documento_validacao_externa.php:290
+msgid "Informe o Código de confirmação."
+msgstr "Informe el Código de confirmación."
+
+#: documento_validacao_externa.php:309
+msgid "Código Verificador"
+msgstr "Código de confirmación"
+
+#: documento_validacao_externa.php:312
+msgid "Código CRC"
+msgstr "Código CRC"
+
+#: documento_validacao_externa.php:315
+msgid "Não foi possível carregar a imagem de confirmação"
+msgstr "No se pudo cargar la imagen de confirmación"
+
+#: documento_validacao_externa.php:318
+msgid "Pesquisar"
+msgstr "Buscar"

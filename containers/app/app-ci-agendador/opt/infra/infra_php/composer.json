@@ -1,0 +1,8 @@
+{
+    "require": {
+        "sebastian/diff": "1.4.3",
+        "voku/anti-xss": "2.2.1",
+        "tuupola/base32": "^0.2.0",
+        "spomky-labs/otphp": "^10.0"
+    }
+}

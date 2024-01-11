@@ -1,0 +1,20 @@
+div.infraBarraProgresso {
+    float: left;
+    padding-top: 1em;
+}
+
+div.infraBarraProgressoRotulo {
+    text-align: left;
+    font-weight: normal;
+    font-size: 1.2em;
+    padding-bottom: .2em;
+}
+
+div.infraBarraProgressoBorda {
+    border: .1em solid #000000;
+}
+
+div.infraBarraProgressoMiolo {
+    float: left;
+}
+

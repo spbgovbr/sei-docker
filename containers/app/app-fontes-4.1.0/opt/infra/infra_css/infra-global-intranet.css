@@ -1,0 +1,407 @@
+* {
+    border: 0px;
+    font-family: Verdana, Arial, Helvetica, Sans-serif;
+    margin: 0 auto;
+}
+
+body {
+    font-size: 10px;
+}
+
+div.infraAreaGlobal {
+    clear: both;
+    margin-top: 5px;
+    width: 778px;
+}
+
+div.barraSuperior {
+    background-color: #449284;
+    height: 15px;
+}
+
+div.barraInferior {
+    clear: both;
+    background-color: #B2D078;
+    height: 15px;
+    text-align: center;
+    width: 778px;
+}
+
+div.areaEsquerda {
+    float: left;
+    margin-bottom: 2px;
+    margin-top: 1px;
+}
+
+div.logotipo {
+    float: left;
+    height: 66px;
+    width: 138px;
+}
+
+div.menuSuperior {
+    background-color: #449284;
+    clear: both;
+    float: left;
+    margin-bottom: 5px;
+    width: 138px;
+}
+
+div.menuMeio {
+    background-color: #B2D078;
+    clear: both;
+    float: left;
+    margin-top: 5px;
+    width: 138px;
+}
+
+div.menuInferior {
+    background-color: #DEDEDC;
+    clear: both;
+    color: #838383;
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    text-align: left;
+    width: 138px;
+}
+
+div.botoesZoom {
+    clear: both;
+    float: left;
+    margin-top: 0px;
+    margin-bottom: 3px;
+    text-align: right;
+    width: 138px;
+}
+
+div.areaAbas {
+    float: left;
+    margin-top: 1px;
+}
+
+b {
+    font-weight: bold;
+}
+
+strong {
+    font-weight: bold;
+}
+
+p {
+    padding: 2px 2px 8px 2px;
+}
+
+html {
+    overflow: -moz-scrollbars-vertical;
+    /*overflow: auto;*/
+}
+
+a:link, a:active, a:visited {
+    color: #000;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #999;
+}
+
+hr {
+    background-color: #F0F0F0;
+    color: #F0F0F0;
+    height: 1px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.formulario input, textarea, select {
+    border: 1px solid #000;
+    font-size: 1em;
+}
+
+form {
+    margin: 0px;
+}
+
+.infraTeclaAtalho {
+    text-decoration: underline;
+}
+
+.botao {
+    background: url("/intranet/imagens/fundo_botao.gif");
+    border: 1px solid #000;
+    font-size: 1em;
+}
+
+.tabela {
+    border-collapse: collapse;
+    font-size: 1em;
+}
+
+.tabela tr td {
+    border: 1px solid #B0B0B0;
+    padding: 2px;
+    margin: 0px;
+}
+
+.tabela th {
+    border: 1px solid #B0B0B0;
+    padding: 2px;
+    margin: 0px;
+    text-align: center;
+    color: #336699;
+    font-weight: bold;
+    background-color: #D4D4D4;
+}
+
+.formulario input.checkbox {
+    border: none;
+}
+
+i {
+    font-style: italic;
+}
+
+em {
+    font-style: italic;
+}
+
+blockquote {
+    margin-left: 20px;
+}
+
+div.areaResultadoAcompanhamento {
+    line-height: 150%;
+}
+
+.msg_erro {
+    color: red;
+    font-weight: bold;
+}
+
+div.infraAreaDados {
+    border: 1px solid #CDCDCD;
+    clear: both;
+    float: left;
+    margin-left: 1px;
+    overflow: auto;
+    position: relative;
+    text-align: left;
+    width: 484px;
+}
+
+h2.caixa {
+    color: #449284;
+    font-size: 1em;
+    font-weight: bold;
+    padding: 2px;
+    padding-left: 7px;
+}
+
+/*INÍCIO DOS AVISOS LATERAIS**********************************/
+div.colunaAvisos {
+    float: right;
+    width: 140px;
+
+}
+
+div.caixaAvisoVerdeEscuro {
+    background-color: #449284;
+    float: right;
+    margin-bottom: 4px;
+    width: 140px;
+}
+
+div.caixaAvisoVerdeClaro {
+    background-color: #B2D078;
+    float: right;
+    margin-bottom: 4px;
+    width: 140px;
+}
+
+div.textoAvisos {
+    color: #FFF;
+    font-size: 1em;
+    padding-left: 10px;
+    padding-top: 6px;
+}
+
+div.textoAvisos a:link,
+div.textoAvisos a:active,
+div.textoAvisos a:visited {
+    color: #FFF;
+    font-weight: normal;
+    text-decoration: none;
+}
+
+div.textoAvisos a:hover {
+    color: #DEDEDC;
+}
+
+/*FIM DOS AVISOS LATERAIS**********************************/
+
+/*MENU**********************************/
+div.infraMenu {
+    margin-top: 1em;
+    text-align: right;
+    width: 138px;
+}
+
+div.infraMenu a {
+    display: block;
+    padding: 1px;
+}
+
+div.infraMenu ul {
+    list-style: none;
+    padding: 0px;
+}
+
+div.infraMenu ul ul {
+    left: 138px;
+    position: absolute;
+    top: 0;
+    width: 136px;
+}
+
+div.infraMenu ul li {
+    padding: 1px 0px 1px 0px;
+    position: relative;
+    width: 136px;
+    z-index: 999;
+    font-weight: normal;
+}
+
+div.infraMenu ul ul,
+div.infraMenu ul li:hover ul ul,
+div.infraMenu ul ul li:hover ul ul,
+div.infraMenu ul ul ul li:hover ul ul,
+div.infraMenu ul ul ul ul li:hover ul ul {
+    display: none;
+}
+
+div.infraMenu ul li:hover ul,
+div.infraMenu ul ul li:hover ul,
+div.infraMenu ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul li:hover ul,
+div.infraMenu ul ul ul ul ul li:hover ul {
+    display: block;
+    margin-left: 0px;
+    text-align: left;
+}
+
+div.infraMenu a:link,
+div.infraMenu a:active,
+div.infraMenu a:visited {
+    color: #000;
+}
+
+div.infraMenu a:hover {
+    color: #000;
+}
+
+div.infraMenu ul ul li a:link,
+div.infraMenu ul ul li a:active,
+div.infraMenu ul ul li a:visited {
+    border: 1px solid #449284;
+    color: #000;
+    font-weight: normal;
+    padding: 2px 0px 2px 0px;
+}
+
+div.infraItemMenu {
+    display: table;
+    height: 1%;
+    overflow: hidden;
+    width: 95%;
+}
+
+div.infraRotuloMenu {
+    cursor: pointer;
+    float: left;
+    width: 87%;
+}
+
+div.infraSetaMenu {
+    float: right;
+    height: 0.7em;
+    width: 0.7em;
+}
+
+a.infraMenuRaiz div {
+    color: #FFF;
+    font-weight: bold;
+}
+
+a.infraMenuFilho {
+    border: 1px solid #449284;
+    background-color: #DEDEDE;
+}
+
+/*FIM DO MENU**********************************/
+
+h3 {
+    color: #000;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.iframeEditor {
+    border: 1px solid #000;
+}
+
+p.quebrapagina {
+    page-break-before: always;
+}
+
+div.infraBarraLocalizacao {
+    /*border-left:0.2em solid white;
+    border-top:0.2em solid white;*/
+}
+
+div.infraAreaDadosDinamica {
+    border: 1px solid #CDCDCD;
+    display: block;
+    float: left;
+    margin-left: 1px;
+    overflow: auto;
+    padding: 4px;
+    position: relative;
+    width: 484px;
+}
+
+div.infraBarraComandos {
+    clear: both;
+    text-align: right;
+}
+
+div.infraAreaTabela {
+    clear: both;
+    display: table;
+    overflow: auto;
+    width: 100%;
+}
+
+div {
+    margin: 0pt auto;
+}
+
+div, legend, caption {
+    text-align: left;
+}
+
+div.infraAreaPaginacao {
+    clear: both;
+    padding: 0.2em;
+    text-align: center;
+}
+
+img.infraImgNormal {
+    opacity: 1;
+    -moz-opacity: 1;
+}
+
+img.infraImgOpaca {
+    opacity: 0.3;
+    -moz-opacity: 0.3;
+}

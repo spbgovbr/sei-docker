@@ -238,28 +238,28 @@ fi
 
 echo "***************************************************"
 echo "***************************************************"
-echo "**CONFIGURANDO MODULO REST************************"
+echo "**CONFIGURANDO MODULO WSSUPER************************"
 echo "***************************************************"
 echo "***************************************************"
-if [ "$MODULO_REST_INSTALAR" == "true" ]; then
+if [ "$MODULO_WSSUPER_INSTALAR" == "true" ]; then
 
-    if [ -f /sei/controlador-instalacoes/instalado-modulo-rest.ok ]; then
+    if [ -f /sei/controlador-instalacoes/instalado-modulo-wssuper.ok ]; then
 
-        if [ -z "$MODULO_REST_VERSAO" ] || \
-           [ -z "$MODULO_REST_URL_NOTIFICACAO" ] || \
-	       [ -z "$MODULO_REST_ID_APP" ] || \
-	       [ -z "$MODULO_REST_CHAVE" ]; then
+        if [ -z "$MODULO_WSSUPER_VERSAO" ] || \
+           [ -z "$MODULO_WSSUPER_URL_NOTIFICACAO" ] || \
+	       [ -z "$MODULO_WSSUPER_ID_APP" ] || \
+	       [ -z "$MODULO_WSSUPER_CHAVE" ]; then
             echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_REST_VERSAO, MODULO_REST_URL_NOTIFICACAO, MODULO_REST_ID_APP, MODULO_REST_CHAVE"
+            echo "MODULO_WSSUPER_VERSAO, MODULO_WSSUPER_URL_NOTIFICACAO, MODULO_WSSUPER_ID_APP, MODULO_WSSUPER_CHAVE"
 
         else
 
-            echo "Verificando existencia do modulo rest"
+            echo "Verificando existencia do modulo wssuper"
             if [ -d "/opt/sei/web/modulos/mod-wssei" ]; then
                 echo "Ja existe um diretorio para o modulo wssei. Vamos assumir que o codigo la esteja integro"
 
             else
-                echo "Copiando o modulo rest"
+                echo "Copiando o modulo wssuper"
                 cp -Rf /sei-modulos/mod-wssei /opt/sei/web/modulos/
             fi
 
@@ -268,22 +268,22 @@ if [ "$MODULO_REST_INSTALAR" == "true" ]; then
             
             cd /opt/sei/config/mod-wssei/
             cp -f /opt/sei/web/modulos/mod-wssei/src/config/ConfiguracaoMdWSSEI.php .
-            sed -i "s#MOD_WSSEI_URL_SERVICO_NOTIFICACAO#MODULO_REST_URL_NOTIFICACAO#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_ID_APP#MODULO_REST_ID_APP#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_CHAVE_AUTORIZACAO#MODULO_REST_CHAVE#g" ConfiguracaoMdWSSEI.php
-            sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_REST_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_URL_SERVICO_NOTIFICACAO#MODULO_WSSUPER_URL_NOTIFICACAO#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_ID_APP#MODULO_WSSUPER_ID_APP#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_CHAVE_AUTORIZACAO#MODULO_WSSUPER_CHAVE#g" ConfiguracaoMdWSSEI.php
+            sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_WSSUPER_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
 
         fi
 
     else
 
-        echo "Arquivo de controle do Modulo REST encontrado pulando configuracao do modulo"
+        echo "Arquivo de controle do Modulo WSSUPER encontrado pulando configuracao do modulo"
 
     fi
 
 else
 
-    echo "Variavel MODULO_REST_INSTALAR nao setada para true, pulando configuracao..."
+    echo "Variavel MODULO_WSSUPER_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
 
@@ -730,134 +730,6 @@ else
     echo "Variavel MODULO_PETICIONAMENTO_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
-
-if [ "$MODULO_PI_INSTALAR" == "true" ]; then
-
-    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-pi.ok ]; then
-
-        if [ -z "$MODULO_PI_VERSAO" ] || \
-           [ -z "$MODULO_PI_URL" ] || \
-           [ -z "$MODULO_PI_USUARIO" ] || \
-           [ -z "$MODULO_PI_SENHA" ] || \
-           [ -z "$MODULO_PI_EMAIL" ]; then
-            echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_PI_VERSAO, MODULO_PI_URL, MODULO_PI_USUARIO, MODULO_PI_SENHA, MODULO_PI_EMAIL"
-
-        else
-
-            echo "Verificando existencia do modulo PEN"
-            if [ -d "/opt/sei/web/modulos/protocolo-integrado" ]; then
-                echo "Ja existe um diretorio para o modulo do PI. Vamos assumir que o codigo la esteja integro"
-
-            else
-
-                echo "Buildando o modulo PI"
-
-                cd /opt/sei/web/modulos
-                cp -R /sei-modulos/mod-sei-protocolo-integrado mod-sei-protocolo-integrado
-                cd mod-sei-protocolo-integrado
-                git checkout $MODULO_PI_VERSAO
-                echo "Versao do PI agora: $MODULO_PI_VERSAO"
-                make clean
-                make dist
-                cd dist
-                files=( *.zip )
-                f="${files[0]}"
-                mkdir temp
-                cp $f temp/
-                cd temp/
-                yes | unzip $f
-                \cp -Rf sei/* /opt/sei/
-                \cp -Rf sip/* /opt/sip/
-
-                cd /opt/sei/web/modulos
-                mv mod-sei-protocolo-integrado mod-sei-protocolo-integrado.old
-
-                cd /opt/sei/config/mod-protocolo-integrado/
-                echo -ne "y" | mv ./ConfiguracaoModProtocoloIntegrado.exemplo.php ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"WebService\" => \"\"#'WebService' => \"$MODULO_PI_URL\"#g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"UsuarioWebService\" => \"\"#'UsuarioWebService' => \"$MODULO_PI_USUARIO\"#g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"SenhaWebService\" => \"\"#'SenhaWebService' => \"$MODULO_PI_SENHA\"#g" ConfiguracaoModProtocoloIntegrado.php
-                sed -i "s#\"PublicarProcessosRestritos\" => false#'PublicarProcessosRestritos' => true#g" ConfiguracaoModProtocoloIntegrado.php
-
-            fi
-
-        fi
-
-    else
-
-        echo "Arquivo de controle do Modulo PI encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
-
-    fi
-
-else
-
-    echo "Variavel MODULO_PI_INSTALAR nao setada para true, pulando configuracao..."
-
-fi
-
-echo "***************************************************"
-echo "***************************************************"
-echo "********MODULO INCOM*******************************"
-echo "***************************************************"
-echo "***************************************************"
-
-if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
-
-    if [ ! -f /sei/controlador-instalacoes/instalado-modulo-incom.ok ]; then
-
-        if [ -z "$MODULO_INCOM_VERSAO" ]; then
-            echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_INCOM_VERSAO"
-
-        else
-
-            echo "Verificando existencia do modulo INCM"
-            if [ -d "/opt/sei/web/modulos/incom" ]; then
-                echo "Ja existe um diretorio para o modulo INCOM. Vamos assumir que o codigo la esteja integro"
-
-            else
-
-                echo "Buildando o modulo INCOM"
-
-                cd /opt/sei/web/modulos
-                cp -R /sei-modulos/mod-sei-incom mod-sei-incom
-                cd mod-sei-incom
-                git checkout $MODULO_INCOM_VERSAO
-                echo "Versao do INCOM agora: $MODULO_INCOM_VERSAO"
-                make clean
-                make dist
-                cd dist
-                files=( *.zip )
-                f="${files[0]}"
-                mkdir temp
-                cp $f temp/
-                cd temp/
-                yes | unzip $f
-                \cp -Rf sei/* /opt/sei/
-                \cp -Rf sip/* /opt/sip/
-
-                cd /opt/sei/web/modulos
-                mv mod-sei-incom mod-sei-incom.old
-
-                cd /opt/sei/config/mod-incom/
-
-            fi
-
-        fi
-
-    else
-
-        echo "Arquivo de controle do Modulo INCOM encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
-
-    fi
-
-else
-
-    echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
-
-fi
-
 
 echo "Atualizador finalizado procedendo com a subida dos agendamentos..."
 

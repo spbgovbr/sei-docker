@@ -1,0 +1,15 @@
+{
+    "dependencies": {
+        "axios": "^0.21",
+        "bootstrap": "^4.3.1",
+        "bootstrap-select": "^1.13.12",
+        "imask": "^5.2.1",
+        "jquery": "^3",
+        "lodash": "^4.17.13",
+        "moment": "^2.24.0",
+        "moment-timezone": "^0.5.27",
+        "prismjs": "^1.17.1",
+        "tempusdominus-bootstrap-4": "^5.1.2",
+        "vue": "^2.6.10"
+    }
+}

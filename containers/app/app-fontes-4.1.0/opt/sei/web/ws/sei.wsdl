@@ -1,0 +1,2847 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions
+    name="SeiWS"
+    targetNamespace="Sei"
+    xmlns="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+    xmlns:xmime="http://www.w3.org/2005/05/xmlmime"
+    xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="Sei">
+
+  <wsdl:types>
+    <xsd:schema targetNamespace="Sei">
+
+      <xsd:import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+
+      <xsd:complexType name="Feriado">
+        <xsd:all>
+          <xsd:element name="Data" type="xsd:string"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfFeriado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Feriado[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Remetente">
+        <xsd:all>
+          <xsd:element name="IdContato" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cpf" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cnpj" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Nome" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Interessado">
+        <xsd:all>
+          <xsd:element name="IdContato" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cpf" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cnpj" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Nome" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfInteressado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Interessado[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Destinatario">
+        <xsd:all>
+          <xsd:element name="IdContato" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cpf" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cnpj" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Sigla" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Nome" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDestinatario">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Destinatario[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Assunto">
+        <xsd:all>
+          <xsd:element name="CodigoEstruturado" type="xsd:string"/>
+          <xsd:element name="Descricao" nillable="true" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAssunto">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Assunto[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Unidade">
+        <xsd:all>
+          <xsd:element name="IdUnidade" type="xsd:string"/>
+          <xsd:element name="Sigla" type="xsd:string"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="SinProtocolo" type="xsd:string" minOccurs="0" />
+          <xsd:element name="SinArquivamento" type="xsd:string" minOccurs="0" />
+          <xsd:element name="SinOuvidoria" type="xsd:string" minOccurs="0" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUnidade">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Unidade[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Usuario">
+        <xsd:all>
+          <xsd:element name="IdUsuario" type="xsd:string"/>
+          <xsd:element name="Sigla" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUsuario">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Usuario[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="TipoProcedimento">
+        <xsd:all>
+          <xsd:element name="IdTipoProcedimento" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfTipoProcedimento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:TipoProcedimento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="TipoPrioridade">
+        <xsd:all>
+          <xsd:element name="IdTipoPrioridade" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfTipoPrioridade">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:TipoPrioridade[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Serie">
+        <xsd:all>
+          <xsd:element name="IdSerie" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Aplicabilidade" type="xsd:string" minOccurs="0"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfSerie">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Serie[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Observacao">
+        <xsd:all>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="Unidade" type="tns:Unidade"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfObservacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Observacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="AtributoAndamento">
+        <xsd:all>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Valor" type="xsd:string"/>
+          <xsd:element name="IdOrigem" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAtributoAndamento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:AtributoAndamento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Andamento">
+        <xsd:all>
+          <xsd:element name="IdAndamento" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="IdTarefa" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="IdTarefaModulo" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="DataHora" type="xsd:string"/>
+          <xsd:element name="Unidade" type="tns:Unidade"/>
+          <xsd:element name="Usuario" type="tns:Usuario"/>
+          <xsd:element name="Atributos" type="tns:ArrayOfAtributoAndamento" minOccurs="0"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAndamento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Andamento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="DefinicaoMarcador">
+        <xsd:all>
+          <xsd:element name="ProtocoloProcedimento" type="xsd:string"/>
+          <xsd:element name="IdMarcador" type="xsd:string"/>
+          <xsd:element name="Texto" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDefinicaoMarcador">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:DefinicaoMarcador[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="DefinicaoControlePrazo">
+        <xsd:all>
+          <xsd:element name="ProtocoloProcedimento" type="xsd:string"/>
+          <xsd:element name="DataPrazo" type="xsd:string"/>
+          <xsd:element name="Dias" type="xsd:string"/>
+          <xsd:element name="SinDiasUteis" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDefinicaoControlePrazo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:DefinicaoControlePrazo[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Anotacao">
+        <xsd:all>
+          <xsd:element name="ProtocoloProcedimento" type="xsd:string"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="SinPrioridade" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAnotacao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Anotacao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="UnidadeProcedimentoAberto">
+        <xsd:all>
+          <xsd:element name="Unidade" type="tns:Unidade"/>
+          <xsd:element name="UsuarioAtribuicao" type="tns:Usuario"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfUnidadeProcedimentoAberto">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:UnidadeProcedimentoAberto[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ProcedimentoResumido">
+        <xsd:all>
+          <xsd:element name="IdProcedimento" type="xsd:string"/>
+          <xsd:element name="ProcedimentoFormatado" type="xsd:string"/>
+          <xsd:element name="TipoProcedimento" type="tns:TipoProcedimento"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProcedimentoResumido">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ProcedimentoResumido[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Assinatura">
+        <xsd:all>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="CargoFuncao" type="xsd:string"/>
+          <xsd:element name="DataHora" type="xsd:string"/>
+          <xsd:element name="IdUsuario" type="xsd:string"/>
+          <xsd:element name="IdOrigem" type="xsd:string"/>
+          <xsd:element name="IdOrgao" type="xsd:string"/>
+          <xsd:element name="Sigla" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAssinatura">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Assinatura[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Campo">
+        <xsd:all>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Valor" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfCampo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Campo[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Bloco">
+        <xsd:all>
+          <xsd:element name="IdBloco" type="xsd:string"/>
+          <xsd:element name="Unidade" type="tns:Unidade"/>
+          <xsd:element name="Usuario" type="tns:Usuario"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="Tipo" type="xsd:string"/>
+          <xsd:element name="Estado" type="xsd:string"/>
+          <xsd:element name="SinPrioridade" />
+          <xsd:element name="SinRevisao" />
+          <xsd:element name="UsuarioAtribuicao" />
+          <xsd:element name="UnidadesDisponibilizacao" type="tns:ArrayOfUnidade"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfBloco">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Bloco[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="SecaoDocumento">
+        <xsd:all>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Conteudo" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfSecaoDocumento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:SecaoDocumento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="PublicacaoImprensaNacional">
+        <xsd:all>
+          <xsd:element name="IdVeiculo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SiglaVeiculo" type="xsd:string"  minOccurs="0" nillable="true" />
+          <xsd:element name="DescricaoVeiculo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Pagina" type="xsd:string"/>
+          <xsd:element name="IdSecao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Secao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Data" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Publicacao">
+        <xsd:all>
+          <xsd:element name="IdPublicacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdDocumento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="StaMotivo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Resumo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdVeiculoPublicacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NomeVeiculo" type="xsd:string"/>
+          <xsd:element name="StaTipoVeiculo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Numero" type="xsd:string"/>
+          <xsd:element name="DataDisponibilizacao" type="xsd:string"/>
+          <xsd:element name="DataPublicacao" type="xsd:string"/>
+          <xsd:element name="Estado" type="xsd:string"/>
+          <xsd:element name="ImprensaNacional" type="tns:PublicacaoImprensaNacional"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoConsultaPublicacao">
+        <xsd:all>
+          <xsd:element name="Publicacao" type="tns:Publicacao"/>
+          <xsd:element name="Andamento" type="tns:Andamento"/>
+          <xsd:element name="Assinaturas" type="tns:ArrayOfAssinatura"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoInclusaoDocumento">
+        <xsd:all>
+          <xsd:element name="IdDocumento" type="xsd:string"/>
+          <xsd:element name="DocumentoFormatado" type="xsd:string"/>
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoEnvioEmail">
+        <xsd:all>
+          <xsd:element name="IdDocumento" type="xsd:string"/>
+          <xsd:element name="DocumentoFormatado" type="xsd:string"/>
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfRetornoInclusaoDocumento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:RetornoInclusaoDocumento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoGeracaoProcedimento">
+        <xsd:all>
+          <xsd:element name="IdProcedimento" type="xsd:string"/>
+          <xsd:element name="ProcedimentoFormatado" type="xsd:string"/>
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+          <xsd:element name="RetornoInclusaoDocumentos" type="tns:ArrayOfRetornoInclusaoDocumento"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoConsultaDocumento">
+        <xsd:all>
+          <xsd:element name="IdProcedimento" type="xsd:string"/>
+          <xsd:element name="ProcedimentoFormatado" type="xsd:string"/>
+          <xsd:element name="IdDocumento" type="xsd:string"/>
+          <xsd:element name="DocumentoFormatado" type="xsd:string"/>
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+          <xsd:element name="NivelAcessoLocal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NivelAcessoGlobal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Serie" type="tns:Serie"/>
+          <xsd:element name="Numero" type="xsd:string"/>
+          <xsd:element name="NomeArvore" type="xsd:string"/>
+          <xsd:element name="DinValor" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="Data" type="xsd:string"/>
+          <xsd:element name="UnidadeElaboradora" type="tns:Unidade"/>
+          <xsd:element name="AndamentoGeracao" type="tns:Andamento"/>
+          <xsd:element name="Assinaturas" type="tns:ArrayOfAssinatura"/>
+          <xsd:element name="Publicacao" type="tns:Publicacao"/>
+          <xsd:element name="Campos" type="tns:ArrayOfCampo"/>
+          <xsd:element name="Blocos" type="tns:ArrayOfBloco" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Procedimento">
+        <xsd:all>
+          <xsd:element name="IdTipoProcedimento" type="xsd:string"/>
+          <xsd:element name="NumeroProtocolo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="DataAutuacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Especificacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Assuntos" type="tns:ArrayOfAssunto"/>
+          <xsd:element name="Interessados" type="tns:ArrayOfInteressado"/>
+          <xsd:element name="Observacao" type="xsd:string" nillable="true" />
+          <xsd:element name="NivelAcesso" type="xsd:string" nillable="true" />
+          <xsd:element name="IdHipoteseLegal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdTipoPrioridade" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="Documento">
+        <xsd:all>
+          <xsd:element name="Tipo" type="xsd:string"/>
+          <xsd:element name="IdProcedimento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ProtocoloProcedimento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdSerie" type="xsd:string"/>
+          <xsd:element name="Numero" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NomeArvore" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="DinValor" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Data" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Descricao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdTipoConferencia" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinArquivamento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Remetente" type="tns:Remetente" minOccurs="0" nillable="true" />
+          <xsd:element name="Interessados" type="tns:ArrayOfInteressado" minOccurs="0" />
+          <xsd:element name="Destinatarios" type="tns:ArrayOfDestinatario" minOccurs="0" />
+          <xsd:element name="Observacao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NomeArquivo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NivelAcesso" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdHipoteseLegal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Conteudo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ConteudoSecoes" type="tns:ArrayOfSecaoDocumento" minOccurs="0" nillable="true" />
+          <xsd:element name="ConteudoMTOM" type="xsd:base64Binary" xmime:expectedContentTypes="application/octet-stream" minOccurs="0" nillable="true" />
+          <xsd:element name="IdArquivo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Campos" type="tns:ArrayOfCampo" minOccurs="0" />
+          <xsd:element name="SinBloqueado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdItemEtapa" type="xsd:string" minOccurs="0" nillable="true" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDocumento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Documento[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoConsultaProcedimento">
+        <xsd:all>
+          <xsd:element name="IdProcedimento" type="xsd:string"/>
+          <xsd:element name="ProcedimentoFormatado" type="xsd:string"/>
+          <xsd:element name="Especificacao" type="xsd:string"/>
+          <xsd:element name="DataAutuacao" type="xsd:string"/>
+          <xsd:element name="LinkAcesso" type="xsd:string"/>
+          <xsd:element name="NivelAcessoLocal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NivelAcessoGlobal" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="TipoProcedimento" type="tns:TipoProcedimento"/>
+          <xsd:element name="AndamentoGeracao" type="tns:Andamento"/>
+          <xsd:element name="AndamentoConclusao" type="tns:Andamento"/>
+          <xsd:element name="UltimoAndamento" type="tns:Andamento"/>
+          <xsd:element name="UnidadesProcedimentoAberto" type="tns:ArrayOfUnidadeProcedimentoAberto"/>
+          <xsd:element name="Assuntos" type="tns:ArrayOfAssunto"/>
+          <xsd:element name="Interessados" type="tns:ArrayOfInteressado"/>
+          <xsd:element name="Observacoes" type="tns:ArrayOfObservacao"/>
+          <xsd:element name="ProcedimentosRelacionados" type="tns:ArrayOfProcedimentoResumido"/>
+          <xsd:element name="ProcedimentosAnexados" type="tns:ArrayOfProcedimentoResumido"/>
+          <xsd:element name="TipoPrioridade" type="tns:TipoPrioridade" />
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProcedimento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProcedimentoRelacionado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdDocumento">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdUnidade">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfDocumentoFormatado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArquivoExtensao">
+        <xsd:all>
+          <xsd:element name="IdArquivoExtensao" type="xsd:string"/>
+          <xsd:element name="Extensao" type="xsd:string"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfArquivoExtensao">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ArquivoExtensao[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ProtocoloBloco">
+        <xsd:all>
+          <xsd:element name="ProtocoloFormatado" type="xsd:string"/>
+          <xsd:element name="Identificacao" type="xsd:string"/>
+          <xsd:element name="Assinaturas" type="tns:ArrayOfAssinatura"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfProtocoloBloco">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:ProtocoloBloco[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="RetornoConsultaBloco">
+        <xsd:all>
+          <xsd:element name="IdBloco" type="xsd:string"/>
+          <xsd:element name="Unidade" type="tns:Unidade"/>
+          <xsd:element name="Usuario" type="tns:Usuario"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+          <xsd:element name="Tipo" type="xsd:string"/>
+          <xsd:element name="Estado" type="xsd:string"/>
+          <xsd:element name="SinPrioridade" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinRevisao" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="UsuarioAtribuicao" type="tns:Usuario" minOccurs="0" nillable="true" />
+          <xsd:element name="UnidadesDisponibilizacao" type="tns:ArrayOfUnidade"/>
+          <xsd:element name="Protocolos" type="tns:ArrayOfProtocoloBloco"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="HipoteseLegal">
+        <xsd:all>
+          <xsd:element name="IdHipoteseLegal" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="BaseLegal" type="xsd:string"/>
+          <xsd:element name="NivelAcesso" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfHipoteseLegal">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:HipoteseLegal[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="TipoConferencia">
+        <xsd:all>
+          <xsd:element name="IdTipoConferencia" type="xsd:string"/>
+          <xsd:element name="Descricao" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfTipoConferencia">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:TipoConferencia[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Pais">
+        <xsd:all>
+          <xsd:element name="IdPais" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfPais">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Pais[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Estado">
+        <xsd:all>
+          <xsd:element name="IdEstado" type="xsd:string"/>
+          <xsd:element name="IdPais" type="xsd:string"/>
+          <xsd:element name="Sigla" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="CodigoIbge" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfEstado">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Estado[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Cidade">
+        <xsd:all>
+          <xsd:element name="IdCidade" type="xsd:string"/>
+          <xsd:element name="IdEstado" type="xsd:string"/>
+          <xsd:element name="IdPais" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="CodigoIbge" type="xsd:string"/>
+          <xsd:element name="SinCapital" type="xsd:string"/>
+          <xsd:element name="Latitude" type="xsd:string"/>
+          <xsd:element name="Longitude" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfCidade">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Cidade[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Cargo">
+        <xsd:all>
+          <xsd:element name="IdCargo" type="xsd:string"/>
+          <xsd:element name="ExpressaoCargo" type="xsd:string"/>
+          <xsd:element name="ExpressaoTratamento" type="xsd:string"/>
+          <xsd:element name="ExpressaoVocativo" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfCargo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Cargo[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Contato">
+        <xsd:all>
+          <xsd:element name="StaOperacao" type="xsd:string" minOccurs="0" />
+          <xsd:element name="IdContato" type="xsd:string"/>
+          <xsd:element name="IdTipoContato" type="xsd:string"/>
+          <xsd:element name="NomeTipoContato" type="xsd:string" minOccurs="0" />
+          <xsd:element name="Sigla" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="NomeSocial" type="xsd:string" minOccurs="0" nillable="true"/>
+          <xsd:element name="StaNatureza" type="xsd:string"/>
+          <xsd:element name="IdContatoAssociado" type="xsd:string" nillable="true" />
+          <xsd:element name="NomeContatoAssociado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="SinEnderecoAssociado" type="xsd:string" />
+          <xsd:element name="CnpjAssociado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Endereco" type="xsd:string"/>
+          <xsd:element name="Complemento" type="xsd:string"/>
+          <xsd:element name="Bairro" type="xsd:string"/>
+          <xsd:element name="IdCidade" type="xsd:string" nillable="true" />
+          <xsd:element name="NomeCidade" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdEstado" type="xsd:string" nillable="true" />
+          <xsd:element name="SiglaEstado" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdPais" type="xsd:string" nillable="true" />
+          <xsd:element name="NomePais" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cep" type="xsd:string"/>
+          <xsd:element name="StaGenero" type="xsd:string"/>
+          <xsd:element name="IdCargo" type="xsd:string" nillable="true" />
+          <xsd:element name="ExpressaoCargo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ExpressaoTratamento" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="ExpressaoVocativo" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Cpf" type="xsd:string"/>
+          <xsd:element name="Cnpj" type="xsd:string"/>
+          <xsd:element name="Rg" type="xsd:string"/>
+          <xsd:element name="OrgaoExpedidor" type="xsd:string"/>
+          <xsd:element name="NumeroPassaporte" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="IdPaisPassaporte" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="NomePaisPassaporte" type="xsd:string" minOccurs="0" nillable="true" />
+          <xsd:element name="Matricula" type="xsd:string"/>
+          <xsd:element name="MatriculaOab" type="xsd:string"/>
+          <xsd:element name="TelefoneComercial" type="xsd:string"/>
+          <xsd:element name="TelefoneResidencial" type="xsd:string"/>
+          <xsd:element name="TelefoneCelular" type="xsd:string"/>
+          <xsd:element name="DataNascimento" type="xsd:string"/>
+          <xsd:element name="Email" type="xsd:string"/>
+          <xsd:element name="SitioInternet" type="xsd:string"/>
+          <xsd:element name="Observacao" type="xsd:string"/>
+          <xsd:element name="Conjuge" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="Funcao" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="IdTitulo" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="ExpressaoTitulo" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="AbreviaturaTitulo" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="SinAtivo" type="xsd:string"/>
+          <xsd:element name="IdCategoria" type="xsd:string"  minOccurs="0" nillable="true"/>
+          <xsd:element name="IdNomeCategoria" type="xsd:string"  minOccurs="0" nillable="true"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfContato">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Contato[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="Marcador">
+        <xsd:all>
+          <xsd:element name="IdMarcador" type="xsd:string"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Icone" type="xsd:string"/>
+          <xsd:element name="SinAtivo" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfMarcador">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:Marcador[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="AndamentoMarcador">
+        <xsd:all>
+          <xsd:element name="IdAndamentoMarcador" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Texto" type="xsd:string"/>
+          <xsd:element name="DataHora" type="xsd:string"/>
+          <xsd:element name="Usuario" type="tns:Usuario"/>
+          <xsd:element name="Marcador" type="tns:Marcador"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAndamentoMarcador">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:AndamentoMarcador[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdAndamentos">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdTarefas">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdTarefasModulo">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdMarcadores">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfIdContatos">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="xsd:string[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+      <xsd:complexType name="AtributoOuvidoria">
+        <xsd:all>
+          <xsd:element name="Id" type="xsd:string" minOccurs="0"/>
+          <xsd:element name="Nome" type="xsd:string"/>
+          <xsd:element name="Titulo" type="xsd:string"/>
+          <xsd:element name="Valor" type="xsd:string"/>
+        </xsd:all>
+      </xsd:complexType>
+
+      <xsd:complexType name="ArrayOfAtributoOuvidoria">
+        <xsd:complexContent>
+          <xsd:restriction base="SOAP-ENC:Array">
+            <xsd:attribute ref="SOAP-ENC:arrayType" wsdl:arrayType="tns:AtributoOuvidoria[]" />
+          </xsd:restriction>
+        </xsd:complexContent>
+      </xsd:complexType>
+
+
+    </xsd:schema>
+  </wsdl:types>
+
+  <wsdl:message name="gerarProcedimentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Procedimento" type="tns:Procedimento"/>
+    <wsdl:part name="Documentos" type="tns:ArrayOfDocumento"/>
+    <wsdl:part name="ProcedimentosRelacionados" type="tns:ArrayOfProcedimentoRelacionado"/>
+    <wsdl:part name="UnidadesEnvio" type="tns:ArrayOfIdUnidade"/>
+    <wsdl:part name="SinManterAbertoUnidade" type="xsd:string"/>
+    <wsdl:part name="SinEnviarEmailNotificacao" type="xsd:string"/>
+    <wsdl:part name="DataRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="DiasRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="SinDiasUteisRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="IdMarcador" type="xsd:string"/>
+    <wsdl:part name="TextoMarcador" type="xsd:string"/>
+    <wsdl:part name="DataControlePrazo" type="xsd:string"/>
+    <wsdl:part name="DiasControlePrazo" type="xsd:string"/>
+    <wsdl:part name="SinDiasUteisControlePrazo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="gerarProcedimentoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoGeracaoProcedimento"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirDocumentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Documento" type="tns:Documento"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirDocumentoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoInclusaoDocumento"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarUnidadesRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string"/>
+    <wsdl:part name="IdSerie" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarUnidadesResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfUnidade"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdSerie" type="xsd:string"/>
+    <wsdl:part name="SinIndividual" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfTipoProcedimento"/>
+  </wsdl:message>
+
+
+  <wsdl:message name="listarTiposPrioridadeRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposPrioridadeResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfTipoPrioridade"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarSeriesRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarSeriesResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfSerie"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarContatosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdTipoContato" type="xsd:string"/>
+    <wsdl:part name="PaginaRegistros" type="xsd:string"/>
+    <wsdl:part name="PaginaAtual" type="xsd:string"/>
+    <wsdl:part name="Sigla" type="xsd:string"/>
+    <wsdl:part name="Nome" type="xsd:string"/>
+    <wsdl:part name="Cpf" type="xsd:string"/>
+    <wsdl:part name="Cnpj" type="xsd:string"/>
+    <wsdl:part name="Matricula" type="xsd:string"/>
+    <wsdl:part name="IdContatos" type="tns:ArrayOfIdContatos"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarContatosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfContato"/>
+  </wsdl:message>
+
+  <wsdl:message name="atualizarContatosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Contatos" type="tns:ArrayOfContato"/>
+  </wsdl:message>
+
+  <wsdl:message name="atualizarContatosResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarProcedimentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAssuntos" type="xsd:string"/>
+    <wsdl:part name="SinRetornarInteressados" type="xsd:string"/>
+    <wsdl:part name="SinRetornarObservacoes" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAndamentoGeracao" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAndamentoConclusao" type="xsd:string"/>
+    <wsdl:part name="SinRetornarUltimoAndamento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarUnidadesProcedimentoAberto" type="xsd:string"/>
+    <wsdl:part name="SinRetornarProcedimentosRelacionados" type="xsd:string"/>
+    <wsdl:part name="SinRetornarProcedimentosAnexados" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarProcedimentoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoConsultaProcedimento"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarProcedimentoIndividualRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdOrgaoProcedimento" type="xsd:string"/>
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string"/>
+    <wsdl:part name="IdOrgaoUsuario" type="xsd:string"/>
+    <wsdl:part name="SiglaUsuario" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarProcedimentoIndividualResponse">
+    <wsdl:part name="parametros" type="tns:ProcedimentoResumido"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarDocumentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAndamentoGeracao" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAssinaturas" type="xsd:string"/>
+    <wsdl:part name="SinRetornarPublicacao" type="xsd:string"/>
+    <wsdl:part name="SinRetornarCampos" type="xsd:string"/>
+    <wsdl:part name="SinRetornarBlocos" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarDocumentoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoConsultaDocumento"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarDocumentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="Motivo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarDocumentoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="bloquearDocumentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="bloquearDocumentoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="gerarBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Tipo" type="xsd:string"/>
+    <wsdl:part name="Descricao" type="xsd:string"/>
+    <wsdl:part name="UnidadesDisponibilizacao" type="tns:ArrayOfIdUnidade"/>
+    <wsdl:part name="Documentos" type="tns:ArrayOfDocumentoFormatado"/>
+    <wsdl:part name="SinDisponibilizar" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="gerarBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+    <wsdl:part name="SinRetornarProtocolos" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarBlocoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoConsultaBloco"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirDocumentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="excluirDocumentoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="disponibilizarBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="disponibilizarBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarDisponibilizacaoBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarDisponibilizacaoBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="concluirBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="concluirBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="reabrirBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="reabrirBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="devolverBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="devolverBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirDocumentoBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="Anotacao" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirDocumentoBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="retirarDocumentoBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="retirarDocumentoBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirProcessoBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="Anotacao" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="incluirProcessoBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="retirarProcessoBlocoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdBloco" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="retirarProcessoBlocoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="reabrirProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="reabrirProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="concluirProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="concluirProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarExtensoesPermitidasRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdArquivoExtensao" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarExtensoesPermitidasResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfArquivoExtensao"/>
+  </wsdl:message>
+
+  <wsdl:message name="enviarProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="UnidadesDestino" type="tns:ArrayOfIdUnidade"/>
+    <wsdl:part name="SinManterAbertoUnidade" type="xsd:string"/>
+    <wsdl:part name="SinRemoverAnotacao" type="xsd:string"/>
+    <wsdl:part name="SinEnviarEmailNotificacao" type="xsd:string"/>
+    <wsdl:part name="DataRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="DiasRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="SinDiasUteisRetornoProgramado" type="xsd:string"/>
+    <wsdl:part name="SinReabrir" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="enviarProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarUsuariosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdUsuario" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarUsuariosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfUsuario"/>
+  </wsdl:message>
+
+  <wsdl:message name="atribuirProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="IdUsuario" type="xsd:string"/>
+    <wsdl:part name="SinReabrir" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="atribuirProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarHipotesesLegaisRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="NivelAcesso" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarHipotesesLegaisResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfHipoteseLegal"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposConferenciaRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposConferenciaResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfTipoConferencia"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarPaisesRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarPaisesResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfPais"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarEstadosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdPais" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarEstadosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfEstado"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarCidadesRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdPais" type="xsd:string"/>
+    <wsdl:part name="IdEstado" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarCidadesResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfCidade"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoOuvidoriaRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarTiposProcedimentoOuvidoriaResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfTipoProcedimento"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarCargosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdCargo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarCargosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfCargo"/>
+  </wsdl:message>
+
+  <wsdl:message name="adicionarArquivoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Nome" type="xsd:string"/>
+    <wsdl:part name="Tamanho" type="xsd:string"/>
+    <wsdl:part name="Hash" type="xsd:string"/>
+    <wsdl:part name="Conteudo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="adicionarArquivoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="adicionarConteudoArquivoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdArquivo" type="xsd:string"/>
+    <wsdl:part name="Conteudo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="adicionarConteudoArquivoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="lancarAndamentoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="IdTarefa" type="xsd:string"/>
+    <wsdl:part name="IdTarefaModulo" type="xsd:string"/>
+    <wsdl:part name="Atributos" type="tns:ArrayOfAtributoAndamento"/>
+  </wsdl:message>
+
+  <wsdl:message name="lancarAndamentoResponse">
+    <wsdl:part name="parametros" type="tns:Andamento"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarAndamentosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAtributos" type="xsd:string"/>
+    <wsdl:part name="Andamentos" type="tns:ArrayOfIdAndamentos"/>
+    <wsdl:part name="Tarefas" type="tns:ArrayOfIdTarefas"/>
+    <wsdl:part name="TarefasModulos" type="tns:ArrayOfIdTarefasModulo"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarAndamentosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfAndamento"/>
+  </wsdl:message>
+
+  <wsdl:message name="bloquearProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="bloquearProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="desbloquearProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="desbloquearProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="relacionarProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento1" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento2" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="relacionarProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="removerRelacionamentoProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento1" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento2" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="removerRelacionamentoProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="sobrestarProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimentoVinculado" type="xsd:string"/>
+    <wsdl:part name="Motivo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="sobrestarProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="removerSobrestamentoProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="removerSobrestamentoProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="anexarProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimentoPrincipal" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimentoAnexado" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="anexarProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="desanexarProcessoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimentoPrincipal" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimentoAnexado" type="xsd:string"/>
+    <wsdl:part name="Motivo" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="desanexarProcessoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarMarcadoresUnidadeRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarMarcadoresUnidadeResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfMarcador"/>
+  </wsdl:message>
+
+  <wsdl:message name="definirMarcadorRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Definicoes" type="tns:ArrayOfDefinicaoMarcador"/>
+  </wsdl:message>
+
+  <wsdl:message name="definirMarcadorResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="definirControlePrazoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Definicoes" type="tns:ArrayOfDefinicaoControlePrazo"/>
+  </wsdl:message>
+
+  <wsdl:message name="definirControlePrazoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="concluirControlePrazoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocolosProcedimentos" type="tns:ArrayOfProcedimento" />
+  </wsdl:message>
+
+  <wsdl:message name="concluirControlePrazoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="removerControlePrazoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocolosProcedimentos" type="tns:ArrayOfProcedimento" />
+  </wsdl:message>
+
+  <wsdl:message name="removerControlePrazoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="registrarAnotacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="Anotacoes" type="tns:ArrayOfAnotacao"/>
+  </wsdl:message>
+
+  <wsdl:message name="registrarAnotacaoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarAndamentosMarcadoresRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="Marcadores" type="tns:ArrayOfIdMarcadores"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarAndamentosMarcadoresResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfAndamentoMarcador"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarPublicacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdPublicacao" type="xsd:string"/>
+    <wsdl:part name="IdDocumento" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAndamento" type="xsd:string"/>
+    <wsdl:part name="SinRetornarAssinaturas" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="consultarPublicacaoResponse">
+    <wsdl:part name="parametros" type="tns:RetornoConsultaPublicacao"/>
+  </wsdl:message>
+
+  <wsdl:message name="agendarPublicacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdDocumento" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="StaMotivo" type="xsd:string"/>
+    <wsdl:part name="IdVeiculoPublicacao" type="xsd:string"/>
+    <wsdl:part name="DataDisponibilizacao" type="xsd:string"/>
+    <wsdl:part name="Resumo" type="xsd:string"/>
+    <wsdl:part name="ImprensaNacional" type="tns:PublicacaoImprensaNacional"/>
+  </wsdl:message>
+
+  <wsdl:message name="agendarPublicacaoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="alterarPublicacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdPublicacao" type="xsd:string"/>
+    <wsdl:part name="IdDocumento" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+    <wsdl:part name="StaMotivo" type="xsd:string"/>
+    <wsdl:part name="IdVeiculoPublicacao" type="xsd:string"/>
+    <wsdl:part name="DataDisponibilizacao" type="xsd:string"/>
+    <wsdl:part name="Resumo" type="xsd:string"/>
+    <wsdl:part name="ImprensaNacional" type="tns:PublicacaoImprensaNacional"/>
+  </wsdl:message>
+
+  <wsdl:message name="alterarPublicacaoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarAgendamentoPublicacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdPublicacao" type="xsd:string"/>
+    <wsdl:part name="IdDocumento" type="xsd:string"/>
+    <wsdl:part name="ProtocoloDocumento" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="cancelarAgendamentoPublicacaoResponse">
+    <wsdl:part name="parametros" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarFeriadosRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="IdOrgao" type="xsd:string"/>
+    <wsdl:part name="DataInicial" type="xsd:string"/>
+    <wsdl:part name="DataFinal" type="xsd:string"/>
+  </wsdl:message>
+
+  <wsdl:message name="listarFeriadosResponse">
+    <wsdl:part name="parametros" type="tns:ArrayOfFeriado"/>
+  </wsdl:message>
+
+  <wsdl:message name="confirmarDisponibilizacaoPublicacaoRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdVeiculoPublicacao" type="xsd:string"/>
+    <wsdl:part name="DataDisponibilizacao" type="xsd:string"/>
+    <wsdl:part name="DataPublicacao" type="xsd:string"/>
+    <wsdl:part name="Numero" type="xsd:string"/>
+    <wsdl:part name="IdDocumentos" type="tns:ArrayOfIdDocumento"/>
+  </wsdl:message>
+
+  <wsdl:message name="confirmarDisponibilizacaoPublicacaoResponse">
+    <wsdl:part name="parametros" type="xsd:string" />
+  </wsdl:message>
+
+  <wsdl:message name="enviarEmailRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdUnidade" type="xsd:string"/>
+    <wsdl:part name="ProtocoloProcedimento" type="xsd:string"/>
+    <wsdl:part name="De" type="xsd:string"/>
+    <wsdl:part name="Para" type="xsd:string"/>
+    <wsdl:part name="CCO" type="xsd:string"/>
+    <wsdl:part name="Assunto" type="xsd:string"/>
+    <wsdl:part name="Mensagem" type="xsd:string"/>
+    <wsdl:part name="IdDocumentos" type="tns:ArrayOfIdDocumento"/>
+  </wsdl:message>
+
+  <wsdl:message name="enviarEmailResponse">
+    <wsdl:part name="parametros" type="tns:RetornoEnvioEmail"/>
+  </wsdl:message>
+
+  <wsdl:message name="registrarOuvidoriaRequest">
+    <wsdl:part name="SiglaSistema" type="xsd:string"/>
+    <wsdl:part name="IdentificacaoServico" type="xsd:string"/>
+    <wsdl:part name="IdOrgao" type="xsd:string" />
+    <wsdl:part name="Nome" type="xsd:string" />
+    <wsdl:part name="NomeSocial" type="xsd:string" />
+    <wsdl:part name="Email" type="xsd:string" />
+    <wsdl:part name="Cpf" type="xsd:string" />
+    <wsdl:part name="Rg" type="xsd:string" />
+    <wsdl:part name="OrgaoExpedidor" type="xsd:string" />
+    <wsdl:part name="Telefone" type="xsd:string" />
+    <wsdl:part name="IdEstado" type="xsd:string" />
+    <wsdl:part name="IdCidade" type="xsd:string" />
+    <wsdl:part name="IdTipoProcedimento" type="xsd:string" />
+    <wsdl:part name="Processos" type="xsd:string" />
+    <wsdl:part name="SinRetorno" type="xsd:string" />
+    <wsdl:part name="Mensagem" type="xsd:string" />
+    <wsdl:part name="AtributosAdicionais" type="tns:ArrayOfAtributoOuvidoria"/>
+  </wsdl:message>
+
+  <wsdl:message name="registrarOuvidoriaResponse">
+    <wsdl:part name="processo" type="tns:ProcedimentoResumido"/>
+  </wsdl:message>
+
+  <wsdl:portType name="SeiPortType">
+
+    <wsdl:operation name="gerarProcedimento">
+      <wsdl:documentation>Geracao de processos</wsdl:documentation>
+      <wsdl:input message="tns:gerarProcedimentoRequest"/>
+      <wsdl:output message="tns:gerarProcedimentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirDocumento">
+      <wsdl:documentation>Geracao de documentos</wsdl:documentation>
+      <wsdl:input message="tns:incluirDocumentoRequest"/>
+      <wsdl:output message="tns:incluirDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarUnidades">
+      <wsdl:documentation>Lista de unidades disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarUnidadesRequest"/>
+      <wsdl:output message="tns:listarUnidadesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimento">
+      <wsdl:documentation>Lista de tipos de processo disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarTiposProcedimentoRequest"/>
+      <wsdl:output message="tns:listarTiposProcedimentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposPrioridade">
+      <wsdl:documentation>Lista de tipos de prioridade disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarTiposPrioridadeRequest"/>
+      <wsdl:output message="tns:listarTiposPrioridadeResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarSeries">
+      <wsdl:documentation>Lista de series disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarSeriesRequest"/>
+      <wsdl:output message="tns:listarSeriesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarContatos">
+      <wsdl:documentation>Lista de contatos</wsdl:documentation>
+      <wsdl:input message="tns:listarContatosRequest"/>
+      <wsdl:output message="tns:listarContatosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="atualizarContatos">
+      <wsdl:documentation>Atualizacao de contatos</wsdl:documentation>
+      <wsdl:input message="tns:atualizarContatosRequest"/>
+      <wsdl:output message="tns:atualizarContatosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarProcedimento">
+      <wsdl:documentation>Consulta de processos</wsdl:documentation>
+      <wsdl:input message="tns:consultarProcedimentoRequest"/>
+      <wsdl:output message="tns:consultarProcedimentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarProcedimentoIndividual">
+      <wsdl:documentation>Consulta de processos individuais por usuario interessado</wsdl:documentation>
+      <wsdl:input message="tns:consultarProcedimentoIndividualRequest"/>
+      <wsdl:output message="tns:consultarProcedimentoIndividualResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarDocumento">
+      <wsdl:documentation>Consulta de documentos</wsdl:documentation>
+      <wsdl:input message="tns:consultarDocumentoRequest"/>
+      <wsdl:output message="tns:consultarDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarDocumento">
+      <wsdl:documentation>Cancelamento de documentos</wsdl:documentation>
+      <wsdl:input message="tns:cancelarDocumentoRequest"/>
+      <wsdl:output message="tns:cancelarDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearDocumento">
+      <wsdl:documentation>Bloqueio de documentos</wsdl:documentation>
+      <wsdl:input message="tns:bloquearDocumentoRequest"/>
+      <wsdl:output message="tns:bloquearDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarBloco">
+      <wsdl:documentation>Geracao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:gerarBlocoRequest"/>
+      <wsdl:output message="tns:gerarBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarBloco">
+      <wsdl:documentation>Consulta de bloco</wsdl:documentation>
+      <wsdl:input message="tns:consultarBlocoRequest"/>
+      <wsdl:output message="tns:consultarBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirBloco">
+      <wsdl:documentation>Exclusao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:excluirBlocoRequest"/>
+      <wsdl:output message="tns:excluirBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirProcesso">
+      <wsdl:documentation>Exclusao de processo</wsdl:documentation>
+      <wsdl:input message="tns:excluirProcessoRequest"/>
+      <wsdl:output message="tns:excluirProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirDocumento">
+      <wsdl:documentation>Exclusao de documento</wsdl:documentation>
+      <wsdl:input message="tns:excluirDocumentoRequest"/>
+      <wsdl:output message="tns:excluirDocumentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="disponibilizarBloco">
+      <wsdl:documentation>Disponibilizacao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:disponibilizarBlocoRequest"/>
+      <wsdl:output message="tns:disponibilizarBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarDisponibilizacaoBloco">
+      <wsdl:documentation>Cancelamento de disponibilizacao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:cancelarDisponibilizacaoBlocoRequest"/>
+      <wsdl:output message="tns:cancelarDisponibilizacaoBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirBloco">
+      <wsdl:documentation>Conclusao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:concluirBlocoRequest"/>
+      <wsdl:output message="tns:concluirBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="reabrirBloco">
+      <wsdl:documentation>Reabertura de bloco</wsdl:documentation>
+      <wsdl:input message="tns:reabrirBlocoRequest"/>
+      <wsdl:output message="tns:reabrirBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="devolverBloco">
+      <wsdl:documentation>Devolucao de bloco</wsdl:documentation>
+      <wsdl:input message="tns:devolverBlocoRequest"/>
+      <wsdl:output message="tns:devolverBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirDocumentoBloco">
+      <wsdl:documentation>Inclusao de documento em bloco</wsdl:documentation>
+      <wsdl:input message="tns:incluirDocumentoBlocoRequest"/>
+      <wsdl:output message="tns:incluirDocumentoBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="retirarDocumentoBloco">
+      <wsdl:documentation>Remocao de documento de bloco</wsdl:documentation>
+      <wsdl:input message="tns:retirarDocumentoBlocoRequest"/>
+      <wsdl:output message="tns:retirarDocumentoBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirProcessoBloco">
+      <wsdl:documentation>Inclusao de processo em bloco</wsdl:documentation>
+      <wsdl:input message="tns:incluirProcessoBlocoRequest"/>
+      <wsdl:output message="tns:incluirProcessoBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="retirarProcessoBloco">
+      <wsdl:documentation>Remocao de processo de bloco</wsdl:documentation>
+      <wsdl:input message="tns:retirarProcessoBlocoRequest"/>
+      <wsdl:output message="tns:retirarProcessoBlocoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="reabrirProcesso">
+      <wsdl:documentation>Reabertura de processo</wsdl:documentation>
+      <wsdl:input message="tns:reabrirProcessoRequest"/>
+      <wsdl:output message="tns:reabrirProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirProcesso">
+      <wsdl:documentation>Conclusao de processo</wsdl:documentation>
+      <wsdl:input message="tns:concluirProcessoRequest"/>
+      <wsdl:output message="tns:concluirProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarExtensoesPermitidas">
+      <wsdl:documentation>Lista de extensoes de arquivos permitidas</wsdl:documentation>
+      <wsdl:input message="tns:listarExtensoesPermitidasRequest"/>
+      <wsdl:output message="tns:listarExtensoesPermitidasResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="enviarProcesso">
+      <wsdl:documentation>Movimentacao de processo entre unidades</wsdl:documentation>
+      <wsdl:input message="tns:enviarProcessoRequest"/>
+      <wsdl:output message="tns:enviarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarUsuarios">
+      <wsdl:documentation>Lista de usuarios com permissao na unidade</wsdl:documentation>
+      <wsdl:input message="tns:listarUsuariosRequest"/>
+      <wsdl:output message="tns:listarUsuariosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="atribuirProcesso">
+      <wsdl:documentation>Atribuicao de processo para usuario na unidade</wsdl:documentation>
+      <wsdl:input message="tns:atribuirProcessoRequest"/>
+      <wsdl:output message="tns:atribuirProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarHipotesesLegais">
+      <wsdl:documentation>Lista de hipoteses legais disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarHipotesesLegaisRequest"/>
+      <wsdl:output message="tns:listarHipotesesLegaisResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposConferencia">
+      <wsdl:documentation>Lista de tipos de conferencia disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarTiposConferenciaRequest"/>
+      <wsdl:output message="tns:listarTiposConferenciaResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarPaises">
+      <wsdl:documentation>Lista de paises disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarPaisesRequest"/>
+      <wsdl:output message="tns:listarPaisesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarEstados">
+      <wsdl:documentation>Lista de estados disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarEstadosRequest"/>
+      <wsdl:output message="tns:listarEstadosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCidades">
+      <wsdl:documentation>Lista de cidades disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarCidadesRequest"/>
+      <wsdl:output message="tns:listarCidadesResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimentoOuvidoria">
+      <wsdl:documentation>Lista de tipos de processo da ouvidoria</wsdl:documentation>
+      <wsdl:input message="tns:listarTiposProcedimentoOuvidoriaRequest"/>
+      <wsdl:output message="tns:listarTiposProcedimentoOuvidoriaResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCargos">
+      <wsdl:documentation>Lista de cargos disponiveis</wsdl:documentation>
+      <wsdl:input message="tns:listarCargosRequest"/>
+      <wsdl:output message="tns:listarCargosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="adicionarArquivo">
+      <wsdl:documentation>Adiciona um arquivo no repositorio</wsdl:documentation>
+      <wsdl:input message="tns:adicionarArquivoRequest"/>
+      <wsdl:output message="tns:adicionarArquivoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="adicionarConteudoArquivo">
+      <wsdl:documentation>Adiciona conteudo em um arquivo do repositorio</wsdl:documentation>
+      <wsdl:input message="tns:adicionarConteudoArquivoRequest"/>
+      <wsdl:output message="tns:adicionarConteudoArquivoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="lancarAndamento">
+      <wsdl:documentation>Lanca andamento em processo</wsdl:documentation>
+      <wsdl:input message="tns:lancarAndamentoRequest"/>
+      <wsdl:output message="tns:lancarAndamentoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAndamentos">
+      <wsdl:documentation>Lista andamentos do processo</wsdl:documentation>
+      <wsdl:input message="tns:listarAndamentosRequest"/>
+      <wsdl:output message="tns:listarAndamentosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearProcesso">
+      <wsdl:documentation>Bloqueia processo</wsdl:documentation>
+      <wsdl:input message="tns:bloquearProcessoRequest"/>
+      <wsdl:output message="tns:bloquearProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="desbloquearProcesso">
+      <wsdl:documentation>Desbloqueia processo</wsdl:documentation>
+      <wsdl:input message="tns:desbloquearProcessoRequest"/>
+      <wsdl:output message="tns:desbloquearProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="relacionarProcesso">
+      <wsdl:documentation>Relaciona processos</wsdl:documentation>
+      <wsdl:input message="tns:relacionarProcessoRequest"/>
+      <wsdl:output message="tns:relacionarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerRelacionamentoProcesso">
+      <wsdl:documentation>Remove relacionamento entre processos</wsdl:documentation>
+      <wsdl:input message="tns:removerRelacionamentoProcessoRequest"/>
+      <wsdl:output message="tns:removerRelacionamentoProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="sobrestarProcesso">
+      <wsdl:documentation>Sobrestar processo</wsdl:documentation>
+      <wsdl:input message="tns:sobrestarProcessoRequest"/>
+      <wsdl:output message="tns:sobrestarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerSobrestamentoProcesso">
+      <wsdl:documentation>Remover sobrestamento processo</wsdl:documentation>
+      <wsdl:input message="tns:removerSobrestamentoProcessoRequest"/>
+      <wsdl:output message="tns:removerSobrestamentoProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="anexarProcesso">
+      <wsdl:documentation>Anexar processo</wsdl:documentation>
+      <wsdl:input message="tns:anexarProcessoRequest"/>
+      <wsdl:output message="tns:anexarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="desanexarProcesso">
+      <wsdl:documentation>Desanexar processo</wsdl:documentation>
+      <wsdl:input message="tns:desanexarProcessoRequest"/>
+      <wsdl:output message="tns:desanexarProcessoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarMarcadoresUnidade">
+      <wsdl:documentation>Lista marcadores da unidade</wsdl:documentation>
+      <wsdl:input message="tns:listarMarcadoresUnidadeRequest"/>
+      <wsdl:output message="tns:listarMarcadoresUnidadeResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="definirMarcador">
+      <wsdl:documentation>Define marcador em processos</wsdl:documentation>
+      <wsdl:input message="tns:definirMarcadorRequest"/>
+      <wsdl:output message="tns:definirMarcadorResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="definirControlePrazo">
+      <wsdl:documentation>Define o controle de prazo do processo</wsdl:documentation>
+      <wsdl:input message="tns:definirControlePrazoRequest"/>
+      <wsdl:output message="tns:definirControlePrazoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirControlePrazo">
+      <wsdl:documentation>Conclui o controle de prazo do processo</wsdl:documentation>
+      <wsdl:input message="tns:concluirControlePrazoRequest"/>
+      <wsdl:output message="tns:concluirControlePrazoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerControlePrazo">
+      <wsdl:documentation>Remove o controle de prazo do processo</wsdl:documentation>
+      <wsdl:input message="tns:removerControlePrazoRequest"/>
+      <wsdl:output message="tns:removerControlePrazoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="registrarAnotacao">
+      <wsdl:documentation>Registro de anotação no processo</wsdl:documentation>
+      <wsdl:input message="tns:registrarAnotacaoRequest"/>
+      <wsdl:output message="tns:registrarAnotacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAndamentosMarcadores">
+      <wsdl:documentation>Lista andamentos de marcadores do processo</wsdl:documentation>
+      <wsdl:input message="tns:listarAndamentosMarcadoresRequest"/>
+      <wsdl:output message="tns:listarAndamentosMarcadoresResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarPublicacao">
+      <wsdl:documentation>Consulta Publicacao</wsdl:documentation>
+      <wsdl:input message="tns:consultarPublicacaoRequest"/>
+      <wsdl:output message="tns:consultarPublicacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="agendarPublicacao">
+      <wsdl:documentation>Agenda Publicacao</wsdl:documentation>
+      <wsdl:input message="tns:agendarPublicacaoRequest"/>
+      <wsdl:output message="tns:agendarPublicacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="alterarPublicacao">
+      <wsdl:documentation>Altera dados da Publicacao</wsdl:documentation>
+      <wsdl:input message="tns:alterarPublicacaoRequest"/>
+      <wsdl:output message="tns:alterarPublicacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarAgendamentoPublicacao">
+      <wsdl:documentation>Cancela Agendamento da Publicacao</wsdl:documentation>
+      <wsdl:input message="tns:cancelarAgendamentoPublicacaoRequest"/>
+      <wsdl:output message="tns:cancelarAgendamentoPublicacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarFeriados">
+      <wsdl:documentation>Lista Feriados</wsdl:documentation>
+      <wsdl:input message="tns:listarFeriadosRequest"/>
+      <wsdl:output message="tns:listarFeriadosResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="confirmarDisponibilizacaoPublicacao">
+      <wsdl:documentation>Confirma Disponibilização das Publicações</wsdl:documentation>
+      <wsdl:input message="tns:confirmarDisponibilizacaoPublicacaoRequest"/>
+      <wsdl:output message="tns:confirmarDisponibilizacaoPublicacaoResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="enviarEmail">
+      <wsdl:documentation>Envia e-mail no processo</wsdl:documentation>
+      <wsdl:input message="tns:enviarEmailRequest"/>
+      <wsdl:output message="tns:enviarEmailResponse"/>
+    </wsdl:operation>
+
+    <wsdl:operation name="registrarOuvidoria">
+      <wsdl:documentation>Registrar Contato com Ouvidoria</wsdl:documentation>
+      <wsdl:input message="tns:registrarOuvidoriaRequest"/>
+      <wsdl:output message="tns:registrarOuvidoriaResponse"/>
+    </wsdl:operation>
+
+  </wsdl:portType>
+
+  <wsdl:binding name="SeiBinding" type="tns:SeiPortType">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+    <wsdl:operation name="gerarProcedimento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirDocumento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarUnidades">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposPrioridade">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarSeries">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarContatos">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="atualizarContatos">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarProcedimento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarProcedimentoIndividual">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarDocumento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarDocumento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearDocumento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="gerarBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="excluirDocumento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="disponibilizarBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarDisponibilizacaoBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="reabrirBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="devolverBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirDocumentoBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="retirarDocumentoBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="incluirProcessoBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="retirarProcessoBloco">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="reabrirProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarExtensoesPermitidas">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="enviarProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarUsuarios">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="atribuirProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarHipotesesLegais">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarPaises">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarEstados">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCidades">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposProcedimentoOuvidoria">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarCargos">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarTiposConferencia">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="adicionarArquivo">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="adicionarConteudoArquivo">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="lancarAndamento">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAndamentos">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="bloquearProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="desbloquearProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="relacionarProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerRelacionamentoProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="sobrestarProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerSobrestamentoProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="anexarProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="desanexarProcesso">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarMarcadoresUnidade">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="definirMarcador">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="definirControlePrazo">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="concluirControlePrazo">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="removerControlePrazo">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="registrarAnotacao">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarAndamentosMarcadores">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="consultarPublicacao">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="agendarPublicacao">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="alterarPublicacao">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="cancelarAgendamentoPublicacao">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="listarFeriados">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="confirmarDisponibilizacaoPublicacao">
+      <soap:operation soapAction="SeiAction"/>
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="enviarEmail">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+    <wsdl:operation name="registrarOuvidoria">
+      <soap:operation soapAction="SeiAction" />
+      <wsdl:input>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="Sei" use="encoded" encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
+      </wsdl:output>
+    </wsdl:operation>
+
+  </wsdl:binding>
+
+  <wsdl:service name="SeiService">
+    <wsdl:port name="SeiPortService" binding="tns:SeiBinding">
+      <soap:address location="[servidor]/ws/SeiWS.php"/>
+    </wsdl:port>
+  </wsdl:service>
+
+
+</wsdl:definitions>

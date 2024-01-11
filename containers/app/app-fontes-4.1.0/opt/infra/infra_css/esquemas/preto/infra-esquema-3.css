@@ -1,0 +1,389 @@
+:root {
+    --dark-gray: #363636;
+    --infra-esquema-cor-barra-superior: black;
+    --infra-esquema-cor-barra-sistema: white;
+    --infra-esquema-cor-clara: white;
+    --infra-esquema-cor-escura: black;
+}
+
+* {
+    color: white;
+    background-color: transparent;
+}
+
+html {
+    background-color: black;
+}
+
+input, button, textarea, select {
+    background-color: black !important;
+    color: inherit !important;
+}
+
+select:focus, textarea:focus, input:focus {
+    outline: 1px dotted white;
+    outline-offset: 1px;
+}
+
+fieldset {
+    border-color: white !important;
+    background-color: black !important;
+}
+
+legend {
+    color: white !important;
+    background-color: var(--dark-gray) !important;
+    border: 1px solid white !important;
+}
+
+#divInfraAreaGlobal {
+    background-color: black !important;
+}
+
+#divInfraBarraSistemaPadrao {
+    background-color: rgb(0, 83, 0);
+}
+
+#divInfraBarraSistemaMovel, #divInfraBarraSistemaPadrao, #divInfraBarraSistemaLinha {
+    filter: brightness(65%);
+    background-color: green;
+}
+
+.infraCorBarraSuperior {
+    background-color: rgb(0, 83, 0);
+    filter: brightness(65%);
+}
+
+#divInfraMensagens div {
+    color: white;
+    background-color: black;
+}
+
+span.infraAcaoBarraConjugada {
+    background-color: black;
+    border: 1px solid white;
+}
+
+#lnkInfraUnidade {
+    color: white !important;
+    background-color: black;
+    border: 1px solid white;
+}
+
+.infraCheckboxDiv input:checked + label::before, .infraRadioDiv > input:checked + label {
+    background: #0075ff;
+    border-color: #0075ff;
+}
+
+.infraCheckboxDiv input:hover + label::before, .infraRadioDiv > input:hover + label {
+    background-color: darkblue !important;
+    border-color: darkblue !important;
+}
+
+label.infraLabelOpcional, label.infraLabelObrigatorio,
+label.infraLabelCheckbox, label.infraLabelRadio {
+    color: inherit;
+}
+
+caption.infraCaption {
+    color: white !important;
+    border-bottom-color: lightgray;
+}
+
+a:link {
+    color: yellow;
+}
+
+a:visited {
+    color: rgb(132, 0, 255);
+}
+
+a:hover {
+    color: lightskyblue;
+}
+
+a:active {
+    color: red;
+}
+
+li a:hover {
+    background-color: darkblue !important;
+    color: white !important;
+}
+
+.dd-options {
+    background-color: black !important;
+}
+
+.dd-option-selected, .dd-selected {
+    background: darkgreen !important;
+}
+
+
+a:focus img, img:focus {
+    outline: 1px dotted white;
+}
+
+.infraCheckboxInput:focus + label, .infraRadioInput:focus + label {
+    outline: 1px dotted white;
+}
+
+/*** MENU LATERAL ***********************************************************/
+.divInfraAreaTelaE, #divInfraPesquisarMenu {
+    background-color: #004225;
+}
+
+div.infraSidebarMenu a {
+    border-bottom-color: var(--dark-gray);
+}
+
+div.infraSidebarMenu a:focus {
+    border: 1px solid white;
+}
+
+div.infraSidebarMenu a:hover {
+    background-color: darkblue !important;
+}
+
+/****************************************************************************/
+
+table.infraTable {
+    background-color: #555 !important;
+}
+
+th.infraTh, th.infraTh div {
+    background-color: #555;
+    background-image: none;
+}
+
+tr.infraTrClara {
+    background-color: black;
+}
+
+tr.infraTrEscura {
+    background-color: #333;
+}
+
+tr.infraTrAcessada td {
+    background-color: transparent !important;
+}
+
+tr.infraTrAcessada a {
+    color: unset !important;
+}
+
+div.infraAreaDados {
+    border-bottom-color: transparent
+}
+
+div.infraAreaTelaD {
+    border-color: transparent;
+}
+
+#spnInfraAviso {
+    color: black !important;
+}
+
+tr.infraTrMarcada td { /* remove a cor do td */
+    background-color: transparent !important;
+}
+
+tr.infraTrMarcada {
+    background-color: #003800 !important; /* Very DarkGreen */
+}
+
+tr.infraTrSelecionada,
+tr.infraTrSelecionada td,
+td.infraTdSelecionada {
+    background-color: darkblue !important;
+}
+
+
+/*** CALENDARIOS ************************************************************/
+#infraCalendario, #divCalendario .diaUtil {
+    background-color: black;
+    border: none;
+}
+
+.calendar_week_column, #infraCalendario .todaysDate,
+#divCalendario .diaFimDeSemana {
+    background-color: #333333 !important;
+    border: none;
+}
+
+#divCalendario .diaAtrasado {
+    background-color: darkred !important;
+}
+
+#divCalendario .diaConteudo a {
+    color: black;
+}
+
+
+/*** infra-ajax.css *** Caixa de autocompletar ******************************/
+div.infraAjaxAutoCompletar {
+    background-color: black;
+}
+
+div.infraAjaxAutoCompletar a {
+    color: lightgray;
+}
+
+div.infraAjaxAutoCompletar li.selected {
+    background-color: darkblue;
+}
+
+.infraAjaxMarcarSelecao {
+    border-color: gray !important;;
+}
+
+/*** multiple-select.css */
+.ms-drop {
+    background-color: var(--dark-gray);
+}
+
+.ms-drop:hover {
+    background-color: darkblue;
+}
+
+
+/*** TOOLTIP ****************************************************************/
+div.infraTooltipTitulo {
+    color: white !important;
+    background-color: black;
+
+}
+
+div.infraTooltipTexto {
+    color: black !important;
+}
+
+div.infraTooltip {
+    background-color: white;
+    border: 1px solid black;
+    border-radius: .2rem;
+}
+
+img[src*="voltar.svg"],
+img[src*="menu_pontos.svg"],
+img[src*="anterior.svg"],
+img[src*="proximo.svg"],
+img[src*="avancar.svg"],
+img[src*="alterar.svg"],
+img[src*="consultar.svg"],
+img[src*="clonar.svg"],
+img[src*="desativar.svg"],
+img[src*="reativar.svg"],
+img[src*="excluir.svg"],
+img[src*="pesquisar.svg"],
+img[src*="grupo.svg"],
+img[src*="paginacao_primeira.svg"],
+img[src*="paginacao_anterior.svg"],
+img[src*="paginacao_proxima.svg"],
+img[src*="paginacao_ultima.svg"],
+img[src*="calendario.svg"] {
+    filter: invert(100%);
+}
+
+a:focus img[src*="alterar.svg"],
+a:focus img[src*="consultar.svg"],
+a:focus img[src*="clonar.svg"],
+a:focus img[src*="desativar.svg"],
+a:focus img[src*="reativar.svg"],
+a:focus img[src*="excluir.svg"],
+a:focus img[src*="pesquisar.svg"],
+a:focus img[src*="grupo.svg"],
+a:focus img[src*="paginacao_primeira.svg"],
+a:focus img[src*="paginacao_anterior.svg"],
+a:focus img[src*="paginacao_proxima.svg"],
+a:focus img[src*="paginacao_ultima.svg"],
+a:focus img[src*="calendario.svg"] {
+    outline: 1px dotted black;
+}
+
+img:focus[src*="alterar.svg"],
+img:focus[src*="consultar.svg"],
+img:focus[src*="pesquisar.svg"],
+img:focus[src*="grupo.svg"],
+img:focus[src*="calendario.svg"] {
+    outline: 1px dotted black;
+}
+
+div.infraCalendario {
+    color: white;
+    background-color: black;
+}
+
+div.infraCalendario .topBar, div.infraCalendario .bottomBar {
+    color: inherit;
+    background-color: inherit;
+}
+
+div.infraCalendario td {
+    border: 1px solid black;
+}
+
+div.infraCalendario .activeDay {
+    color: black;
+    background-color: white;
+}
+
+div.infraCalendario .monthYearPicker {
+    background-color: black;
+}
+
+div.infraCalendario .monthYearActive {
+    color: black;
+    background-color: white;
+}
+
+.ms-drop input[type=radio]:focus, .ms-drop input[type=checkbox]:focus {
+    outline: 1px dotted white;
+    outline-offset: 1px;
+}
+
+a.infraArvoreNo:focus,
+a.infraArvoreNoAcao:focus img {
+    outline: 1px dotted white !important;
+}
+
+a.infraArvoreInformacao:focus span {
+    color: black !important;
+    background-color: white !important;
+}
+
+div:focus-visible {
+    outline: 1px dotted white;
+}
+
+button:focus {
+    outline: 1px solid white;
+}
+
+#btnInfraTopo {
+    border: 1px solid #666;
+}
+
+.sparkling-modal-frame {
+    border: 1px solid #ced4da;
+}
+
+#divInfraSparklingModalContent {
+    background-color: black;
+}
+
+.ui-icon-gripsmall-diagonal-se {
+    filter: invert(50%);
+}
+
+.infraLabelInputFile {
+    color: white !important;
+    background-color: black;
+    border: 1px solid white;
+}
+
+.infraLabelInputFile:hover {
+    color: white !important;
+    background-color: black;
+    border: 1px solid #0062cc;
+}

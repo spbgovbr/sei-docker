@@ -1,0 +1,33 @@
+div.infraMenu{
+font-weight:bold;
+/*background-color:#f0f0f0;*/
+height:50em;
+background-color:white;
+}
+
+div.infraMenu ul{
+padding:0;
+}
+
+div.infraMenu ul li{
+/*padding:0.1em;*/
+}
+
+div.infraMenu a{
+color:#000;
+border:0.1em solid #ccc; 
+padding:0.15em 0.25em;
+background:#dfdfdf;
+}
+
+div.infraMenu a:link, 
+div.infraMenu a:active, 
+div.infraMenu a:visited{
+font-weight:bold;
+color:#000;
+} 
+
+div.infraMenu a:hover{
+color:#a00;
+background:#fff;
+}

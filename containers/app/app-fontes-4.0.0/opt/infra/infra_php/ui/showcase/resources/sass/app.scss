@@ -1,0 +1,235 @@
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/bootstrap-grid";
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/nav";
+@import "~prismjs/plugins/line-numbers/prism-line-numbers";
+@import "~bootstrap-darkmode/darktheme";
+@import "prismjs";
+@import 'showcaser-menu';
+@import 'vars';
+
+
+.nav-tabs .nav-link {
+    border: none;
+
+    &.active {
+        border-bottom: 3px solid $primary;
+    }
+}
+
+.card {
+    border-radius: 0;
+}
+
+.card.doc-card {
+    border-radius: 0px;
+    border-bottom: none;
+    border-top: none;
+
+    .card.doc-card {
+        border-left: 3px solid #d0d0d0;
+    }
+
+    ~ .card.doc-card {
+        margin-top: 30px;
+    }
+
+    .comparator {
+        border: none;
+
+        > .card {
+            margin-bottom: 0 !important;
+            border-left: none;
+        }
+    }
+
+    > .card-header {
+        .card-header-link {
+            visibility: hidden;
+            text-decoration: none;
+            vertical-align: middle;
+        }
+
+        &:hover .card-header-link {
+            visibility: visible;
+        }
+    }
+}
+
+.shared-card {
+    > div > .container-fluid > .card {
+        border-top: none;
+    }
+}
+
+.cards + .cards {
+    margin-top: 80px;
+}
+
+.cards .card.doc-card {
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:not(:last-child) {
+        margin-bottom: 80px;
+    }
+}
+
+.showcase-directory {
+    > .card-header {
+        border-radius: 0;
+        background-color: #e0e0e0ed;
+        z-index: 20;
+    }
+
+    .showcase-directory > .card-header {
+        z-index: 19;
+
+        > .sticky-top {
+            position: inherit !important;
+        }
+    }
+
+}
+
+#wrapper {
+    max-width: 2000px;
+}
+
+@media (min-width: 768px) {
+    #page-content-wrapper {
+        flex-basis: 0;
+        flex-grow: 999;
+        min-width: 40%;
+    }
+}
+
+
+body[data-theme="dark"] {
+    .navbar-brand {
+        color: white;
+    }
+
+    .card.doc-card .card.doc-card {
+        border-color: #303030;
+    }
+
+    .showcase-directory > .card-header {
+        background-color: #494949ed;
+    }
+
+    $spinnerColor: white;
+
+    .formsubmit-result {
+
+        &.loading {
+
+            .loader,
+            .loader:before,
+            .loader:after {
+                background: $spinnerColor;
+            }
+
+            .loader {
+                color: $spinnerColor;
+            }
+
+        }
+    }
+
+}
+
+.formsubmit-result {
+    &.loading {
+        height: 50px;
+        $spinnerColor: #333;
+
+        .loader,
+        .loader:before,
+        .loader:after {
+            background: $spinnerColor;
+            -webkit-animation: load1 1s infinite ease-in-out;
+            animation: load1 1s infinite ease-in-out;
+            width: 1em;
+            height: 4em;
+        }
+
+        .loader {
+            color: $spinnerColor;
+            text-indent: -9999em;
+            margin: 88px auto;
+            position: relative;
+            font-size: 11px;
+            -webkit-transform: translateZ(0);
+            -ms-transform: translateZ(0);
+            transform: translateZ(0);
+            -webkit-animation-delay: -0.16s;
+            animation-delay: -0.16s;
+        }
+
+        .loader:before,
+        .loader:after {
+            position: absolute;
+            top: 0;
+            content: '';
+        }
+
+        .loader:before {
+            left: -1.5em;
+            -webkit-animation-delay: -0.32s;
+            animation-delay: -0.32s;
+        }
+
+        .loader:after {
+            left: 1.5em;
+        }
+
+
+        @keyframes load1 {
+            0%,
+            80%,
+            100% {
+                box-shadow: 0 0;
+                height: 1em;
+            }
+            40% {
+                box-shadow: 0 -2em;
+                height: 3em;
+            }
+        }
+    }
+}
+
+
+.is-prototype-container {
+    width: 20px;
+    background-color: red;
+    position: relative;
+    overflow: visible;
+}
+
+.prototype-text {
+    color: white;
+    transform: rotateZ(-90deg);
+    margin-left: -33px;
+    font-weight: bold;
+    width: 90px;
+}
+
+body[data-theme="dark"] {
+    .gitlab-logo {
+        background: url('../images/gitlab-icon-1-color-white-rgb.svg');
+    }
+}
+
+.gitlab-logo {
+    background: url('../images/gitlab-icon-1-color-black-rgb.svg');
+    width: 34px;
+    height: 34px;
+    display: inline-block;
+}

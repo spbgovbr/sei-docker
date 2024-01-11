@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# Atribuição dos parâmetros de configuração do SEI
+# Atribuição dos parâmetros de configuração do SUPER
 if [ -f /opt/sei/config/ConfiguracaoSEI.php ] && [ ! -f /opt/sei/config/ConfiguracaoSEI.php~ ]; then
     mv /opt/sei/config/ConfiguracaoSEI.php /opt/sei/config/ConfiguracaoSEI.php~
 fi
@@ -18,7 +18,7 @@ if [ ! -f /opt/sip/config/ConfiguracaoSip.php ]; then
     cp /ConfiguracaoSip.php /opt/sip/config/ConfiguracaoSip.php
 fi
 
-# Ajustes de permissões diversos para desenvolvimento do SEI
+# Ajustes de permissões diversos para desenvolvimento do SUPER
 chmod +x /opt/sei/bin/pdfboxmerge.jar
 mkdir -p /opt/sip/temp
 mkdir -p /opt/sei/temp
@@ -54,10 +54,21 @@ php -r "
     \$conexao->executarSql(\"update sistema set pagina_inicial='$HOST_URL/sip' where sigla='SIP'\");
     \$conexao->executarSql(\"update sistema set pagina_inicial='$HOST_URL/sei/inicializar.php' where sigla='SEI'\");
     \$conexao->executarSql(\"update sistema set web_service='$HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI'\");
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();    
 " || exit 1
 
+# Atualizar os endereços de host definidos para na inicialização e sincronização de sequências
+php -r "
+    require_once '/opt/sei/web/SEI.php';
+    \$conexao = BancoSEI::getInstance();
+    \$objScriptRN = new ScriptRN();
+    \$objScriptRN->atualizarSequencias();
+" || exit 1
 
 # Apaga o PID antes de reinicar o servidor
 rm -f /run/httpd/httpd.pid
+
+
 # Inicialização do servidor web
-/usr/sbin/httpd -DFOREGROUND
+/bin/sh -c /usr/sbin/php-fpm && /usr/sbin/httpd -DFOREGROUND

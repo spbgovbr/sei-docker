@@ -1,0 +1,217 @@
+
+input, button, textarea, select, table, label, legend, caption, a {
+    font-size: 1.2em;
+}
+
+input, button, textarea, select {
+    background-color: #f0f7e2;
+}
+
+button:focus, input:focus, select:focus, textarea:focus {
+    background: #dfdfdf;
+}
+
+div.infraAreaValidacao {
+    margin-top: 1em;
+    margin-bottom: .2em;
+    font-size: 1.4em;
+    color: #f00;
+}
+
+div.infraAreaDebug {
+    font-size: 1.2em;
+}
+
+div.infraAreaGlobal {
+    width: 95%;
+    padding-bottom: 0.5em;
+    border: .1em solid black;
+}
+
+div.infraBarraTribunal {
+    padding: .2em;
+    background-color: #000;
+}
+
+div.infraBarraTribunalD {
+    width: 30%;
+}
+
+div.infraBarraTribunalE {
+    width: 65%;
+}
+
+div.infraBarraTribunal label, div.infraBarraTribunal a {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+}
+
+div.infraBarraSistema {
+    padding-top: .3em;
+    padding-left: .2em;
+    padding-right: .2em;
+    padding-bottom: .2em;
+    background-color: #f0f7e2;
+    border-bottom: .1em solid #ccc;
+}
+
+div.infraBarraSistemaD {
+    width: 30%;
+}
+
+div.infraBarraSistemaE {
+    width: 65%;
+}
+
+div.infraBarraSistema label, div.infraBarraSistema a {
+    font-size: 1.4em;
+    font-weight: bold;
+}
+
+div.infraAreaTela {
+    width: 100%;
+}
+
+div.infraAreaTelaE {
+    width: 19%;
+}
+
+div.infraAreaTelaD {
+    width: 79%;
+    border: .3em solid white;
+}
+
+div.infraBarraLocalizacao {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+div.infraBarraComandos {
+    border-top: .1em solid white;
+    border-bottom: .5em solid white;
+}
+
+input.infraButton, button.infraButton {
+    text-align: center;
+    border-style: outset;
+    border: .1em solid #333;
+    /* background-image:url(imagens/fundo_botao.gif); */
+}
+
+label.infraLabelOpcional {
+    margin-bottom: .2em;
+}
+
+label.infraLabelObrigatorio {
+    margin-bottom: .2em;
+    font-weight: bold;
+}
+
+label.infraLabelRadio {
+    margin-bottom: .2em;
+    cursor: pointer;
+}
+
+label.infraLabelCheckbox {
+    margin-bottom: .2em;
+    cursor: pointer;
+}
+
+table.infraTable {
+    background-color: #c0c0c0;
+    border-spacing: .1em;
+}
+
+table.infraTable td {
+    border-spacing: 0;
+    padding: .1em;
+}
+
+th.infraTh, th.infraTh div {
+    font-weight: bold;
+    text-align: center;
+    border-spacing: 0;
+}
+
+th.infraTh {
+    padding: .1em;
+    background-color: #f8eddb;
+}
+
+caption.infraCaption {
+    font-size: 1em;
+    margin-bottom: .5em;
+}
+
+
+input.infraCheckbox, input.infraCheckbox:focus {
+    background-color: #fff;
+    border: 0;
+}
+
+input.infraRadio, input.infraRadio:focus {
+    background-color: #fff;
+    border: 0;
+}
+
+fieldset.infraFieldset {
+    border: .1em solid #ccc;
+}
+
+legend.infraLegendOpcional {
+    padding: .2em;
+}
+
+legend.infraLegendObrigatorio {
+    font-weight: bold;
+    padding: .2em;
+}
+
+span.infraTeclaAtalho {
+    text-decoration: underline;
+    font-weight: normal;
+}
+
+label.infraLabelObrigatorio span.infraTeclaAtalho {
+    font-weight: bold;
+}
+
+form.infraForm {
+}
+
+input.infraPassword {
+}
+
+input.infraText {
+}
+
+textarea.infraTextarea {
+    resize: none;
+}
+
+select.infraSelect {
+}
+
+span.infraExcecao {
+    font-size: 1.4em;
+    color: red;
+}
+
+span.infraDetalhesExcecao {
+    font-size: 1.2em;
+}
+
+fieldset.infraFieldset {
+    border: .1em solid #ccc;
+}
+
+legend.infraLegend {
+    font-weight: bold;
+    background-color: #c03;
+    color: white;
+    font-size: 1.2em;
+    letter-spacing: .1em;
+}
+

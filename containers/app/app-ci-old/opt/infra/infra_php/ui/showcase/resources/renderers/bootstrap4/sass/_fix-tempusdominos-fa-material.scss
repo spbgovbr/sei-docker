@@ -1,0 +1,48 @@
+.material-icons {
+    &.time::before {
+        content: 'access_time';
+    }
+
+    &.date::before {
+        content: 'calendar_today';
+    }
+
+    &.up::before {
+        content: 'arrow_drop_up';
+        font-size: 47px;
+    }
+
+    &.down::before {
+        content: 'arrow_drop_down';
+        font-size: 47px;
+    }
+
+    &.previous::before {
+        content: 'chevron_left';
+    }
+
+    &.next::before {
+        content: 'chevron_right';
+    }
+
+    &.today::before {
+        content: 'today';
+    }
+
+    &.clear::before {
+        content: 'clear';
+    }
+
+    &.close::before {
+        content: 'close';
+    }
+}
+
+
+.datepicker {
+    max-width: 225px;
+}
+
+.input-group .datetimepicker-input {
+    cursor: initial;
+}

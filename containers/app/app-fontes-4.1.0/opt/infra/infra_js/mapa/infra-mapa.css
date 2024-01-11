@@ -1,0 +1,44 @@
+
+.infraMapaDivisa {
+    stroke: #ffffff;
+}
+
+.infraMapaRegiao1 {
+    fill: #87aade
+}
+
+.infraMapaRegiao2 {
+    fill: #5599ff
+}
+
+.infraMapaRegiao3 {
+    fill: #2c5aa0
+}
+
+.infraMapaRegiao4 {
+    fill: #0066ff
+}
+
+.infraMapaRegiao5 {
+    fill: #2a7fff
+}
+
+.infraMapaTooltip {
+    color: #fff;
+    position: absolute;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased;
+}
+
+.infraMapaTooltip .infraMapaTooltipNome {
+    font-weight: bold;
+}
+
+.infraMapaTooltipCaminho {
+    fill: #000;
+    fill-opacity: .7;
+}
+
+.infraMapaTooltipDescricao {
+
+}
