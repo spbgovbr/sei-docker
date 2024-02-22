@@ -22,7 +22,7 @@ Segue a anatomia do projeto atualmente caso se deseje subir por completo. Cada c
 
 *Clique com o botão direito na figura -> copiar endereço da imagem; depois abra em uma nova aba do seu browser:*
 
-![Anatomia do Projeto](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/anatomia_02.jpeg)
+![Anatomia do Projeto](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/anatomia_02.jpg)
 
 ## Kubernetes
 
