@@ -110,7 +110,8 @@ test_lineup_completa: test_confirmation
 	@echo "*****************************************************"
 	@echo "Vamos iniciar uma execucao da montagem do ambiente reduzida com url customizada, nas 4 bases de dados. "
 	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente default com localhost, nas 4 bases de dados. "
-	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 4 bases de dados. Aguarde ... "
+	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente completa com url customizada, nas 4 bases de dados."
+	@echo "Em seguida vamos iniciar uma execucao da montagem do ambiente em http, nas 4 bases de dados. Aguarde ... "
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@sleep 5

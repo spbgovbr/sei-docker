@@ -129,6 +129,8 @@ services:
         volumes_from:
             - storage-app
             - storage-certs
+        volumes:
+            - /home/marcelo/projetos/github/spbgovbr/sei-docker/containers/app/app-ci/assets/scripts-e-automatizadores/entrypoint-atualizador.sh:/entrypoint-atualizador.sh
         labels:
             io.rancher.container.pull_image: always
             io.rancher.container.start_once: 'true'
@@ -137,6 +139,8 @@ services:
         - APP_HOST=${APP_HOST}
         - APP_ORGAO=${APP_ORGAO}
         - APP_ORGAO_DESCRICAO=${APP_ORGAO_DESCRICAO}
+        - APP_ORGAOS_ADICIONAIS_SIGLA=${APP_ORGAOS_ADICIONAIS_SIGLA}
+        - APP_ORGAOS_ADICIONAIS_NOME=${APP_ORGAOS_ADICIONAIS_NOME}
         - APP_NOMECOMPLEMENTO=${APP_NOMECOMPLEMENTO}
         - APP_MEMCACHED_HOST=${APP_MEMCACHED_HOST}
         - APP_DB_TIPO=${APP_DB_TIPO}
@@ -267,6 +271,8 @@ services:
         - APP_HOST=${APP_HOST}
         - APP_ORGAO=${APP_ORGAO}
         - APP_ORGAO_DESCRICAO=${APP_ORGAO_DESCRICAO}
+        - APP_ORGAOS_ADICIONAIS_SIGLA=${APP_ORGAOS_ADICIONAIS_SIGLA}
+        - APP_ORGAOS_ADICIONAIS_NOME=${APP_ORGAOS_ADICIONAIS_NOME}
         - APP_NOMECOMPLEMENTO=${APP_NOMECOMPLEMENTO}
         - APP_MEMCACHED_HOST=${APP_MEMCACHED_HOST}
         - APP_DB_TIPO=${APP_DB_TIPO}
@@ -400,6 +406,8 @@ services:
         - APP_HOST=${APP_HOST}
         - APP_ORGAO=${APP_ORGAO}
         - APP_ORGAO_DESCRICAO=${APP_ORGAO_DESCRICAO}
+        - APP_ORGAOS_ADICIONAIS_SIGLA=${APP_ORGAOS_ADICIONAIS_SIGLA}
+        - APP_ORGAOS_ADICIONAIS_NOME=${APP_ORGAOS_ADICIONAIS_NOME}
         - APP_NOMECOMPLEMENTO=${APP_NOMECOMPLEMENTO}
         - APP_MEMCACHED_HOST=${APP_MEMCACHED_HOST}
         - APP_DB_TIPO=${APP_DB_TIPO}
