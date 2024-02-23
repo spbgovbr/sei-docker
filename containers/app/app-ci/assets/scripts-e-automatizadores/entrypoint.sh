@@ -52,7 +52,6 @@ if [ -z "$APP_PROTOCOLO" ] || \
     exit 1
 fi
 
-
 echo "***************************************************"
 echo "***************************************************"
 echo "**INICIANDO CONFIGURACOES BASICAS DO APACHE E SEI**"
@@ -137,61 +136,6 @@ do
 done  
 
 set -e
-
-echo "***************************************************"
-echo "***************************************************"
-echo "UPDATE NA BASE DE DADOS - ORGAO E SISTEMA**********"
-echo "***************************************************"
-echo "***************************************************"
-
-# Atualizacao do endereco de host da aplicacao
-echo "Atualizando Banco de Dados com as Configuracoes Iniciais..."
-if [ "$APP_DB_TIPO" == "MySql" ]; then
-    echo "Atualizando MySql..."
-    MYSQL_CMD="mysql --host $APP_DB_HOST --user $APP_DB_ROOT_USERNAME --password=$APP_DB_ROOT_PASSWORD"
-    $MYSQL_CMD -e "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" sip
-    $MYSQL_CMD -e "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" sei
-    $MYSQL_CMD -e "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';" sip
-    $MYSQL_CMD -e "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';" sip
-fi
-
-if [ "$APP_DB_TIPO" == "Oracle" ]; then
-    echo "Atualizando Oracle..."
-    echo "alter user sip identified by sip_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "alter user sei identified by sei_user;" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO';" | sqlplus64 sei/sei_user@$APP_DB_HOST
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';" | sqlplus64 $APP_DB_ROOT_USERNAME/$APP_DB_ROOT_PASSWORD@$APP_DB_HOST
-fi
-
-if [ "$APP_DB_TIPO" == "SqlServer" ]; then
-    echo "Atualizando SqlServer..."
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-
-
-    echo "use sei" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_SEI_USERNAME -P $APP_DB_SEI_PASSWORD
-
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-
-    echo "use sip" > /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    echo "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI'" >> /tmp/update.tmp
-    echo "go" >> /tmp/update.tmp
-    cat /tmp/update.tmp | tsql -S $APP_DB_HOST -U $APP_DB_ROOT_USERNAME -P $APP_DB_ROOT_PASSWORD
-fi
 
 echo "***************************************************"
 echo "***************************************************"

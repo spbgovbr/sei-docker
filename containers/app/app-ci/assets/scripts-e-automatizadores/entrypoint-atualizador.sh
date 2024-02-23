@@ -232,16 +232,6 @@ if [ "$APP_DB_TIPO" == "PostgreSql" ]; then
     PGPASSWORD=$APP_DB_ROOT_PASSWORD $PSQL_CMD -d sip -c "update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI';"
 fi
 
-# multiorgaos
-echo "Vamos verificar se passou multiorgaos para instalar"
-if [ "$APP_ORGAOS_ADICIONAIS_SIGLA" == "" ] || [ "$APP_ORGAOS_ADICIONAIS_NOME" == "" ]; then
-	echo "Arrays multiorgaos vazios ou preenchidos incorretamente"
-else
-	echo "Vamos executar agora o script para cadastrar multiorgaos"
-	php /sei/files/scripts-e-automatizadores/misc/enableservicePD.php
-	echo "Script multiorgaos executado verifique se houve observacoes acima"
-fi
-
 echo "***************************************************"
 echo "***************************************************"
 echo "**GERACAO DE CERTIFICADO PARA O APACHE*************"
@@ -290,6 +280,20 @@ echo "Incluindo TrustStore no sistema"
 cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
 update-ca-trust extract
 update-ca-trust enable
+
+# multiorgaos
+echo "Vamos verificar se passou multiorgaos para instalar"
+if [ "$APP_ORGAOS_ADICIONAIS_SIGLA" == "" ] || [ "$APP_ORGAOS_ADICIONAIS_NOME" == "" ]; then
+	echo "Arrays multiorgaos vazios ou preenchidos incorretamente, pulando instalacao multiorgaos"
+else
+
+	/usr/sbin/httpd -DFOREGROUND &
+
+	echo "Vamos executar agora o script para cadastrar multiorgaos"
+	php /sei/files/scripts-e-automatizadores/misc/cadastrarMultiorgao.php
+	echo "Script multiorgaos executado verifique se houve observacoes acima"
+
+fi
 
 if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 
