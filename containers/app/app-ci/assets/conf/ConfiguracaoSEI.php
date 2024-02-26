@@ -60,7 +60,7 @@ class ConfiguracaoSEI extends InfraConfiguracao  {
 					                	'Porta' => '11211'),
 
         'Federacao' => array(
-          'Habilitado' => false
+          'Habilitado' => (getenv('APP_FEDERACAO_HABILITAR') == 'true')
          ),
 
  	      'JODConverter' => array('Servidor' => 'http://jod:8080/converter/service'),
