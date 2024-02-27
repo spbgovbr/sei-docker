@@ -242,29 +242,6 @@ cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
 update-ca-trust extract
 update-ca-trust enable
 
-if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
-	
-	# multiorgaos
-	echo "Vamos verificar se passou multiorgaos para instalar"
-	
-	if [ "$APP_ORGAOS_ADICIONAIS_SIGLA" == "" ] || [ "$APP_ORGAOS_ADICIONAIS_NOME" == "" ]; then
-	    echo "Arrays multiorgaos vazios ou preenchidos incorretamente, pulando instalacao multiorgaos"
-    else
-
-	    /usr/sbin/httpd -DFOREGROUND &
-
-	    echo "Vamos executar agora o script para cadastrar multiorgaos"
-	    php /sei/files/scripts-e-automatizadores/misc/cadastrarMultiorgao.php
-	    echo "Script multiorgaos executado verifique se houve observacoes acima"
-
-    fi
-
-    echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
-    chown -R apache:apache /sei/arquivos_externos_sei/
-
-fi
-
-
 echo "***************************************************"
 echo "***************************************************"
 echo "**RODAR ARQUIVOS DE ATUALIZACAO DO SIP e SEI*******"
@@ -341,6 +318,30 @@ else
         fi
     fi
     touch /sei/controlador-instalacoes/atualizacao-sip-$VERSAO_ENCONTRADA-recurso.ok
+fi
+
+
+# multiorgaos
+if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
+	
+	# multiorgaos
+	echo "Vamos verificar se passou multiorgaos para instalar"
+	
+	if [ "$APP_ORGAOS_ADICIONAIS_SIGLA" == "" ] || [ "$APP_ORGAOS_ADICIONAIS_NOME" == "" ]; then
+	    echo "Arrays multiorgaos vazios ou preenchidos incorretamente, pulando instalacao multiorgaos"
+    else
+
+	    /usr/sbin/httpd -DFOREGROUND &
+
+	    echo "Vamos executar agora o script para cadastrar multiorgaos"
+	    php /sei/files/scripts-e-automatizadores/misc/cadastrarMultiorgao.php
+	    echo "Script multiorgaos executado verifique se houve observacoes acima"
+
+    fi
+
+    echo "Vamos fazer o apache se apropriar dos dados externos... Aguarde"
+    chown -R apache:apache /sei/arquivos_externos_sei/
+
 fi
 
 echo "***************************************************"
