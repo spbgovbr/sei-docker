@@ -18,7 +18,7 @@ qtd := "2"
 LOGS_SEGUIR=true
 
 DIR := ${CURDIR}
-COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.yml 
+COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.yml
 CMD_CURL_SEI_LOGIN = curl -s -L -k $(APP_PROTOCOLO)://$(APP_HOST)/sei | grep "txtUsuario"
 
 check_isalive-timeout := "37"
@@ -50,12 +50,12 @@ test_ambiente_localhost_mysql:
 	echo "Terminei eeeee"
 
 criar_volumes: ## Cria todos os volumes necessarios ao projeto. As vezes eh necessario apagar os volumes antes, para apagar make apagar_volumes
-	make criar_volume_fontes 
-	make criar_volume_certs 
-	make criar_volume_banco 
-	make criar_volume_arquivos_externos 
-	make criar_volume_solr 
-	make criar_volume_openldap 
+	make criar_volume_fontes
+	make criar_volume_certs
+	make criar_volume_banco
+	make criar_volume_arquivos_externos
+	make criar_volume_solr
+	make criar_volume_openldap
 	make criar_volume_controlador_instalacao
 
 
@@ -73,11 +73,11 @@ ifneq ("$(EXISTE_LOCAL_CERTS)",  "")
 else
 	docker run --rm -v $(LOCALIZACAO_CERTS):/source -v $(VOLUME_CERTS):/destino -w /source --entrypoint="" processoeletronico/haproxy:latest sh -c "echo ''; echo ''; echo ''; if [[ -f cert0.pem ]] ; then echo 'Cert para o balanceador ja existe, pulando.';echo ''; echo ''; echo '';  else echo 'Cert para o balanceador nao existe. Copiando auto assinado default...' ; cp /mycertexample/cert0.pem /destino ; echo 'Copiado';echo ''; echo ''; echo '';  fi"
 	docker run --rm -v $(LOCALIZACAO_CERTS):/source -v $(VOLUME_CERTS):/destino -w /source --entrypoint="" processoeletronico/haproxy:latest sh -c "if [ ! -f seiapp/sei-ca.pem ] || [ ! -f seiapp/sei.crt ] || [ ! -f seiapp/sei.key ]; then echo ''; echo ''; echo ''; echo 'CA, cert ou key nao existe para o SEI. O conteiner de app vai criar um auto assinado. Nao se preocupe caso esteja usando um cert valido no balanceador'; echo ''; echo ''; echo '';  else echo ''; echo ''; echo ''; echo 'CA, cert e key encontradas para o SEI, pulando.';  echo ''; echo ''; echo '';  fi"
-	
+
 endif
 
 criar_volume_banco: ## Cria o volume docker para o banco de dados que serao consumidos pelo projeto
-	
+
 ifneq ("$(EXISTE_LOCAL_DB)",  "")
 	@echo "Ja existe um volume de banco de dados. Voce pode apaga-lo com o comando make apagar_volume_banco"
 else
@@ -85,7 +85,7 @@ else
 endif
 
 criar_volume_arquivos_externos: ## Cria o volume docker para os arquivos externos
-	
+
 ifneq ("$(EXISTE_LOCAL_ARQUIVOS_EXTERNOS)",  "")
 	@echo "Ja existe um volume de Arquivos Externos. Voce pode apaga-lo com o comando make apagar_volume_arquivos_externos"
 else
@@ -93,7 +93,7 @@ else
 endif
 
 criar_volume_solr: ## Cria o volume docker para os dados do solr
-	
+
 ifneq ("$(EXISTE_LOCAL_SOLR)",  "")
 	@echo "Ja existe um volume para o Solr. Voce pode apaga-lo com o comando make apagar_volume_solr"
 else
@@ -101,7 +101,7 @@ else
 endif
 
 criar_volume_openldap_slapd: ## Cria o volume docker para a base do openldap slapd
-	
+
 ifneq ("$(EXISTE_LOCAL_OPENLDAP_SLAPD)",  "")
 	@echo "Ja existe um volume de openldap slapd. Voce pode apaga-lo com o comando make apagar_volume_openldap_slapd"
 else
@@ -109,7 +109,7 @@ else
 endif
 
 criar_volume_openldap_db: ## Cria os volumes docker para a base do openldap db
-	
+
 ifneq ("$(EXISTE_LOCAL_OPENLDAP_DB)",  "")
 	@echo "Ja existe um volume de openldap db. Voce pode apaga-lo com o comando make apagar_volume_openldap_db"
 else
@@ -119,7 +119,7 @@ endif
 criar_volume_openldap: criar_volume_openldap_slapd criar_volume_openldap_db
 
 criar_volume_controlador_instalacao: ## Cria o volume para controlar a instalacao do SEI e modulos
-	
+
 ifneq ("$(EXISTE_LOCAL_CONTROLADOR_INSTALACAO)",  "")
 	@echo "Ja existe um volume de controlador da instalacao. Voce pode apaga-lo com o comando make apagar_volume_controlador_instalacao"
 else
@@ -129,7 +129,7 @@ endif
 
 build_docker_compose: ## Construa o docker-compose.yml baseado no arquivo envlocal.env
 	rm -f orquestrators/docker-compose/docker-compose.yml
-	
+
 	envsubst < orquestrators/docker-compose/docker-compose-template.yml > orquestrators/docker-compose/docker-compose.yml
 	@echo "Agora vamos iniciar uma serie de substituicoes de variaveis para montar o docker-compose.yml"
 	@echo "Os comandos sed nao aparecem aqui na tela."
@@ -139,7 +139,7 @@ build_docker_compose: ## Construa o docker-compose.yml baseado no arquivo envloc
 
 ifeq ("$(APP_PORTA_80_MAP_EXPOR)",  "true")
 	@sed -i'' -e "s|#ports:|ports:|" orquestrators/docker-compose/docker-compose.yml
-	
+
 ifneq ("$(APP_PORTA_80_MAP_EXPOR)",  "")
 	@sed -i'' -e "s|#    - $(APP_PORTA_80_MAP)|    - $(APP_PORTA_80_MAP)|" orquestrators/docker-compose/docker-compose.yml
 else
@@ -150,7 +150,7 @@ endif
 
 ifeq ("$(APP_PORTA_443_MAP_EXPOR)",  "true")
 	@sed -i'' -e "s|#ports:|ports:|" orquestrators/docker-compose/docker-compose.yml
-	
+
 ifneq ("$(APP_PORTA_443_MAP_EXPOR)",  "")
 	@sed -i'' -e "s|#    - $(APP_PORTA_443_MAP)|    - $(APP_PORTA_443_MAP)|" orquestrators/docker-compose/docker-compose.yml
 else
@@ -176,7 +176,7 @@ ifeq ("$(DBADMIN_PRESENTE)",  "true")
 endif
 
 ifeq ("$(MEMCACHEDADMIN_PRESENTE)",  "true")
-    
+
 	@sed -i'' -e "s|#memcachedadmin: #servicememcachedadmin|memcachedadmin: #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    image: ${DOCKER_IMAGE_MEMCACHEDADMIN} #servicememcachedadmin|    image: ${DOCKER_IMAGE_MEMCACHEDADMIN}  #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    environment: #servicememcachedadmin|    environment: #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
@@ -196,7 +196,7 @@ ifeq ("$(MAIL_CATCHER_PRESENTE)",  "true")
 	@sed -i'' -e 's|#    command: \["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"\] #servicemail|    command: ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"] #servicemail|'	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    expose: #servicemail|    expose: #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - 25 #servicemail|        - 25 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        - 80 #servicemail|        - 80 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml	
+	@sed -i'' -e "s|#        - 80 #servicemail|        - 80 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    environment: #servicemail|    environment: #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - VIRTUAL_HOST=http://${APP_HOST}/mailadmin\*,https://${APP_HOST}/mailadmin\*,http://${APP_HOST}/assets\*,https://${APP_HOST}/assets\*,http://${APP_HOST}/messages\*,https://${APP_HOST}/messages\* #servicemail|        - VIRTUAL_HOST=http://${APP_HOST}/mail*,https://${APP_HOST}/mail*,http://${APP_HOST}/assets*,https://${APP_HOST}/assets*,http://${APP_HOST}/messages*,https://${APP_HOST}/messages* #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - FORCE_SSL=true #servicemail|        - FORCE_SSL=true #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
@@ -247,17 +247,17 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@sed -i'' -e "s|#    links: #servicebal|    links: #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - app #servicebal|        - app #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - solr #servicesolr #servicebal|        - solr #servicesolr #servicebal|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#    environment: #servicebal|    environment: #servicebal|" orquestrators/docker-compose/docker-compose.yml	
-	@sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|" orquestrators/docker-compose/docker-compose.yml	
-	@sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|" orquestrators/docker-compose/docker-compose.yml	
-	@sed -i'' -e "s|#        - CERT_FOLDER=/certs #servicebal|        - CERT_FOLDER=/certs #servicebal|" orquestrators/docker-compose/docker-compose.yml	
+	@sed -i'' -e "s|#    environment: #servicebal|    environment: #servicebal|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        - CERT_FOLDER=/certs #servicebal|        - CERT_FOLDER=/certs #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    volumes_from: #servicebal|    volumes_from: #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - storage-certs #servicebal|        - storage-certs #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    volumes: #servicebal|    volumes: #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - /var/run/docker.sock:/var/run/docker.sock #servicebal|        - /var/run/docker.sock:/var/run/docker.sock #servicebal|g" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|nada|nada|" orquestrators/docker-compose/docker-compose.yml
-	
-	
+
+
 ifeq ("$(DBADMIN_PRESENTE)",  "true")
 	@sed -i'' -e "s|#        - dbadmin #servicedbadmin #servicebal|        - dbadmin #servicedbadmin #servicebal|" orquestrators/docker-compose/docker-compose.yml
 endif
@@ -333,14 +333,14 @@ endif
 
 
 setup: ## executa criar_volumes e run na sequencia
-	make criar_volumes 
+	make criar_volumes
 	make run
 
 scale: ## escala os nohs de aplicacao do SEI para 2. Caso vc queira mais de 2 basta usar o comando make qtd=3 scale, substituindo o 3 pelo numero desejado, ou o comando docker-compose scale app=x na pasta orquestrators/docker-compose
 
 	@echo "escala os nohs de aplicacao do SEI para 2. Caso vc queira mais de 2 basta usar o comando make qtd=3 scale, substituindo o 3 pelo numero desejado, ou o comando docker-compose scale app=3 na pasta orquestrators/docker-compose"
-	
-	
+
+
 ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	$(COMMMADCOMPOSE) scale app=$(qtd)
 else
@@ -358,7 +358,7 @@ ifeq ("$(LOGS_SEGUIR)",  "true")
 else
 	$(COMMMADCOMPOSE) logs $(LOGS_COMPONENTE)
 endif
-	
+
 
 logs_app: ## docker-compose logs -f app pressione ctrol+c para sair
 	make LOGS_COMPONENTE=app logs
@@ -368,7 +368,7 @@ logs_app-atualizador: ## docker-compose logs -f app-atualizador pressione ctrol+
 
 logs_balanceador: ## docker-compose logs -f balanceador pressione ctrol+c para sair
 	make LOGS_COMPONENTE=balanceador logs
-	
+
 logs_openldap: ## docker-compose logs -f openldap pressione ctrol+c para sair
 	make LOGS_COMPONENTE=openldap logs
 
@@ -380,10 +380,10 @@ clear: ## pahra o projeto e remove tds os conteineres, redes criados. Nao remove
 	$(COMMMADCOMPOSE) down -v --remove-orphans
 
 apagar_volumes: ## Apaga todos os volumes do projeto ATENCAO TODOS OS DADOS DE BASE E ARQUIVOS SERAO DELETADOS
-	make apagar_volume_fontes 
+	make apagar_volume_fontes
 	make apagar_volume_certs
-	make apagar_volume_banco 
-	make apagar_volume_arquivos_externos 
+	make apagar_volume_banco
+	make apagar_volume_arquivos_externos
 	make apagar_volume_solr
 	make apagar_volume_openldap
 	make apagar_volume_controlador_instalacao
@@ -394,7 +394,7 @@ apagar_volume_fontes: ## Apaga o volume docker com os fontes que serao consumido
 
 apagar_volume_certs: ## Apaga o volume docker com os certs que serao consumidos pelo projeto
 	docker volume rm $(VOLUME_CERTS) || true
-	
+
 apagar_volume_banco: ## Apagar volume do banco
 	docker volume rm $(VOLUME_DB) || true
 
@@ -421,15 +421,74 @@ kubernetes_montar_yaml: ## Montar receitas para kubernetes - apenas mysql
 	orquestrators/rancher-kubernetes/topublish/pvc.yaml \
 	orquestrators/rancher-kubernetes/topublish/statefullsets.yaml \
 	orquestrators/rancher-kubernetes/topublish/secrets.yaml
-	
-	@envsubst < orquestrators/rancher-kubernetes/templates/configmaps-template.yaml > orquestrators/rancher-kubernetes/topublish/configmaps.yaml 
-	@envsubst < orquestrators/rancher-kubernetes/templates/deploys-svc-template.yaml > orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml 
-	@envsubst < orquestrators/rancher-kubernetes/templates/ingress-template.yaml > orquestrators/rancher-kubernetes/topublish/ingress.yaml 
-	@envsubst < orquestrators/rancher-kubernetes/templates/jobs-template.yaml > orquestrators/rancher-kubernetes/topublish/jobs.yaml 
-	@envsubst < orquestrators/rancher-kubernetes/templates/pvc-template.yaml > orquestrators/rancher-kubernetes/topublish/pvc.yaml 
-	@envsubst < orquestrators/rancher-kubernetes/templates/statefullsets-template.yaml > orquestrators/rancher-kubernetes/topublish/statefullsets.yaml 
-	@./generatebase64.sh 
-	
+
+	@envsubst < orquestrators/rancher-kubernetes/templates/configmaps-template.yaml > orquestrators/rancher-kubernetes/topublish/configmaps.yaml
+	@envsubst < orquestrators/rancher-kubernetes/templates/deploys-svc-template.yaml > orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@envsubst < orquestrators/rancher-kubernetes/templates/ingress-template.yaml > orquestrators/rancher-kubernetes/topublish/ingress.yaml
+	@envsubst < orquestrators/rancher-kubernetes/templates/jobs-template.yaml > orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@envsubst < orquestrators/rancher-kubernetes/templates/pvc-template.yaml > orquestrators/rancher-kubernetes/topublish/pvc.yaml
+	@envsubst < orquestrators/rancher-kubernetes/templates/statefullsets-template.yaml > orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@./generatebase64.sh
+
+ifeq ("$(KUBERNETES_RESOURCES_INFORMAR)",  "true")
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_APP} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_APP} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_APP} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_APP} #kb_resources|        #    memory: ${KUBERNETES_REQUEST_MEMORY_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/jobs.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_DB} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_DB} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_DB} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_DB} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_DB} #kb_resources|        #    cpu: ${KUBERNETES_REQUEST_CPU_DB} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_DB} #kb_resources|        #    memory: ${KUBERNETES_REQUEST_MEMORY_DB} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_SOLR} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_SOLR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_SOLR} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_SOLR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_SOLR} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_SOLR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_SOLR} #kb_resources|            memory: ${KUBERNETES_REQUEST_MEMORY_SOLR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/statefullsets.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_MEMCACHED} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_MEMCACHED} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_MEMCACHED} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_MEMCACHED} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_MEMCACHED} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_MEMCACHED} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_MEMCACHED} #kb_resources|            memory: ${KUBERNETES_REQUEST_MEMORY_MEMCACHED} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_JOD} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_JOD} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_JOD} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_JOD} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_JOD} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_JOD} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_JOD} #kb_resources|            memory: ${KUBERNETES_REQUEST_MEMORY_JOD} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_APP} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_APP} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_APP} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_APP} #kb_resources|            memory: ${KUBERNETES_REQUEST_MEMORY_APP} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+
+	@sed -i'' -e "s|        #resources: #kb_resources|        resources: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  limits: #kb_resources|          limits: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_LIMITS_CPU_APP_AGENDADOR} #kb_resources|            cpu: ${KUBERNETES_LIMITS_CPU_APP_AGENDADOR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_LIMITS_MEMORY_APP_AGENDADOR} #kb_resources|            memory: ${KUBERNETES_LIMITS_MEMORY_APP_AGENDADOR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #  requests: #kb_resources|          requests: #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    cpu: ${KUBERNETES_REQUEST_CPU_APP_AGENDADOR} #kb_resources|            cpu: ${KUBERNETES_REQUEST_CPU_APP_AGENDADOR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+	@sed -i'' -e "s|        #    memory: ${KUBERNETES_REQUEST_MEMORY_APP_AGENDADOR} #kb_resources|            memory: ${KUBERNETES_REQUEST_MEMORY_APP_AGENDADOR} #kb_resources|" orquestrators/rancher-kubernetes/topublish/deploys-svc.yaml
+
+endif
+
 	@echo "Arquivos gerados no diretorio orquestrators/rancher-kubernetes/topublish"
 	@echo "Verifique cada um antes de publicar"
 	@echo "Como existem muitas variações de versões de kubernetes e orquestradores pode ser necessário algum ajuste adicional"
