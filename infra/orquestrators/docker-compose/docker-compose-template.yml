@@ -129,8 +129,6 @@ services:
         volumes_from:
             - storage-app
             - storage-certs
-        volumes:
-            - /home/marcelo/projetos/github/spbgovbr/sei-docker/containers/app/app-ci/assets/scripts-e-automatizadores/entrypoint-atualizador.sh:/entrypoint-atualizador.sh
         labels:
             io.rancher.container.pull_image: always
             io.rancher.container.start_once: 'true'
