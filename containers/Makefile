@@ -89,6 +89,10 @@ verificar-imagem-base-haproxy: ## target de apoio para verificar se a imagem bas
 		@if [ -z "$(IMAGEM_BASE_HAPROXY_VERSAO)" ]; then echo "Var IMAGEM_BASE_HAPROXY_VERSAO nao definida"; exit 1; fi
 
 
+verificar-imagem-base-traefik: ## target de apoio para verificar se a imagem base do traefik foi informada
+		@if [ -z "$(IMAGEM_BASE_TRAEFIK)" ]; then echo "Var IMAGEM_BASE_TRAEFIK nao definida"; make envcontainers.env; fi
+		@if [ -z "$(IMAGEM_BASE_TRAEFIK_VERSAO)" ]; then echo "Var IMAGEM_BASE_TRAEFIK_VERSAO nao definida"; exit 1; fi
+
 verificar-imagem-base-openldap: ## target de apoio para verificar se a imagem base do openldap foi informada
 		@if [ -z "$(IMAGEM_BASE_OPENLDAP)" ]; then echo "Var IMAGEM_BASE_OPENLDAP nao definida"; make envcontainers.env; fi
 		@if [ -z "$(IMAGEM_BASE_OPENLDAP_VERSAO)" ]; then echo "Var IMAGEM_BASE_OPENLDAP_VERSAO nao definida"; exit 1; fi		
@@ -203,9 +207,15 @@ erase-conteiner-app-ci: ## apagar a imagem app-ci
 erase-conteiner-haproxy-base: ## apagar a imagem haproxy-base
 		@make IMAGEMTMP=haproxy-base IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
 
+erase-conteiner-traefik-base: ## apagar a imagem traefik-base
+		@make IMAGEMTMP=traefik-base IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
+
 
 erase-conteiner-haproxy: ## apagar a imagem haproxy
 		@make IMAGEMTMP=haproxy IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
+
+erase-conteiner-traefik: ## apagar a imagem haproxy
+		@make IMAGEMTMP=traefik IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
 
 
 erase-conteiner-openldap-base: ## apagar a imagem openldap-base
@@ -232,7 +242,7 @@ erase-conteiner-dbadminer: ## apagar a imagem dbadminer
 		@make IMAGEMTMP=dbadminer IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) erase-conteiner-generic
 
 ## erase-conteiners-local: target que chama todos os outros targets para apagar as imagens do projeto
-erase-conteiners-local: erase-conteiner-app-ci-agendador erase-conteiner-app-ci erase-conteiner-app-dev erase-conteiner-base-app erase-conteiner-solr erase-conteiner-memcached erase-conteiner-jod erase-conteiner-mailcatcher erase-conteiner-mariadb erase-conteiner-base-mariadb erase-conteiner-sqlserver erase-conteiner-base-sqlserver erase-conteiner-oracle erase-conteiner-base-oracle erase-conteiner-postgres erase-conteiner-base-postgres erase-conteiner-base-centos erase-conteiner-phpmemcachedadmin erase-conteiner-phpmemcachedadmin-base erase-conteiner-openldap erase-conteiner-openldap-base erase-conteiner-haproxy erase-conteiner-haproxy-base erase-conteiner-phpldapadmin erase-conteiner-dbadminer
+erase-conteiners-local: erase-conteiner-app-ci-agendador erase-conteiner-app-ci erase-conteiner-app-dev erase-conteiner-base-app erase-conteiner-solr erase-conteiner-memcached erase-conteiner-jod erase-conteiner-mailcatcher erase-conteiner-mariadb erase-conteiner-base-mariadb erase-conteiner-sqlserver erase-conteiner-base-sqlserver erase-conteiner-oracle erase-conteiner-base-oracle erase-conteiner-postgres erase-conteiner-base-postgres erase-conteiner-base-centos erase-conteiner-phpmemcachedadmin erase-conteiner-phpmemcachedadmin-base erase-conteiner-openldap erase-conteiner-openldap-base erase-conteiner-haproxy erase-conteiner-haproxy-base erase-conteiner-traefik erase-conteiner-traefik-base erase-conteiner-phpldapadmin erase-conteiner-dbadminer
 
 
 #*****************************************************
@@ -403,6 +413,22 @@ build-conteiner-haproxy: verificar-imagem-base-haproxy
 					BUILD_ARGS=--build-arg\ IMAGEM_BASE=$(IMAGEM_BASE_HAPROXY):$(IMAGEM_BASE_HAPROXY_VERSAO) \
 					build-conteiner-generic
 
+## build-conteiner-traefik-base construir imagem traefik-base
+build-conteiner-traefik-base:
+		@make IMAGEMTMP=traefik-base \
+		      IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) \
+					IMAGEMTMP_PATH=traefik/traefik-base \
+					build-conteiner-generic
+
+
+## build-conteiner-traefik construir imagem traefik
+build-conteiner-traefik: verificar-imagem-base-traefik
+		@make IMAGEMTMP=traefik \
+		      IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) \
+					IMAGEMTMP_PATH=traefik/traefik \
+					BUILD_ARGS=--build-arg\ IMAGEM_BASE=$(IMAGEM_BASE_TRAEFIK):$(IMAGEM_BASE_TRAEFIK_VERSAO) \
+					build-conteiner-generic
+
 
 build-conteiner-openldap-base: ## construir imagem openldap-base
 		@make IMAGEMTMP=openldap-base \
@@ -562,6 +588,12 @@ publish-container-haproxy-base: ## publicar imagem haproxy-base
 publish-container-haproxy: ## publicar imagem haproxy
 		@make IMAGEMTMP=haproxy IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
 
+publish-container-traefik-base: ## publicar imagem traefik-base
+		@make IMAGEMTMP=traefik-base IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
+
+
+publish-container-traefik: ## publicar imagem traefik
+		@make IMAGEMTMP=traefik IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
 
 publish-container-phpldapadmin: ## publicar imagem phpldapadmin
 		@make IMAGEMTMP=phpldapadmin IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
@@ -572,4 +604,4 @@ publish-container-dbadminer: ## publicar imagem dbadminer
 
 
 ## publish-containers: executa todos os targets de publicacao de imagem na sequencia
-publish-containers: publish-container-base-centos publish-container-memcached publish-container-jod publish-container-mailcatcher publish-container-base-mariadb publish-container-mariadb publish-container-base-sqlserver publish-container-sqlserver publish-container-base-oracle publish-container-oracle publish-container-base-postgres publish-container-postgres publish-container-solr publish-container-base-app publish-container-app-dev publish-container-app-ci publish-container-app-ci-agendador publish-container-phpmemcachedadmin-base publish-container-phpmemcachedadmin publish-container-openldap-base publish-container-openldap publish-container-haproxy-base publish-container-haproxy publish-container-phpldapadmin publish-container-dbadminer
+publish-containers: publish-container-base-centos publish-container-memcached publish-container-jod publish-container-mailcatcher publish-container-base-mariadb publish-container-mariadb publish-container-base-sqlserver publish-container-sqlserver publish-container-base-oracle publish-container-oracle publish-container-base-postgres publish-container-postgres publish-container-solr publish-container-base-app publish-container-app-dev publish-container-app-ci publish-container-app-ci-agendador publish-container-phpmemcachedadmin-base publish-container-phpmemcachedadmin publish-container-openldap-base publish-container-openldap publish-container-haproxy-base publish-container-traefik publish-container-traefik-base publish-container-haproxy publish-container-phpldapadmin publish-container-dbadminer

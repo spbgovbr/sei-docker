@@ -51,8 +51,8 @@ CURLCMD_301 = $(CURLCMD) | grep 301
 CURLCMDSEI_LOGIN = $(CURLCMD) | grep txtUsuario
 CURLCMDSIP_LOGIN = $(CURLCMD_SIP) | grep txtUsuario
 
-CURLHAPROXY = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy | grep Statistics
-CURLHAPROXYFULL = curl -s -L  -u stats:stats --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/haproxy
+CURLTRAEFIK = curl -s -L --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/traefik | grep "Traefik UI"
+CURLTRAEFIKFULL = curl -s -L  --resolve "$(APP_HOST):80:127.0.0.1" http://$(APP_HOST)/traefik
 CURLSOLR = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1"  --resolve "$(APP_HOST):80:127.0.0.1"  https://$(APP_HOST)/solr | grep Dashboard
 CURLDBADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/dbadmin | grep Adminer
 CURLMEMCACHEDADMIN = curl -s -k -L --resolve "$(APP_HOST):443:127.0.0.1" https://$(APP_HOST)/memcachedadmin/ | grep phpMemcachedAdmin
@@ -343,8 +343,8 @@ test_verificar_balanceador_urls: ## target de apoio verifica se as urls fornecid
 	
 ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	
-	@for i in {1..3}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXY))); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 10;  done
-	@var=$$(echo $$($(CURLHAPROXY)));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu tela inicial. Saindo do teste'; exit 1; fi
+	@for i in {1..3}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIK))); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 10;  done
+	@var=$$(echo $$($(CURLTRAEFIK)));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu tela inicial. Saindo do teste'; exit 1; fi
 	
 	@for i in {1..3}; do echo 'Tentando acessar solr admin...'; var=$$(echo $$($(CURLSOLR))); if [ "$$var" != "" ]; then echo 'Pagina solr respondeu com sucesso'; break; else echo 'Aguardando resposta solr ...'; fi; sleep 10;  done
 	@var=$$(echo $$($(CURLSOLR)));  if [ "$$var" = "" ]; then echo 'SOLR nao respondeu tela inicial. Saindo do teste'; exit 1; fi
@@ -404,8 +404,8 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	for i in {1..6}; do echo 'Tentando acessar logs do noh 2...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh2 responder...'; else echo 'Noh 2 respondeu com sucesso'; break; fi; sleep 5;  done; \
 	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh2 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
 	\
-	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
-	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi;
+	for i in {1..6}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI")); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI"));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi;
 	
 	@echo "Escalonando de volta para 1 e verificando..."
 	@echo "*****************************************************"
@@ -419,8 +419,8 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	echo 'Numero de apps diferente do esperado. Saindo do teste'; exit 1; \
 	fi; \
 	\
-	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
-	var=$$(echo $$($(CURLHAPROXYFULL) | grep app));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
+	for i in {1..6}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI")); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI"));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
 	
 	
 	@echo "Escalonando para 3 instancias e verificando..."
@@ -451,15 +451,15 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	for i in {1..6}; do echo 'Tentando acessar logs do noh 2...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh2 responder...'; else echo 'Noh 2 respondeu com sucesso'; break; fi; sleep 5;  done; \
 	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_2 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh2 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
 	\
-	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
-	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_2));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
+	for i in {1..6}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI")); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI"));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; \
 	sleep 1 \
 	&& \
 	for i in {1..6}; do echo 'Tentando acessar logs do noh 3...'; var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_3 | grep "Apache Liberado")); if [ "$$var" = "" ]; then echo 'Aguardando noh 3 responder...'; else echo 'Noh 3 respondeu com sucesso'; break; fi; sleep 5;  done; \
 	var=$$(echo $$($(CMDMAKE) LOGS_SEGUIR=false logs_app | grep app_3 | grep "Apache Liberado"));  if [ "$$var" = "" ]; then echo 'Noh3 nao respondeu como esperado. Saindo do teste...'; exit 1; fi; \
 	\
-	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app_3)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
-	var=$$(echo $$($(CURLHAPROXYFULL) | grep app_3));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
+	for i in {1..6}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI")); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI"));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
 	
 	@echo "Escalonando de volta para 1 e verificando..."
 	@echo "*****************************************************"
@@ -473,8 +473,8 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	echo 'Numero de apps diferente do esperado. Saindo do teste'; exit 1; \
 	fi; \
 	\
-	for i in {1..6}; do echo 'Tentando acessar haproxy...'; var=$$(echo $$($(CURLHAPROXYFULL) | grep app)); if [ "$$var" != "" ]; then echo 'Pagina haproxy respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta haproxy ...'; fi; sleep 5;  done; \
-	var=$$(echo $$($(CURLHAPROXYFULL) | grep app));  if [ "$$var" = "" ]; then echo 'HaProxy nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
+	for i in {1..6}; do echo 'Tentando acessar traefik...'; var=$$(echo $$($(CURLTRAEFIKFULL) | grep app)); if [ "$$var" != "" ]; then echo 'Pagina traefik respondeu com sucesso balanceamento'; break; else echo 'Aguardando resposta traefik ...'; fi; sleep 5;  done; \
+	var=$$(echo $$($(CURLTRAEFIKFULL) | grep "Traefik UI"));  if [ "$$var" = "" ]; then echo 'Traefik nao respondeu com balanceamento esperado. Saindo do teste'; exit 1; fi; 
 
 else
 
