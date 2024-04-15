@@ -107,7 +107,7 @@ services:
 
     #        traefik.http.routers.httpmemcachedadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/memcachedadmin`) #servicememcachedadmin
 
-    #        traefik.http.routers.memcachedadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/dbadmin`) #servicememcachedadmin
+    #        traefik.http.routers.memcachedadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/memcachedadmin`) #servicememcachedadmin
     #        traefik.http.routers.memcachedadmin.tls: true #servicememcachedadmin
     #        traefik.http.services.memcachedadmin.loadbalancer.server.scheme: http #servicememcachedadmin
     #        traefik.http.services.memcachedadmin.loadbalancer.server.port: 80 #servicememcachedadmin
@@ -117,6 +117,8 @@ services:
         labels:
             io.rancher.container.pull_image: always
             io.rancher.sidekicks: storage-db
+        cap_add:
+            - SYS_NICE
         volumes:
             - ${VOLUME_DB}:${DB_DATA_DIRECTORY}
 
@@ -428,7 +430,7 @@ services:
           io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador
 
           traefik.enable: true
-          
+
           #traefik.http.routers.app.rule: Host(`${APP_HOST}`) && (PathPrefix(`/sei`) || PathPrefix(`/sip`) || PathPrefix(`/infra`)) #app-traefik
           #traefik.http.routers.app.entrypoints: websecure #app-traefik
           #traefik.http.routers.app.tls: true #app-traefik
@@ -556,7 +558,7 @@ services:
         - MODULO_INCOM_INCLUSAOPUBLICACAO=${MODULO_INCOM_INCLUSAOPUBLICACAO}
         links:
         - db:db
-        - memcached:memcachedcd 
+        - memcached:memcachedcd
         - solr:solr #servicesolr
         #- jod:jod #servicejod
         #- openldap:openldap #serviceldap
@@ -587,17 +589,17 @@ services:
     #          - traefik.http.routers.seiredirect.middlewares=seiredirectrule #servicebal
     #          - traefik.http.middlewares.seiredirectrule.redirectregex.regex=.* #servicebal
     #          - traefik.http.middlewares.seiredirectrule.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
-              
+
     #          - traefik.http.routers.sipredirect.rule=Host(`${APP_HOST}`) && Path(`/sip`) #servicebal
     #          - traefik.http.routers.sipredirect.middlewares=sipredirectrule #servicebal
     #          - traefik.http.middlewares.sipredirectrule.redirectregex.regex=.* #servicebal
     #          - traefik.http.middlewares.sipredirectrule.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
-              
+
     #          - traefik.http.routers.mydashroot.rule=Host(`${APP_HOST}`) && (PathPrefix(`/traefik`)) #servicebal
     #          - traefik.http.routers.mydashroot.middlewares= mydashredirectroothttp #servicebal
     #          - traefik.http.middlewares.mydashredirectroothttp.redirectregex.regex=.* #servicebal
     #          - traefik.http.middlewares.mydashredirectroothttp.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/dashboard/ #servicebal
-              
+
     #          - traefik.http.routers.mydashroothttps.rule=Host(`${APP_HOST}`) && (PathPrefix(`/traefik`)) #servicebal
     #          - traefik.http.routers.mydashroothttps.tls=true #servicebal
     #          - traefik.http.routers.mydashroothttps.middlewares=mydashredirectroothttp #servicebal
@@ -607,16 +609,16 @@ services:
     #          - traefik.http.routers.mydashboard.service=api@internal #servicebal
     #          - traefik.http.routers.httpmydashboard.rule=Host(`${APP_HOST}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`)) #servicebal
     #          - traefik.http.routers.httpmydashboard.service=api@internal #servicebal
-              
+
     #          - traefik.http.routers.myroot.rule=Host(`${APP_HOST}`) #servicebal
     #          - traefik.http.routers.myroot.middlewares=myrootredirect #servicebal
     #          - traefik.http.middlewares.myrootredirect.redirectregex.regex=.* #servicebal
     #          - traefik.http.middlewares.myrootredirect.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
-              
+
     #          - traefik.http.routers.myroothttps.rule=Host(`${APP_HOST}`) #servicebal
     #          - traefik.http.routers.myroothttps.tls=true #servicebal
     #          - traefik.http.routers.myroothttps.middlewares=myrootredirect #servicebal
-    
+
     #    volumes_from: #servicebal
     #        - storage-certs #servicebal
     #    volumes: #servicebal

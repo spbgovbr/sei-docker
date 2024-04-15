@@ -52,6 +52,7 @@ if [ -z "$APP_PROTOCOLO" ] || \
     exit 1
 fi
 
+
 echo "***************************************************"
 echo "***************************************************"
 echo "**INICIANDO CONFIGURACOES BASICAS DO APACHE E SEI**"
@@ -61,19 +62,12 @@ echo "***************************************************"
 while [ ! -f /sei/controlador-instalacoes/instalado.ok ]
 do
     echo "Aguardando conteiner atualizador instalar e atualizar o SEI e modulos"
-    sleep 5
+    sleep 20
 done
 
 APP_HOST_URL=$APP_PROTOCOLO://$APP_HOST
 
 echo "127.0.0.1 $APP_HOST" >> /etc/hosts
-
-# Direciona logs para saida padrao para utilizar docker logs
-ln -sf /dev/stdout /var/log/httpd/access_log
-ln -sf /dev/stdout /var/log/httpd/ssl_access_log
-ln -sf /dev/stdout /var/log/httpd/ssl_request_log
-ln -sf /dev/stderr /var/log/httpd/error_log
-ln -sf /dev/stderr /var/log/httpd/ssl_error_log
 
 # vefificar se existe codigo fonte
 if [ ! -f /opt/sei/web/SEI.php ] || [ ! -f /opt/sip/web/Sip.php ] ; then
@@ -108,7 +102,7 @@ chmod -R 777 /opt/sip/temp
 while [ ! -f /sei/controlador-instalacoes/instalado.ok ]
 do
     echo "Aguardando conteiner atualizador instalar e atualizar o SEI e modulos"
-    sleep 5 
+    sleep 20
 done
 
 # Ver issue #19
@@ -187,15 +181,6 @@ update-ca-trust extract
 update-ca-trust enable
 
 
-
-echo "Atualizador finalizado procedendo com a subida do apache..."
-
-#atualizar
-/usr/sbin/httpd -DFOREGROUND &
-sleep 3
-
-echo "Apache no ar"
-
 # necessario para testarmos ambientes com a data retroagida
 git config --global http.sslVerify false
 
@@ -207,32 +192,40 @@ echo "***************************************************"
 
 if [ "$MODULO_ESTATISTICAS_INSTALAR" == "true" ]; then
 
-    if [ -z "$MODULO_ESTATISTICAS_VERSAO" ] || \
-       [ -z "$MODULO_ESTATISTICAS_URL" ] || \
-	   [ -z "$MODULO_ESTATISTICAS_SIGLA" ] || \
-	   [ -z "$MODULO_ESTATISTICAS_CHAVE" ]; then
-        echo "Informe as seguinte variaveis de ambiente no container:"
-        echo "MODULO_ESTATISTICAS_VERSAO, MODULO_ESTATISTICAS_URL, MODULO_ESTATISTICAS_SIGLA, MODULO_ESTATISTICAS_CHAVE"
+    if [ -f /sei/controlador-instalacoes/instalado-modulo-estatisticas.ok ]; then
+
+        if [ -z "$MODULO_ESTATISTICAS_VERSAO" ] || \
+           [ -z "$MODULO_ESTATISTICAS_URL" ] || \
+	       [ -z "$MODULO_ESTATISTICAS_SIGLA" ] || \
+	       [ -z "$MODULO_ESTATISTICAS_CHAVE" ]; then
+            echo "Informe as seguinte variaveis de ambiente no container:"
+            echo "MODULO_ESTATISTICAS_VERSAO, MODULO_ESTATISTICAS_URL, MODULO_ESTATISTICAS_SIGLA, MODULO_ESTATISTICAS_CHAVE"
+
+        else
+
+            echo "Verificando existencia do modulo de estatisticas"
+            if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
+                echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
+
+            else
+                echo "Copiando o modulo de estatisticas"
+                cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
+            fi
+
+            cd /opt/sei/web/modulos/mod-sei-estatisticas
+            git checkout $MODULO_ESTATISTICAS_VERSAO
+            echo "Versao do Governanca eh agora: $MODULO_ESTATISTICAS_VERSAO"
+
+            cd /opt/sei/
+
+            sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+            sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+
+        fi
 
     else
 
-        echo "Verificando existencia do modulo de estatisticas"
-        if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
-            echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
-
-        else
-            echo "Copiando o modulo de estatisticas"
-            cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
-        fi
-
-        cd /opt/sei/web/modulos/mod-sei-estatisticas
-        git checkout $MODULO_ESTATISTICAS_VERSAO
-        echo "Versao do Governanca eh agora: $MODULO_ESTATISTICAS_VERSAO"
-
-        cd /opt/sei/
-
-        sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-        sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
+        echo "Arquivo de controle do Modulo de Estatisticas encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
 
     fi
 
@@ -241,6 +234,7 @@ else
     echo "Variavel MODULO_ESTATISTICAS_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
+
 
 echo "***************************************************"
 echo "***************************************************"
@@ -661,6 +655,8 @@ if [ "$MODULO_PEN_INSTALAR" == "true" ]; then
                 mv ./ConfiguracaoModPEN.exemplo.php ConfiguracaoModPEN.php
                 sed -i "s#\"SenhaCertificado\" => \"\"#'SenhaCertificado' => $MODULO_PEN_CERTIFICADO_SENHA#g" ConfiguracaoModPEN.php
                 sed -i "s#\"WebService\" => \"\"#'WebService' => $MODULO_PEN_WEBSERVICE#g" ConfiguracaoModPEN.php
+                sed -i "s#\"Servidor\" => \"\"#'Servidor' => \"$MODULO_PEN_GEARMAN_IP\"#g" ConfiguracaoModPEN.php
+                sed -i "s#\"Porta\" => \"\"#'Porta' => \"$MODULO_PEN_GEARMAN_PORTA\"#g" ConfiguracaoModPEN.php
 
                 # adiciona o certificado
                 cd /opt/sei/config/mod-pen
@@ -735,12 +731,6 @@ else
 
 fi
 
-echo "***************************************************"
-echo "***************************************************"
-echo "********MODULO PROTOCOLO INTEGRADO*****************"
-echo "***************************************************"
-echo "***************************************************"
-
 if [ "$MODULO_PI_INSTALAR" == "true" ]; then
 
     if [ ! -f /sei/controlador-instalacoes/instalado-modulo-pi.ok ]; then
@@ -806,7 +796,6 @@ else
 
 fi
 
-
 echo "***************************************************"
 echo "***************************************************"
 echo "********MODULO INCOM*******************************"
@@ -869,10 +858,34 @@ else
 
 fi
 
-echo "***************************************************"
-echo "Entrypoint chegou ao final..."
-echo "Apache Liberado para uso"
-echo "***************************************************"
 
+echo "Atualizador finalizado procedendo com a subida dos agendamentos..."
+
+
+if [ "$MODULO_PEN_INSTALAR" = "true" ] && [ ! -z "$MODULO_PEN_GEARMAN_IP" ]; then
+    
+    sed -i "s#\"Servidor\" => \"\"#'Servidor' => \"$MODULO_PEN_GEARMAN_IP\"#g" /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+    sed -i "s#\"Porta\" => \"\"#'Porta' => \"$MODULO_PEN_GEARMAN_PORTA\"#g" /opt/sei/config/mod-pen/ConfiguracaoModPEN.php
+    
+    WORKERS=${MODULO_PEN_QTD_WORKER_PROC:-1}
+    sed "s#<<MODULO_PEN_QTD_WORKER_PROC>>#$WORKERS#g" /etc/supervisor/supervisor.ini.template > /etc/supervisor/supervisor.ini
+
+    #Inicializando geramand e supervisord para o Modulo Barramento PEN
+    gearmand -d -l /proc/1/fd/1
+    supervisord
+fi
+
+#Configuração do agendamento do SEI
+printenv | sed 's|^|export |' | sed 's|=|="|' | sed 's|$|"|' > /root/cronenv.sh
+echo "* * * * * root . /root/cronenv.sh; /usr/bin/php -c /etc/php.ini /opt/sei/scripts/AgendamentoTarefaSEI.php >> /proc/1/fd/1 2>> /proc/1/fd/2" >> /etc/cron.d/sei
+#echo "* * * * * root . /root/cronenv.sh; /usr/bin/php -c /etc/php.ini /opt/sei/scripts/mod-pen/verifica_andamento_fila.php >> /proc/1/fd/1 2>> /proc/1/fd/2" >> /etc/cron.d/sei
+echo "* * * * * root . /root/cronenv.sh; /usr/bin/php -c /etc/php.ini /opt/sip/scripts/AgendamentoTarefaSip.php >> /proc/1/fd/1 2>> /proc/1/fd/2" >> /etc/cron.d/sei
+echo "* * * * * root . /root/cronenv.sh; find /opt/sei/temp/ -type f -mmin +120 -delete 2>&1 >> /proc/1/fd/1" >> /etc/cron.d/sei
+
+chown -R root:root /etc/cron.d/
+chmod 0644 /etc/cron.d/sei
+/usr/sbin/crond start -p
+
+echo "Crontab inicializado..."
 
 tail -f /dev/null

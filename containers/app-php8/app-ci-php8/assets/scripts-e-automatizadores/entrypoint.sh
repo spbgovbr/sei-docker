@@ -116,6 +116,13 @@ if [ "$DATABASE_TYPE" = "SqlServer" ]; then
     ln -s /opt2/microsoft /opt/microsoft
 fi
 
+\cp /remi.tgz /opt
+cd /opt && tar -xvzf remi.tgz
+rm remi.tgz
+cd -
+
+sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+
 set +e
 
 RET=1
@@ -183,6 +190,14 @@ cat sei.crt sei.key >> /etc/pki/tls/certs/sei.pem
 echo "Incluindo TrustStore no sistema"
 #cp /icpbrasil/*.crt /etc/pki/ca-trust/source/anchors/
 cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
+
+openssl genrsa -out localhost.key 2048
+openssl req -new -key localhost.key  -out localhost.csr -subj "/CN=${APP_HOST}"
+openssl x509 -req -days 365 -in localhost.csr  -signkey localhost.key  -out localhost.crt
+mv localhost.key /etc/pki/tls/private/
+mv localhost.crt /etc/pki/tls/certs/
+rm -f localhost.csr
+
 update-ca-trust extract
 update-ca-trust enable
 
@@ -191,7 +206,7 @@ update-ca-trust enable
 echo "Atualizador finalizado procedendo com a subida do apache..."
 
 #atualizar
-/usr/sbin/httpd -DFOREGROUND &
+/usr/sbin/php-fpm && /usr/sbin/httpd -DFOREGROUND &
 sleep 3
 
 echo "Apache no ar"

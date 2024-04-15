@@ -5,6 +5,14 @@ ifeq ("$(MAKEFILE_MODO_VERBOSE)",  "true")
 SHELL = sh -xv
 endif
 
+ifneq ($(shell docker compose version 2>/dev/null),)
+DC=docker compose
+else ifneq ($(shell docker-compose --version 2>/dev/null),)
+DC=docker-compose
+else
+$(error ************  docker compose ou docker-compose nao encontrado. Ou inexistente para o usuario do make. Verifique... ************)
+endif
+
 EXISTE_LOCAL_DB := $(shell docker volume ls | grep $(VOLUME_DB)$$ )
 EXISTE_LOCAL_FONTES := $(shell docker volume ls | grep $(VOLUME_FONTES)$$ )
 EXISTE_LOCAL_ARQUIVOS_EXTERNOS := $(shell docker volume ls | grep $(VOLUME_ARQUIVOSEXTERNOS)$$ )
@@ -18,7 +26,8 @@ qtd := "2"
 LOGS_SEGUIR=true
 
 DIR := ${CURDIR}
-COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.yml
+
+CMDCOMPOSE = $(DC) -f orquestrators/docker-compose/docker-compose.yml
 CMD_CURL_SEI_LOGIN = curl -s -L -k $(APP_PROTOCOLO)://$(APP_HOST)/sei | grep "txtUsuario"
 
 check_isalive-timeout := "37"
@@ -36,7 +45,7 @@ check-sei-isalive: ## Target de apoio. Acessa o SEI e verifica se esta responden
 					echo 'Pagina respondeu com tela de login' ; \
 					break ; \
 			else \
-			    echo 'Aguardando resposta 
+			    echo 'Aguardando resposta
 			fi; \
 			sleep 5; \
 	done; \
@@ -44,10 +53,32 @@ check-sei-isalive: ## Target de apoio. Acessa o SEI e verifica se esta responden
 	if [ "$$var" == "" ]; then echo 'Pagina de login nao respondeu. Verifique. Abandonando execucao'; exit 1 ; fi;
 
 
-test_ambiente_localhost_mysql:
-	make apagar_volumes
-	make setup
-	echo "Terminei eeeee"
+check-fontes-posicionado: ## Verifica se o fonte esta posicionado
+	@if [ ! -f $(LOCALIZACAO_FONTES_SEI)/sip/web/Sip.php ]; then "Codigo fonte sip nao localizado em $(LOCALIZACAO_FONTES_SEI)."; exit 1; fi
+	@if [ ! -f $(LOCALIZACAO_FONTES_SEI)/sei/web/SEI.php ]; then "Codigo fonte sei nao localizado em $(LOCALIZACAO_FONTES_SEI)."; exit 1; fi
+	@if [ ! -f $(LOCALIZACAO_FONTES_SEI)/infra/infra_php/InfraRN.php ]; then "Codigo fonte infra nao localizado em $(LOCALIZACAO_FONTES_SEI)."; exit 1; fi
+
+check-version-compatibility: ## Verifica a compatibilidade das versoes com os conteineres
+	@v=$$(grep -o "const SEI_VERSAO = '.*';" $(LOCALIZACAO_FONTES_SEI)/sei/web/SEI.php | sed "s|const SEI_VERSAO = '||" | sed "s|';||"); \
+	set +e; echo $$v |  grep "5\..*\..*" > /dev/null; e=$$?; set -e; \
+	set +e; echo $$DOCKER_IMAGE_APP |  grep "php8" > /dev/null; e1=$$?; set -e; \
+	set +e; echo $$DOCKER_IMAGE_SOLR |  grep "solr9" > /dev/null; e2=$$?; set -e; \
+	set +e; echo $$DOCKER_IMAGE_BD |  grep "mysql8" > /dev/null; e3=$$?; set -e; \
+	if [ "$$e" = "0" ]; then \
+		if [ ! "$$e1" = "0" ] || [ ! "$$e2" = "0" ] || [ ! "$$e3" = "0" ]; then \
+		    echo "Vc escolheu o SEI5. Use as imagens correspondentes para o SEI5. Ver arquivos env de exemplo."; \
+			echo "Aparentemente as imagens de app ou banco ou solr estao erradas. Verifique."; \
+			echo "Mensagem informativa. Iremos continuar em 10 segundos"; \
+			sleep 10; \
+		fi; \
+	else \
+		if [ "$$e1" = "0" ] || [ "$$e2" = "0" ] || [ "$$e3" = "0" ]; then \
+		    echo "Vc escolheu o SEI4. Use as imagens correspondentes para o SEI4. Ver arquivos env de exemplo."; \
+			echo "Aparentemente as imagens de app ou banco ou solr estao erradas. Verifique."; \
+			echo "Mensagem informativa. Iremos continuar em 10 segundos"; \
+			sleep 10; \
+		fi; \
+	fi;
 
 criar_volumes: ## Cria todos os volumes necessarios ao projeto. As vezes eh necessario apagar os volumes antes, para apagar make apagar_volumes
 	make criar_volume_fontes
@@ -59,7 +90,7 @@ criar_volumes: ## Cria todos os volumes necessarios ao projeto. As vezes eh nece
 	make criar_volume_controlador_instalacao
 
 
-criar_volume_fontes: ## Cria o volume docker com os fontes que serao consumidos pelo projeto
+criar_volume_fontes: check-fontes-posicionado ## Cria o volume docker com os fontes que serao consumidos pelo projeto
 ifneq ("$(EXISTE_LOCAL_FONTES)",  "")
 	@echo "Ja existe um volume de Fontes. Voce pode apaga-lo com o comando make apagar_volume_fontes"
 else
@@ -171,8 +202,8 @@ ifeq ("$(DBADMIN_PRESENTE)",  "true")
 	@sed -i'' -e "s|#    image: ${DOCKER_IMAGE_DBADMIN} #servicedbadmin|    image: ${DOCKER_IMAGE_DBADMIN} #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    labels:  #servicedbadmin|    labels:  #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.enable: true  #servicedbadmin|        traefik.enable: true  #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.httpdbadmin.rule: Host(\`localhost\`) && PathPrefix(\`/dbadmin\`) #servicedbadmin|        traefik.http.routers.httpdbadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/dbadmin\`) #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.dbadmin.rule: Host(\`localhost\`) && PathPrefix(\`/dbadmin\`) #servicedbadmin|        traefik.http.routers.dbadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/dbadmin\`) #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.httpdbadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/dbadmin\`) #servicedbadmin|        traefik.http.routers.httpdbadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/dbadmin\`) #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.dbadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/dbadmin\`) #servicedbadmin|        traefik.http.routers.dbadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/dbadmin\`) #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.routers.dbadmin.tls: true #servicedbadmin|        traefik.http.routers.dbadmin.tls: true #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.dbadmin.loadbalancer.server.scheme: http #servicedbadmin|        traefik.http.services.dbadmin.loadbalancer.server.scheme: http #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.dbadmin.loadbalancer.server.port: 80 #servicedbadmin|        traefik.http.services.dbadmin.loadbalancer.server.port: 80 #servicedbadmin|" orquestrators/docker-compose/docker-compose.yml
@@ -184,8 +215,8 @@ ifeq ("$(MEMCACHEDADMIN_PRESENTE)",  "true")
 	@sed -i'' -e "s|#    image: ${DOCKER_IMAGE_MEMCACHEDADMIN} #servicememcachedadmin|    image: ${DOCKER_IMAGE_MEMCACHEDADMIN}  #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    labels: #servicememcachedadmin|    labels: #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.enable: true #servicememcachedadmin|        traefik.enable: true #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.httpmemcachedadmin.rule: Host(\`localhost\`) && PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|        traefik.http.routers.httpmemcachedadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.memcachedadmin.rule: Host(\`localhost\`) && PathPrefix(\`/dbadmin\`) #servicememcachedadmin|        traefik.http.routers.memcachedadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/dbadmin\`) #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.httpmemcachedadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|        traefik.http.routers.httpmemcachedadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.memcachedadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|        traefik.http.routers.memcachedadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/memcachedadmin\`) #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.routers.memcachedadmin.tls: true #servicememcachedadmin|        traefik.http.routers.memcachedadmin.tls: true #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.memcachedadmin.loadbalancer.server.scheme: http #servicememcachedadmin|        traefik.http.services.memcachedadmin.loadbalancer.server.scheme: http #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.memcachedadmin.loadbalancer.server.port: 80 #servicememcachedadmin|        traefik.http.services.memcachedadmin.loadbalancer.server.port: 80 #servicememcachedadmin|" orquestrators/docker-compose/docker-compose.yml
@@ -206,8 +237,8 @@ ifeq ("$(MAIL_CATCHER_PRESENTE)",  "true")
 	@sed -i'' -e "s|#        - 80 #servicemail|        - 80 #servicemail|"	 orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    labels: #servicemail|    labels: #servicemail|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.enable: true #servicemail|        traefik.enable: true #servicemail|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.httpmailadmin.rule: Host(\`localhost\`) && PathPrefix(\`/mailadmin\`) #servicemail|        traefik.http.routers.httpmailadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/mailadmin\`) #servicemail|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.mailadmin.rule: Host(\`localhost\`) && PathPrefix(\`/mailadmin\`) #servicemail|        traefik.http.routers.mailadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/mailadmin\`) #servicemail|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.httpmailadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/mailadmin\`) #servicemail|        traefik.http.routers.httpmailadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/mailadmin\`) #servicemail|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.mailadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/mailadmin\`) #servicemail|        traefik.http.routers.mailadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/mailadmin\`) #servicemail|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.routers.mailadmin.tls: true #servicemail|        traefik.http.routers.mailadmin.tls: true #servicemail|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.mailadmin.loadbalancer.server.scheme: http #servicemail|        traefik.http.services.mailadmin.loadbalancer.server.scheme: http #servicemail|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.mailadmin.loadbalancer.server.port: 80 #servicemail|        traefik.http.services.mailadmin.loadbalancer.server.port: 80 #servicemail|" orquestrators/docker-compose/docker-compose.yml
@@ -224,8 +255,8 @@ ifeq ("$(OPENLDAP_PRESENTE)",  "true")
 	@sed -i'' -e "s|#        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    labels: #serviceldap|    labels: #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.enable: true #serviceldap|        traefik.enable: true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.httpldapadmin.rule: Host(\`localhost\`) && PathPrefix(\`/phpldapadmin\`) #serviceldap|        traefik.http.routers.httpldapadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/phpldapadmin\`) #serviceldap|" orquestrators/docker-compose/docker-compose.yml
-	@sed -i'' -e "s|#        traefik.http.routers.ldapadmin.rule: Host(\`localhost\`) && PathPrefix(\`/phpldapadmin\`) #serviceldap|        traefik.http.routers.ldapadmin.rule: Host(\`localhost\`) \&\& PathPrefix(\`/phpldapadmin\`) #serviceldap|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.httpldapadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/phpldapadmin\`) #serviceldap|        traefik.http.routers.httpldapadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/phpldapadmin\`) #serviceldap|" orquestrators/docker-compose/docker-compose.yml
+	@sed -i'' -e "s|#        traefik.http.routers.ldapadmin.rule: Host(\`${APP_HOST}\`) && PathPrefix(\`/phpldapadmin\`) #serviceldap|        traefik.http.routers.ldapadmin.rule: Host(\`${APP_HOST}\`) \&\& PathPrefix(\`/phpldapadmin\`) #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.routers.ldapadmin.tls: true #serviceldap|        traefik.http.routers.ldapadmin.tls: true #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.ldapadmin.loadbalancer.server.scheme: http #serviceldap|        traefik.http.services.ldapadmin.loadbalancer.server.scheme: http #serviceldap|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        traefik.http.services.ldapadmin.loadbalancer.server.port: 80 #serviceldap|        traefik.http.services.ldapadmin.loadbalancer.server.port: 80 #serviceldap|" orquestrators/docker-compose/docker-compose.yml
@@ -301,7 +332,7 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@sed -i'' -e "s|#          - traefik.http.routers.myroothttps.rule=Host(\`${APP_HOST}\`) #servicebal|          - traefik.http.routers.myroothttps.rule=Host(\`${APP_HOST}\`) #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#          - traefik.http.routers.myroothttps.tls=true #servicebal|          - traefik.http.routers.myroothttps.tls=true #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#          - traefik.http.routers.myroothttps.middlewares=myrootredirect #servicebal|          - traefik.http.routers.myroothttps.middlewares=myrootredirect #servicebal|" orquestrators/docker-compose/docker-compose.yml
-	
+
 	@sed -i'' -e "s|#    volumes_from: #servicebal|    volumes_from: #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#        - storage-certs #servicebal|        - storage-certs #servicebal|" orquestrators/docker-compose/docker-compose.yml
 	@sed -i'' -e "s|#    volumes: #servicebal|    volumes: #servicebal|" orquestrators/docker-compose/docker-compose.yml
@@ -396,11 +427,11 @@ else ifeq ("$(EXISTE_LOCAL_OPENLDAP_DB)",  "")
 
 else
 	make build_docker_compose
-	$(COMMMADCOMPOSE) up -d --remove-orphans
+	$(CMDCOMPOSE) up -d --remove-orphans
 endif
 
 
-setup: ## executa criar_volumes e run na sequencia
+setup: check-version-compatibility ## executa criar_volumes e run na sequencia
 	make criar_volumes
 	make run
 
@@ -410,21 +441,27 @@ scale: ## escala os nohs de aplicacao do SEI para 2. Caso vc queira mais de 2 ba
 
 
 ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
-	$(COMMMADCOMPOSE) scale app=$(qtd)
+
+ifneq ($(shell docker-compose --help | grep scale 2>/dev/null),)
+	$(CMDCOMPOSE) scale app=$(qtd)
+else
+	$(CMDCOMPOSE) up -d app --scale app=$(qtd) --no-recreate
+endif
+
 else
 	echo "Scale nao efetuado. Precisa de um balanceador"
 endif
 
 
 stop: ## docker-compose stop e docker-compose rm -f
-	$(COMMMADCOMPOSE) stop
-	$(COMMMADCOMPOSE) rm -f
+	$(CMDCOMPOSE) stop
+	$(CMDCOMPOSE) rm -f
 
 logs: ## docker-compose logs -f pressione ctrol+c para sair
 ifeq ("$(LOGS_SEGUIR)",  "true")
-	$(COMMMADCOMPOSE) logs -f $(LOGS_COMPONENTE)
+	$(CMDCOMPOSE) logs -f $(LOGS_COMPONENTE)
 else
-	$(COMMMADCOMPOSE) logs $(LOGS_COMPONENTE)
+	$(CMDCOMPOSE) logs $(LOGS_COMPONENTE)
 endif
 
 
@@ -445,7 +482,7 @@ logs_solr: ## docker-compose logs -f solr pressione ctrol+c para sair
 
 clear: ## pahra o projeto e remove tds os conteineres, redes criados. Nao remove os volumes
 	make stop
-	$(COMMMADCOMPOSE) down -v --remove-orphans
+	$(CMDCOMPOSE) down -v --remove-orphans
 
 apagar_volumes: ## Apaga todos os volumes do projeto ATENCAO TODOS OS DADOS DE BASE E ARQUIVOS SERAO DELETADOS
 	@make apagar_volume_fontes
@@ -462,7 +499,7 @@ apagar_volume_generico:
 	else \
 	echo "Apagando volume $(VOLUME_NAME)"; \
 	docker volume rm $(VOLUME_NAME); fi;
-	
+
 
 apagar_volume_fontes: ## Apaga o volume docker com os fontes que serao consumidos pelo projeto
 	@make VOLUME_NAME=$(VOLUME_FONTES) apagar_volume_generico

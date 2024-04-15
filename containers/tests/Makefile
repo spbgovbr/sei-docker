@@ -5,7 +5,7 @@ include envcontainers-test.env
 endif
 
 
-CONTAINERS_LIST=base-centos7 haproxy traefik memcached jod mailcatcher base-mariadb10.5 mariadb10.5 base-sqlserver2017 sqlserver2017 base-oracle11g oracle11g base-postgres15 postgres15 solr8.2.0 base-app app-dev app-ci app-ci-agendador
+CONTAINERS_LIST=base-centos7 base-rocky93 haproxy traefik memcached jod mailcatcher base-mariadb10.5 mariadb10.5 base-mysql8 mysql8 base-sqlserver2017 sqlserver2017 base-oracle11g oracle11g base-postgres15 postgres15 solr8.2.0 solr9.4.0 base-app base-app-php8 app-dev app-ci app-ci-php8 app-ci-agendador app-ci-php8-agendador
 
 help: ## Mostra essa ajuda. Voce pode usar tab para completar os comandos
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//' | sed -e 's|^\ ||'
@@ -14,7 +14,7 @@ help: ## Mostra essa ajuda. Voce pode usar tab para completar os comandos
 getenv-test: ## target de apoio para copiar o envcontainers-teste.env a partir do modelo
 		@cp -f envcontainers-test.env.modelo envcontainers-test.env
 		@echo "Arquivo envcontainers-test.env criado com valores default.";
-		@echo "Abra o arquivo e faca as alteracoes."; 
+		@echo "Abra o arquivo e faca as alteracoes.";
 
 
 envcontainers-test.env: ## target de apoio para verificar se existe o arquivo envcontainers-test.env
@@ -115,15 +115,15 @@ test-containers: verificar-test-envs
 		@echo "***********************************************************************************"
 		@echo "Build******************************************************************************"
 		@echo "***********************************************************************************"
-		make containers-build 
+		make containers-build
 		@echo "***********************************************************************************"
 		@echo "Push*******************************************************************************"
 		@echo "***********************************************************************************"
-		make containers-publish 
+		make containers-publish
 		@echo "***********************************************************************************"
 		@echo "Erase Novamente********************************************************************"
 		@echo "***********************************************************************************"
-		make containers-erase 
+		make containers-erase
 		@echo "***********************************************************************************"
 		@echo "Download **************************************************************************"
 		@echo "***********************************************************************************"
