@@ -207,40 +207,32 @@ echo "***************************************************"
 
 if [ "$MODULO_ESTATISTICAS_INSTALAR" == "true" ]; then
 
-    if [ -f /sei/controlador-instalacoes/instalado-modulo-estatisticas.ok ]; then
-
-        if [ -z "$MODULO_ESTATISTICAS_VERSAO" ] || \
-           [ -z "$MODULO_ESTATISTICAS_URL" ] || \
-	       [ -z "$MODULO_ESTATISTICAS_SIGLA" ] || \
-	       [ -z "$MODULO_ESTATISTICAS_CHAVE" ]; then
-            echo "Informe as seguinte variaveis de ambiente no container:"
-            echo "MODULO_ESTATISTICAS_VERSAO, MODULO_ESTATISTICAS_URL, MODULO_ESTATISTICAS_SIGLA, MODULO_ESTATISTICAS_CHAVE"
-
-        else
-
-            echo "Verificando existencia do modulo de estatisticas"
-            if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
-                echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
-
-            else
-                echo "Copiando o modulo de estatisticas"
-                cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
-            fi
-
-            cd /opt/sei/web/modulos/mod-sei-estatisticas
-            git checkout $MODULO_ESTATISTICAS_VERSAO
-            echo "Versao do Governanca eh agora: $MODULO_ESTATISTICAS_VERSAO"
-
-            cd /opt/sei/
-
-            sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
-            sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
-
-        fi
+    if [ -z "$MODULO_ESTATISTICAS_VERSAO" ] || \
+       [ -z "$MODULO_ESTATISTICAS_URL" ] || \
+	   [ -z "$MODULO_ESTATISTICAS_SIGLA" ] || \
+	   [ -z "$MODULO_ESTATISTICAS_CHAVE" ]; then
+        echo "Informe as seguinte variaveis de ambiente no container:"
+        echo "MODULO_ESTATISTICAS_VERSAO, MODULO_ESTATISTICAS_URL, MODULO_ESTATISTICAS_SIGLA, MODULO_ESTATISTICAS_CHAVE"
 
     else
 
-        echo "Arquivo de controle do Modulo de Estatisticas encontrado, provavelmente ja foi instalado, pulando configuracao do modulo"
+        echo "Verificando existencia do modulo de estatisticas"
+        if [ -d "/opt/sei/web/modulos/mod-sei-estatisticas" ]; then
+            echo "Ja existe um diretorio para o modulo de estatisticas. Vamos assumir que o codigo la esteja integro"
+
+        else
+            echo "Copiando o modulo de estatisticas"
+            cp -Rf /sei-modulos/mod-sei-estatisticas /opt/sei/web/modulos/
+        fi
+
+        cd /opt/sei/web/modulos/mod-sei-estatisticas
+        git checkout $MODULO_ESTATISTICAS_VERSAO
+        echo "Versao do Governanca eh agora: $MODULO_ESTATISTICAS_VERSAO"
+
+        cd /opt/sei/
+
+        sed -i "s#/\*novomodulo\*/#'MdEstatisticas' => 'mod-sei-estatisticas', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
+        sed -i "s#/\*extramodulesconfig\*/#'MdEstatisticas' => array('url' => '$MODULO_ESTATISTICAS_URL','sigla' => '$MODULO_ESTATISTICAS_SIGLA','chave' => '$MODULO_ESTATISTICAS_CHAVE'), /\*extramodulesconfig\*/#g" config/ConfiguracaoSEI.php
 
     fi
 
@@ -249,7 +241,6 @@ else
     echo "Variavel MODULO_ESTATISTICAS_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
-
 
 echo "***************************************************"
 echo "***************************************************"
@@ -877,7 +868,6 @@ else
     echo "Variavel MODULO_INCOM_INSTALAR nao setada para true, pulando configuracao..."
 
 fi
-
 
 echo "***************************************************"
 echo "Entrypoint chegou ao final..."

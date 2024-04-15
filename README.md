@@ -3,6 +3,18 @@
 ```
 Atenção. Mudanças Importantes
 
+04/2024
+Incluímos o traefik como balanceador do ecossistema. Ele está substituindo o haproxy-cloud que usávamos e parou de receber atualização, o que prejudicava o uso em versões docker mais recentes.
+Portanto caso use alguma automação aponte para a tag 2.1.1, ela é a última com o haproxy como balanceador default.
+
+A partir de agora (versão 3.0.0 do projeto) iremos adotar o traefik.
+
+Esta v3 também conta com a possibilidade do SEI5, verificar notas de release.
+Observção importante: para o SEI5 foram cridas novas imagens de app, agendador, banco Mysql e Solr. Portanto será necessário alterar o envlocal.env apontando para as respectivas imagens antes de subir o SEI5.
+
+=========
+Mudanças Importantes - 07/2023
+
 Desde 07/2023 fizemos uma adaptação nesse projeto trazendo diversas melhorias que foram implementadas no projeto super-docker.
 Desta forma o projeto sei-docker aqui listado precisou ser modificado em sua estrutura para atender aos novos requisitos.
 É exatamente o mesmo projeto de antes, porém com novas pastas e funcionalidades, suportando por exemplo o sei4.1.
@@ -12,10 +24,6 @@ Portanto caso esteja usando alguma esteira ou automação que dependa desse repo
 
 No entanto, recomendamos usar a branch main pois será ela que vai receber novas atualizações/correções.
 ```
-
-
-**Atenção** para quem usa docker 24.x ou superior verificar a [issue 72](https://github.com/spbgovbr/sei-docker/issues/72)
-
 
 ## O que é
 
@@ -109,8 +117,8 @@ Nessas pastas ficam os testes automatizados para cada área:
 
 Para utilizar esse projeto você precisa de:
 - código fonte do SEI
-- docker até a versão 23 (ver issue 72)
-- docker-compose 1.29
+- docker
+- docker-compose
 
 
 

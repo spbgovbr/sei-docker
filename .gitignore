@@ -8,7 +8,7 @@ infra/orquestrators/rancher-kubernetes/topublish/jobs.yaml*
 infra/orquestrators/rancher-kubernetes/topublish/pvc.yaml*
 infra/orquestrators/rancher-kubernetes/topublish/secrets.yaml*
 infra/orquestrators/rancher-kubernetes/topublish/statefullsets.yaml*
-tests/Selenium/PythonExported/__pycache__
-tests/Selenium/PythonExported/resultado.xml
-tests/Selenium/PythonExported/test_suiteBasics-executar.py
-tests/Selenium/PythonExported/test_suiteBasics-executar.py-e
+infra/tests/Selenium/PythonExported/__pycache__
+infra/tests/Selenium/PythonExported/resultado.xml
+infra/tests/Selenium/PythonExported/test_suiteBasics-executar.py
+infra/tests/Selenium/PythonExported/test_suiteBasics-executar.py-e

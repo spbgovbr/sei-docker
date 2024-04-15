@@ -53,8 +53,8 @@ Através de um único comando provisiona-se os serviços listados abaixo. Cada s
 *URLNAME é o nome que vc define para o seu ambiente no arquivo envlocal.env. Por ex:* **sei.treinamento.orgao.gov.br**
 
 ### Balanceador
-Interface de estatísticas do balanceador - Acessível com URLNAME/haproxy (usuário e senha: stats)
-![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/haproxy.jpg)
+Interface de estatísticas do balanceador - Acessível com URLNAME/traefik
+![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/traefik.jpeg)
 
 ### SEI: 
 Acesse com URLNAME ou URLNAME/sei ou URLNAME/sip
@@ -81,7 +81,7 @@ Interface para receber e visualizar e-mails em formato html. Acessível com URLN
 Interface de administração do OpenLdap para cadastro de árvores de Departamentos e Usuários. Acessível com URLNAME/phpldapadmin
 ![PhpLdapAdmin](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/phpldapadmin.jpg)
 
-
+ 
 
 
 **Todos os Servicos:**

@@ -34,7 +34,7 @@ services:
             io.rancher.container.start_once: "true"
         volumes:
             - ${VOLUME_CERTS_MOUNT}:/certs:rw
-            
+
     storage-openldap:
         image: "busybox:latest"
         labels:
@@ -42,7 +42,7 @@ services:
         volumes:
             - ${VOLUME_OPENLDAP_SLAPD}:/etc/ldap/slapd.d
             - ${VOLUME_OPENLDAP_DB}:/var/lib/ldap
-            
+
     #ldapadmin: #serviceldap
     #    image: ${DOCKER_IMAGE_OPENLDAP_PHPLDAPADMIN} #serviceldap
     #    environment: #serviceldap
@@ -50,9 +50,13 @@ services:
     #        - PHPLDAPADMIN_LDAP_HOSTS=openldap #serviceldap
     #        - PHPLDAPADMIN_HTTPS=false #serviceldap
     #        - PHPLDAPADMIN_TRUST_PROXY_SSL=true #serviceldap
-    #        - VIRTUAL_HOST=http://${APP_HOST}/phpldapadmin*,https://${APP_HOST}/phpldapadmin* #serviceldap
-    #        - EXCLUDE_PORTS=443 #serviceldap
-    #        - FORCE_SSL=true #serviceldap
+    #    labels: #serviceldap
+    #        traefik.enable: true #serviceldap
+    #        traefik.http.routers.httpldapadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/phpldapadmin`) #serviceldap
+    #        traefik.http.routers.ldapadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/phpldapadmin`) #serviceldap
+    #        traefik.http.routers.ldapadmin.tls: true #serviceldap
+    #        traefik.http.services.ldapadmin.loadbalancer.server.scheme: http #serviceldap
+    #        traefik.http.services.ldapadmin.loadbalancer.server.port: 80 #serviceldap
     #    links: #serviceldap
     #        - openldap:openldap #serviceldap
     #openldap: #serviceldap
@@ -74,55 +78,78 @@ services:
     #        - LDAP_TLS=false #serviceldap
     #    volumes_from: #serviceldap
     #        - storage-openldap #serviceldap
-                
+
     #jod: #servicejod
     #    image: ${DOCKER_IMAGE_JOD} #servicejod
-    
+
     #mail: #servicemail
     #    image: ${DOCKER_IMAGE_MAIL} #servicemail
-    #    command: ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80"] #servicemail
+    #    command: ["mailcatcher", "--no-quit", "--foreground", "--ip=0.0.0.0", "--smtp-port=25", "--http-port=80", "--http-path=/mailadmin"] #servicemail
     #    expose: #servicemail
     #        - 25 #servicemail
     #        - 80 #servicemail
-    #    environment: #servicemail
-    #        - VIRTUAL_HOST=http://${APP_HOST}/mailadmin*,https://${APP_HOST}/mailadmin*,http://${APP_HOST}/assets*,https://${APP_HOST}/assets*,http://${APP_HOST}/messages*,https://${APP_HOST}/messages* #servicemail
-    #        - FORCE_SSL=true #servicemail
-    #        - EXCLUDE_PORTS=25,1080,1025 #servicemail
-    #        - EXTRA_SETTINGS=http-request set-path "%[path\,regsub(^/mailadmin\,/)]" #servicemail
-    
+    #    labels: #servicemail
+    #        traefik.enable: true #servicemail
+    #        traefik.http.routers.httpmailadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/mailadmin`) #servicemail
+
+    #        traefik.http.routers.mailadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/mailadmin`) #servicemail
+    #        traefik.http.routers.mailadmin.tls: true #servicemail
+    #        traefik.http.services.mailadmin.loadbalancer.server.scheme: http #servicemail
+    #        traefik.http.services.mailadmin.loadbalancer.server.port: 80 #servicemail
+
     memcached:
         image: ${DOCKER_IMAGE_MEMCACHED}
-    
+
     #memcachedadmin: #servicememcachedadmin
     #    image: ${DOCKER_IMAGE_MEMCACHEDADMIN} #servicememcachedadmin
-    #    environment: #servicememcachedadmin
-    #        - VIRTUAL_HOST=http://${APP_HOST}/memcachedadmin*,https://${APP_HOST}/memcachedadmin* #servicememcachedadmin
-    #        - FORCE_SSL=true #servicememcachedadmin
+    #    labels: #servicememcachedadmin
+    #        traefik.enable: true #servicememcachedadmin
+
+    #        traefik.http.routers.httpmemcachedadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/memcachedadmin`) #servicememcachedadmin
+
+    #        traefik.http.routers.memcachedadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/memcachedadmin`) #servicememcachedadmin
+    #        traefik.http.routers.memcachedadmin.tls: true #servicememcachedadmin
+    #        traefik.http.services.memcachedadmin.loadbalancer.server.scheme: http #servicememcachedadmin
+    #        traefik.http.services.memcachedadmin.loadbalancer.server.port: 80 #servicememcachedadmin
 
     db:
         image: ${DOCKER_IMAGE_BD}
         labels:
             io.rancher.container.pull_image: always
             io.rancher.sidekicks: storage-db
+        cap_add:
+            - SYS_NICE
         volumes:
             - ${VOLUME_DB}:${DB_DATA_DIRECTORY}
-    
+
     #dbadmin: #servicedbadmin
     #    image: ${DOCKER_IMAGE_DBADMIN} #servicedbadmin
-    #    environment: #servicedbadmin
-    #        - VIRTUAL_HOST=http://${APP_HOST}/dbadmin*,https://${APP_HOST}/dbadmin* #servicedbadmin
-    #        - FORCE_SSL=true #servicedbadmin
-            
-  
+    #    labels:  #servicedbadmin
+    #        traefik.enable: true  #servicedbadmin
+
+    #        traefik.http.routers.httpdbadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/dbadmin`) #servicedbadmin
+
+    #        traefik.http.routers.dbadmin.rule: Host(`${APP_HOST}`) && PathPrefix(`/dbadmin`) #servicedbadmin
+    #        traefik.http.routers.dbadmin.tls: true #servicedbadmin
+    #        traefik.http.services.dbadmin.loadbalancer.server.scheme: http #servicedbadmin
+    #        traefik.http.services.dbadmin.loadbalancer.server.port: 80 #servicedbadmin
+
+
     solr:
         image: ${DOCKER_IMAGE_SOLR}
-        environment:
-            - VIRTUAL_HOST=http://${APP_HOST}/solr*,https://${APP_HOST}/solr*
-            - FORCE_SSL=true
+        labels:
+          traefik.enable: true
+
+          traefik.http.routers.httpsolr.rule: Host(`${APP_HOST}`) && PathPrefix(`/solr`)
+
+          traefik.http.routers.solr.rule: Host(`${APP_HOST}`) && PathPrefix(`/solr`)
+          traefik.http.routers.solr.tls: true
+          traefik.http.services.solr.loadbalancer.server.scheme: http
+          traefik.http.services.solr.loadbalancer.server.port: 8983
         volumes:
             - ${VOLUME_SOLR}:${SOLR_DATA_DIRECTORY}
-        
-    
+
+
     app-atualizador:
         image: ${DOCKER_IMAGE_APP}
         entrypoint: "/entrypoint-atualizador.sh"
@@ -399,8 +426,23 @@ services:
             - storage-app
             - storage-certs
         labels:
-            io.rancher.container.pull_image: always
-            io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador    
+          io.rancher.container.pull_image: always
+          io.rancher.sidekicks: storage-arquivosexternos,storage-fontes,app-atualizador
+
+          traefik.enable: true
+
+          #traefik.http.routers.app.rule: Host(`${APP_HOST}`) && (PathPrefix(`/sei`) || PathPrefix(`/sip`) || PathPrefix(`/infra`)) #app-traefik
+          #traefik.http.routers.app.entrypoints: websecure #app-traefik
+          #traefik.http.routers.app.tls: true #app-traefik
+          #traefik.http.services.app.loadbalancer.server.scheme: https #app-traefik
+          #traefik.http.services.app.loadbalancer.server.port: 443 #app-traefik
+          #traefik.http.services.app.loadBalancer.sticky.cookie: true #app-traefik
+
+          #traefik.http.routers.httpapp.rule: Host(`${APP_HOST}`) && (PathPrefix(`/sei`) || PathPrefix(`/sip`) || PathPrefix(`/infra`)) #app-traefik
+          #traefik.http.routers.httpapp.entrypoints: web #app-traefik
+          #traefik.http.services.httpapp.loadbalancer.server.scheme: http #app-traefik
+          #traefik.http.services.httpapp.loadbalancer.server.port: 80 #app-traefik
+          #traefik.http.services.httpapp.loadBalancer.sticky.cookie: true #app-traefik
         environment:
         - APP_PROTOCOLO=${APP_PROTOCOLO}
         - APP_HOST=${APP_HOST}
@@ -514,17 +556,13 @@ services:
         - MODULO_INCOM_USERWS=${MODULO_INCOM_USERWS}
         - MODULO_INCOM_PASSWS=${MODULO_INCOM_PASSWS}
         - MODULO_INCOM_INCLUSAOPUBLICACAO=${MODULO_INCOM_INCLUSAOPUBLICACAO}
-        - VIRTUAL_HOST=https://${APP_HOST}/sei*,https://${APP_HOST}/sip*,https://${APP_HOST}/infra*,http://${APP_HOST}/sei*,http://${APP_HOST}/sip*,http://${APP_HOST}/infra*
-        #- EXCLUDE_PORTS=443
-        #- EXCLUDE_PORTS=80
-        #- EXTRA_ROUTE_SETTINGS=ssl verify none
-        - COOKIE=SRV insert indirect nocache
         links:
         - db:db
-        - memcached:memcached
+        - memcached:memcachedcd
         - solr:solr #servicesolr
         #- jod:jod #servicejod
         #- openldap:openldap #serviceldap
+
     #balanceador: #servicebal
     #    image: ${DOCKER_IMAGE_BALANCEADOR} #servicebal
     #    links: #servicebal
@@ -534,14 +572,57 @@ services:
     #        - ldapadmin #serviceldap #servicebal
     #        - memcachedadmin #servicememcachedadmin #servicebal
     #        - dbadmin #servicedbadmin #servicebal
-    #    environment: #servicebal
-    #        - EXTRA_FRONTEND_SETTINGS_80=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal
-    #        - EXTRA_FRONTEND_SETTINGS_443=use_backend stats if { path_beg -i /haproxy }, acl is_root path -i /, redirect code 301 location http://${APP_HOST}/sei/ if is_root #servicebal
-    #        - CERT_FOLDER=/certs #servicebal
+    #    command: #servicebal
+    #        - --log.level=DEBUG #servicebal
+    #        - --api.dashboard=true #servicebal
+    #        - --providers.docker=true #servicebal
+    #        - --providers.docker.exposedbydefault=false #servicebal
+    #        - --accesslog=true #servicebal
+    #        - --entrypoints.websecure.address=:443 #servicebal
+    #        - --entrypoints.web.address=:80 #servicebal
+    #        - --serverstransport.insecureskipverify=true #servicebal
+    #        - --providers.file.directory=/etc/traefik/dynamic_conf #servicebal
+    #    labels: #servicebal
+    #          - traefik.enable=true #servicebal
+
+    #          - traefik.http.routers.seiredirect.rule=Host(`${APP_HOST}`) && Path(`/sei`) #servicebal
+    #          - traefik.http.routers.seiredirect.middlewares=seiredirectrule #servicebal
+    #          - traefik.http.middlewares.seiredirectrule.redirectregex.regex=.* #servicebal
+    #          - traefik.http.middlewares.seiredirectrule.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
+
+    #          - traefik.http.routers.sipredirect.rule=Host(`${APP_HOST}`) && Path(`/sip`) #servicebal
+    #          - traefik.http.routers.sipredirect.middlewares=sipredirectrule #servicebal
+    #          - traefik.http.middlewares.sipredirectrule.redirectregex.regex=.* #servicebal
+    #          - traefik.http.middlewares.sipredirectrule.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
+
+    #          - traefik.http.routers.mydashroot.rule=Host(`${APP_HOST}`) && (PathPrefix(`/traefik`)) #servicebal
+    #          - traefik.http.routers.mydashroot.middlewares= mydashredirectroothttp #servicebal
+    #          - traefik.http.middlewares.mydashredirectroothttp.redirectregex.regex=.* #servicebal
+    #          - traefik.http.middlewares.mydashredirectroothttp.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/dashboard/ #servicebal
+
+    #          - traefik.http.routers.mydashroothttps.rule=Host(`${APP_HOST}`) && (PathPrefix(`/traefik`)) #servicebal
+    #          - traefik.http.routers.mydashroothttps.tls=true #servicebal
+    #          - traefik.http.routers.mydashroothttps.middlewares=mydashredirectroothttp #servicebal
+
+    #          - traefik.http.routers.mydashboard.rule=Host(`${APP_HOST}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`)) #servicebal
+    #          - traefik.http.routers.mydashboard.tls=true #servicebal
+    #          - traefik.http.routers.mydashboard.service=api@internal #servicebal
+    #          - traefik.http.routers.httpmydashboard.rule=Host(`${APP_HOST}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`)) #servicebal
+    #          - traefik.http.routers.httpmydashboard.service=api@internal #servicebal
+
+    #          - traefik.http.routers.myroot.rule=Host(`${APP_HOST}`) #servicebal
+    #          - traefik.http.routers.myroot.middlewares=myrootredirect #servicebal
+    #          - traefik.http.middlewares.myrootredirect.redirectregex.regex=.* #servicebal
+    #          - traefik.http.middlewares.myrootredirect.redirectregex.replacement=${APP_PROTOCOLO}://${APP_HOST}/sei/ #servicebal
+
+    #          - traefik.http.routers.myroothttps.rule=Host(`${APP_HOST}`) #servicebal
+    #          - traefik.http.routers.myroothttps.tls=true #servicebal
+    #          - traefik.http.routers.myroothttps.middlewares=myrootredirect #servicebal
+
     #    volumes_from: #servicebal
     #        - storage-certs #servicebal
     #    volumes: #servicebal
     #        - /var/run/docker.sock:/var/run/docker.sock #servicebal
     #    ports: #servicebal
-    #        - ${BALANCEADOR_PORTA_80_MAP} #servicebal
-    #        - ${BALANCEADOR_PORTA_443_MAP} #servicebal
+    #        - 80:80 #servicebal
+    #        - 443:443 #servicebal
