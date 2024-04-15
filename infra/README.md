@@ -53,8 +53,8 @@ Através de um único comando provisiona-se os serviços listados abaixo. Cada s
 *URLNAME é o nome que vc define para o seu ambiente no arquivo envlocal.env. Por ex:* **sei.treinamento.orgao.gov.br**
 
 ### Balanceador
-Interface de estatísticas do balanceador - Acessível com URLNAME/haproxy (usuário e senha: stats)
-![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/haproxy.jpg)
+Interface de estatísticas do balanceador - Acessível com URLNAME/traefik
+![Balanceador](https://github.com/spbgovbr/sei-docker-binarios/raw/main/docs/images/servicePictures/traefik.jpeg)
 
 ### SEI: 
 Acesse com URLNAME ou URLNAME/sei ou URLNAME/sip

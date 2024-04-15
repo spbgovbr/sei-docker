@@ -3,6 +3,18 @@
 ```
 Atenção. Mudanças Importantes
 
+04/2024
+Incluímos o traefik como balanceador do ecossistema. Ele está substituindo o haproxy-cloud que usávamos e parou de receber atualização, o que prejudicava o uso em versões docker mais recentes.
+Portanto caso use alguma automação aponte para a tag 2.1.1, ela é a última com o haproxy como balanceador default.
+
+A partir de agora (versão 3.0.0 do projeto) iremos adotar o traefik.
+
+Esta v3 também conta com a possibilidade do SEI5, verificar notas de release.
+Observção importante: para o SEI5 foram cridas novas imagens de app, agendador, banco Mysql e Solr. Portanto será necessário alterar o envlocal.env apontando para as respectivas imagens antes de subir o SEI5.
+
+=========
+Mudanças Importantes - 07/2023
+
 Desde 07/2023 fizemos uma adaptação nesse projeto trazendo diversas melhorias que foram implementadas no projeto super-docker.
 Desta forma o projeto sei-docker aqui listado precisou ser modificado em sua estrutura para atender aos novos requisitos.
 É exatamente o mesmo projeto de antes, porém com novas pastas e funcionalidades, suportando por exemplo o sei4.1.
