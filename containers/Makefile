@@ -661,7 +661,7 @@ publish-container-app-ci: ## publicar imagem app-ci
 
 
 publish-container-app-ci-php8: ## publicar imagem app-ci-php8
-		@make IMAGEMTMP=app-ci IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
+		@make IMAGEMTMP=app-ci-php8 IMAGEMTMP_VERSAO=$(DOCKER_CONTAINER_VERSAO_PRODUTO) publish-container-generic
 
 
 publish-container-app-ci-agendador: ## publicar imagem app-ci-agendador
