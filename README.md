@@ -25,10 +25,6 @@ Portanto caso esteja usando alguma esteira ou automação que dependa desse repo
 No entanto, recomendamos usar a branch main pois será ela que vai receber novas atualizações/correções.
 ```
 
-
-**Atenção** para quem usa docker 24.x ou superior verificar a [issue 72](https://github.com/spbgovbr/sei-docker/issues/72)
-
-
 ## O que é
 
 O SEI-Docker é o projeto disponibilizado para provisionamento de ambientes do SEI usando a tecnologia docker e os orquestradores docker-compose, cattle ou kubernetes.
@@ -121,8 +117,8 @@ Nessas pastas ficam os testes automatizados para cada área:
 
 Para utilizar esse projeto você precisa de:
 - código fonte do SEI
-- docker até a versão 23 (ver issue 72)
-- docker-compose 1.29
+- docker
+- docker-compose
 
 
 
