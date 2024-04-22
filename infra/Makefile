@@ -45,7 +45,7 @@ check-sei-isalive: ## Target de apoio. Acessa o SEI e verifica se esta responden
 					echo 'Pagina respondeu com tela de login' ; \
 					break ; \
 			else \
-			    echo 'Aguardando resposta
+			    echo 'Aguardando resposta'; \
 			fi; \
 			sleep 5; \
 	done; \
