@@ -9,8 +9,9 @@ yum install -y \
 	gearmand \
 	libgearman \
 	libgearman-devel \
-	php-pecl-gearman \
-	python-pip
+	php-pecl-gearman
+
+curl https://bootstrap.pypa.io/pip/2.7/get-pip.py | python
 
 
 #Instalação Supervisor

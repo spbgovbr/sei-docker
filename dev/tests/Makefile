@@ -4,8 +4,12 @@ ifneq ("$(wildcard env-test.env)","")
 include env-test.env
 endif
 
+ifndef spe
+spe=sei4
+endif
+
 ISLINUX:=$(shell echo $$(uname | grep -i linux | wc -l))
-CMDSELENIUMCHROMELOCAL=docker run -d --rm --name seleniumchrome  -p 4444:4444 --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
+CMDSELENIUMCHROMELOCAL=docker run -d --rm --name seleniumchrome  -p 4444:4444 -p 5900:5900 --network=host -v /dev/shm:/dev/shm selenium/standalone-chrome:4.0.0-rc-1-prerelease-20210618
 CMDSELENIUMTEST=docker run --rm -it -v "$$PWD"/Selenium/PythonExported:/t -w /t --network=host linhares/pytestseleniumdocker:latest bash -c "echo '127.0.0.1 seleniumchrome' >> /etc/hosts && pytest --disable-pytest-warnings -W ignore::DeprecationWarning -o junit_family=xunit2 --junitxml=/t/resultado.xml test_suiteBasics-executar.py"
 
 define MENSAGEM_TESTE_SELENIUM
@@ -42,13 +46,6 @@ export MENSAGEM_TESTE_ALL
 
 help: ## Mostra essa ajuda. Voce pode usar tab para completar os comandos
 		@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//' | sed -e 's|^\ ||'
-
-
-apagar_env: ## target de apoio para apagar arquivo env na origem
-		@echo "Apagando arquivo env na origem"
-		@if test -f ../env.env; then rm -rf env.env; fi;
-		@echo "Copiando arquivo env $(BASE)"
-		@cp ../envs/env-$(BASE).env ../
 
 
 test_selenium_basico1: ## target de apoio roda um teste em selenium apontando para a instancia escolhida para criar processo com anexos
@@ -109,9 +106,9 @@ tests-base: ## target de apoio roda o teste em determinada base de dados via par
 		@echo "Base de dados dessa execucao: $(BASE)"
 		@echo "*****************************************************"
 		make -C ../ destroy
+		rm -rf ../env.env
 		make -C ../ base=$(BASE) config
-		make -C ../ up
-		make -C ../ update
+		make -C ../ up-update
 		make test_selenium_basico1
 		make -C ../ destroy
 		@echo "*****************************************************"
@@ -122,10 +119,10 @@ tests-base: ## target de apoio roda o teste em determinada base de dados via par
 tests-all-bases: ## RODE ESSE TARGET PARA TESTAR TODA A STACK DO DEV
 		@echo "$$MENSAGEM_TESTE_ALL"
 		@echo ""
-		make BASE=mysql tests-base
-		make BASE=sqlserver tests-base
-		make BASE=oracle tests-base
-		make BASE=postgres tests-base
+		make BASE=mysql-$(spe) tests-base
+		make BASE=sqlserver-$(spe) tests-base
+		make BASE=oracle-$(spe) tests-base
+		make BASE=postgres-$(spe) tests-base
 		@echo "*****************************************************"
 		@echo "*****************************************************"
 		@echo "TESTES FINALIZADOS"

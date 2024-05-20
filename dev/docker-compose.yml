@@ -26,13 +26,13 @@ services:
       - ${DATABASE_PORT}:${DATABASE_PORT}
 
   solr:
-    image: ${DOCKER_REGISTRY}/solr8.2.0:${ENVIRONMENT_VERSION}
+    image: ${DOCKER_REGISTRY}/${SOLR_IMAGE}:${ENVIRONMENT_VERSION}
     container_name: solr
     ports:
       - "8983:8983"
 
   httpd:
-    image: ${DOCKER_REGISTRY}/app-dev:${ENVIRONMENT_VERSION}
+    image: ${DOCKER_REGISTRY}/${APP_IMAGE}:${ENVIRONMENT_VERSION}
     container_name: httpd
     restart: always
     ports:

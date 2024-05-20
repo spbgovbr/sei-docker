@@ -146,12 +146,24 @@ if [ "$APP_DB_TIPO" = "SqlServer" ]; then
     ln -s /opt2/microsoft /opt/microsoft
 fi
 
-\cp /remi.tgz /opt
+\cp /opt2/remi.tgz /opt/
 cd /opt && tar -xvzf remi.tgz
 rm -rf remi.tgz
 cd -
 
-sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+if [ "$APP_DB_TIPO" = "SqlServer" ] && [ "$APP_DB_HOST" = "db" ]; then
+
+    set +e
+    grep "'Encrypt' => false" /opt/infra/infra_php/InfraSqlServer.php
+    e=$?
+    set -e
+
+    if [ ! "$e" = "0" ]; then
+        sed -i "s|MultipleActiveResultSets' => false,|MultipleActiveResultSets' => false,'Encrypt' => false,|" /opt/infra/infra_php/InfraSqlServer.php
+    fi
+
+fi
+
 
 set +e
 
@@ -268,7 +280,7 @@ if [ -f /sei/controlador-instalacoes/atualizacao-sip-$VERSAO_ENCONTRADA.ok ]; th
     echo "Arquivos da atualização para o SIP já rodaram nessa versao: $VERSAO_ENCONTRADA . Pulando para a proxima etapa"
 else
     set +e
-    echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php /opt/sip/scripts/atualizar_versao_sip.php > /tmp/result.txt
+    echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php /opt/sip/scripts/atualizar_versao_sip.php > /tmp/result.txt
     erro=$?
     set -e
     cat /tmp/result.txt
@@ -296,7 +308,7 @@ if [ -f /sei/controlador-instalacoes/atualizacao-sip-$VERSAO_ENCONTRADA-recurso.
     echo "Arquivos da atualização de recurso para o SIP já rodaram nessa versao: $VERSAO_ENCONTRADA . Pulando para a proxima etapa"
 else
     set +e
-    echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php /opt/sip/scripts/atualizar_recursos_sei.php > /tmp/result.txt
+    echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php /opt/sip/scripts/atualizar_recursos_sei.php > /tmp/result.txt
     erro=$?
     set -e
     cat /tmp/result.txt
@@ -318,7 +330,7 @@ if [ -f /sei/controlador-instalacoes/atualizacao-sei-$VERSAO_ENCONTRADA.ok ]; th
     echo "Arquivos da atualização para o SEI já rodaram nessa versao: $VERSAO_ENCONTRADA . Pulando para a proxima etapa"
 else
     set +e
-    echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php /opt/sei/scripts/atualizar_versao_sei.php > /tmp/result.txt
+    echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php /opt/sei/scripts/atualizar_versao_sei.php > /tmp/result.txt
     erro=$?
     set -e
     cat /tmp/result.txt
@@ -547,7 +559,7 @@ if [ "$MODULO_REST_INSTALAR" == "true" ]; then
             sed -i "s#MOD_WSSEI_TOKEN_SECRET#MODULO_REST_TOKEN_SECRET#g" ConfiguracaoMdWSSEI.php
             
             cd /opt/sei/scripts/mod-wssei/
-            echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_wssei.php
+            echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei_atualizar_versao_modulo_wssei.php
 
             rm -rf /opt/sei/web/modulos/mod-wssei.old
             touch /sei/controlador-instalacoes/instalado-modulo-rest.ok
@@ -616,10 +628,10 @@ if [ "$MODULO_RESPOSTA_INSTALAR" == "true" ]; then
 
           cd /opt/sip/scripts/mod-sei-resposta/
 
-          echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip_atualizar_versao_modulo_resposta.php
+          echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip_atualizar_versao_modulo_resposta.php
 
           cd /opt/sei/scripts/mod-sei-resposta/
-          echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_resposta.php
+          echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei_atualizar_versao_modulo_resposta.php
 
           if [ ! -z "$MODULO_RESPOSTA_SISTEMA_ID" ]; then
               echo "Vamos chamar a configuracao do mod-sei-resposta"
@@ -691,13 +703,13 @@ if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
 
                 cd /opt/sip/scripts/mod-gestao-documental/
 
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip_atualizar_versao_modulo_documental.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip_atualizar_versao_modulo_documental.php
 
                 cd /opt/sei/config/mod-gestao-documental/
                 cp ConfiguracaoMdGestaoDocumental.exemplo.php ConfiguracaoMdGestaoDocumental.php
 
                 cd /opt/sei/scripts/mod-gestao-documental/
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_documental.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei_atualizar_versao_modulo_documental.php
 
                 rm -rf /opt/sei/web/modulos/mod-gestao-documental.old
 
@@ -800,10 +812,10 @@ if [ "$MODULO_LOGINUNICO_INSTALAR" == "true" ]; then
 
               cd /opt/sip/scripts/mod-loginunico/
 
-              echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip_atualizar_versao_modulo_loginunico.php
+              echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip_atualizar_versao_modulo_loginunico.php
 
               cd /opt/sei/scripts/mod-loginunico/
-              echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_loginunico.php
+              echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei_atualizar_versao_modulo_loginunico.php
 
               rm -rf /opt/sei/web/modulos/mod-sei-loginunico.old
               touch /sei/controlador-instalacoes/instalado-modulo-loginunico.ok
@@ -886,10 +898,10 @@ if [ "$MODULO_ASSINATURAVANCADA_INSTALAR" == "true" ]; then
 
                 cd /opt/sip/scripts/mod-assinatura-avancada/
 
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip_atualizar_versao_modulo_assinatura.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip_atualizar_versao_modulo_assinatura.php
 
                 cd /opt/sei/scripts/mod-assinatura-avancada/
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei_atualizar_versao_modulo_assinatura.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei_atualizar_versao_modulo_assinatura.php
 
                 rm -rf /opt/sei/web/modulos/mod-sei-assinatura-avancada.old
 
@@ -971,8 +983,8 @@ if [ "$MODULO_PEN_INSTALAR" == "true" ]; then
                 sed -i "s#/\*novomodulo\*/#'PENIntegracao' => 'pen', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
 
                 cd /opt
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-pen/sip_atualizar_versao_modulo_pen.php
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-pen/sei_atualizar_versao_modulo_pen.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip/scripts/mod-pen/sip_atualizar_versao_modulo_pen.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei/scripts/mod-pen/sei_atualizar_versao_modulo_pen.php
                 
                 rm -rf /opt/sei/web/modulos/mod-sei-pen.old
                 
@@ -1026,8 +1038,8 @@ if [ "$MODULO_PETICIONAMENTO_INSTALAR" == "true" ]; then
             sed -i "s#/\*novomodulo\*/#'PeticionamentoIntegracao' => 'peticionamento', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
 
             cd /opt
-            echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/sip_atualizar_versao_modulo_peticionamento.php
-            echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/sei_atualizar_versao_modulo_peticionamento.php
+            echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip/scripts/sip_atualizar_versao_modulo_peticionamento.php
+            echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei/scripts/sei_atualizar_versao_modulo_peticionamento.php
 
             touch /sei/controlador-instalacoes/instalado-modulo-peticionamento.ok
 
@@ -1105,8 +1117,8 @@ if [ "$MODULO_PI_INSTALAR" == "true" ]; then
                 sed -i "s#/\*novomodulo\*/#'ProtocoloIntegradoIntegracao' => 'protocolo-integrado', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
 
                 cd /opt
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-protocolo-integrado/sip_atualizar_versao_modulo_protocolo_integrado.php
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-protocolo-integrado/sei_atualizar_versao_modulo_protocolo_integrado.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip/scripts/mod-protocolo-integrado/sip_atualizar_versao_modulo_protocolo_integrado.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei/scripts/mod-protocolo-integrado/sei_atualizar_versao_modulo_protocolo_integrado.php
                 
                 rm -rf /opt/sei/web/modulos/mod-sei-protocolo-integrado.old
                 
@@ -1175,8 +1187,8 @@ if [ "$MODULO_INCOM_INSTALAR" == "true" ]; then
                 sed -i "s#/\*novomodulo\*/#'MdIncomIntegracao' => 'incom', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
 
                 cd /opt
-                echo -ne "$APP_DB_SIP_USERNAME\n$APP_DB_SIP_PASSWORD\n" | php sip/scripts/mod-incom/sip_atualizar_versao_modulo_incom.php
-                echo -ne "$APP_DB_SEI_USERNAME\n$APP_DB_SEI_PASSWORD\n" | php sei/scripts/mod-incom/sei_atualizar_versao_modulo_incom.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sip/scripts/mod-incom/sip_atualizar_versao_modulo_incom.php
+                echo -ne "$APP_DB_ROOT_USERNAME\n$APP_DB_ROOT_PASSWORD\n" | php sei/scripts/mod-incom/sei_atualizar_versao_modulo_incom.php
 
                 echo "Rodando configuracoes"
                 php /sei/files/scripts-e-automatizadores/modulos/mod-sei-incom/mod-sei-incom.php

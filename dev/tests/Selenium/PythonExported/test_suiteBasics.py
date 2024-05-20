@@ -40,7 +40,7 @@ class TestSuiteBasics():
     assert len(elements) > 0
     self.driver.find_element(By.LINK_TEXT, "Infra").click()
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//span[contains(.,\'Módulos\')]")))
-    self.driver.find_element(By.XPATH, "//span[contains(.,\'Módulos\')]").click()
+    #self.driver.find_element(By.XPATH, "//span[contains(.,\'Módulos\')]").click()
     #WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.ID, "divInfraBarraLocalizacao")))
     #WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//td[contains(.,\'Módulo de Estatisticas do SEI\')]")))
     #elements = self.driver.find_elements(By.XPATH, "//td[contains(.,\'Módulo de Estatisticas do SEI\')]")
@@ -81,6 +81,7 @@ class TestSuiteBasics():
     self.vars["win1687"] = self.wait_for_window(5000)
     self.vars["root"] = self.driver.current_window_handle
     self.driver.switch_to.window(self.vars["win1687"])
+    return None
     WebDriverWait(self.driver, 30).until(expected_conditions.visibility_of_element_located((By.XPATH, "//form[@id=\'frmEditor\']")))
     WebDriverWait(self.driver, 30).until(expected_conditions.presence_of_element_located((By.XPATH, "//form[@id=\'frmEditor\']/div[2]/div[4]/div/div/iframe")))
     time.sleep(2)

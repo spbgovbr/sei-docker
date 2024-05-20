@@ -63,18 +63,18 @@ check-version-compatibility: ## Verifica a compatibilidade das versoes com os co
 	set +e; echo $$v |  grep "5\..*\..*" > /dev/null; e=$$?; set -e; \
 	set +e; echo $$DOCKER_IMAGE_APP |  grep "php8" > /dev/null; e1=$$?; set -e; \
 	set +e; echo $$DOCKER_IMAGE_SOLR |  grep "solr9" > /dev/null; e2=$$?; set -e; \
-	set +e; echo $$DOCKER_IMAGE_BD |  grep "mysql8" > /dev/null; e3=$$?; set -e; \
+	set +e; echo $$DOCKER_IMAGE_BD |  grep "-sei41" > /dev/null; e3=$$?; set -e; \
 	if [ "$$e" = "0" ]; then \
 		if [ ! "$$e1" = "0" ] || [ ! "$$e2" = "0" ] || [ ! "$$e3" = "0" ]; then \
 		    echo "Vc escolheu o SEI5. Use as imagens correspondentes para o SEI5. Ver arquivos env de exemplo."; \
-			echo "Aparentemente as imagens de app ou banco ou solr estao erradas. Verifique."; \
+			echo "Aparentemente as imagens de app, banco ou solr estao erradas. Verifique."; \
 			echo "Mensagem informativa. Iremos continuar em 10 segundos"; \
 			sleep 10; \
 		fi; \
 	else \
 		if [ "$$e1" = "0" ] || [ "$$e2" = "0" ] || [ "$$e3" = "0" ]; then \
 		    echo "Vc escolheu o SEI4. Use as imagens correspondentes para o SEI4. Ver arquivos env de exemplo."; \
-			echo "Aparentemente as imagens de app ou banco ou solr estao erradas. Verifique."; \
+			echo "Aparentemente as imagens de app, banco ou solr estao erradas. Verifique."; \
 			echo "Mensagem informativa. Iremos continuar em 10 segundos"; \
 			sleep 10; \
 		fi; \
