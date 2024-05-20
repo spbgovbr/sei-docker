@@ -3,6 +3,14 @@
 ```
 Atenção. Mudanças Importantes
 
+05/2024
+Incluído suporte ao SEI5
+Algumas mudanças estruturais nos arquivos envlocal.env para o ecossitema de dev e infra.
+Verifique os detalhes na nota de release:
+https://github.com/spbgovbr/sei-docker/releases/tag/3.0.1
+
+Considere essas alterações ao ler os manuais e Readme(s), pois os mesmos ainda não foram atualizados.
+
 04/2024
 Incluímos o traefik como balanceador do ecossistema. Ele está substituindo o haproxy-cloud que usávamos e parou de receber atualização, o que prejudicava o uso em versões docker mais recentes.
 Portanto caso use alguma automação aponte para a tag 2.1.1, ela é a última com o haproxy como balanceador default.
