@@ -116,12 +116,23 @@ if [ "$DATABASE_TYPE" = "SqlServer" ]; then
     ln -s /opt2/microsoft /opt/microsoft
 fi
 
-\cp /remi.tgz /opt
+\cp /opt2/remi.tgz /opt/
 cd /opt && tar -xvzf remi.tgz
-rm remi.tgz
+rm -rf remi.tgz
 cd -
 
-sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf
+if [ "$APP_DB_TIPO" = "SqlServer" ] && [ "$APP_DB_HOST" = "db" ]; then
+
+    set +e
+    grep "'Encrypt' => false" /opt/infra/infra_php/InfraSqlServer.php
+    e=$?
+    set -e
+
+    if [ ! "$e" = "0" ]; then
+        sed -i "s|MultipleActiveResultSets' => false,|MultipleActiveResultSets' => false,'Encrypt' => false,|" /opt/infra/infra_php/InfraSqlServer.php
+    fi
+
+fi
 
 set +e
 

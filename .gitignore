@@ -1,3 +1,4 @@
+.DS_Store
 containers/envcontainers.env
 infra/orquestrators/docker-compose/docker-compose.yml
 infra/orquestrators/docker-compose/docker-compose.yml-e

@@ -1,7 +1,5 @@
 #!/bin/sh
 
-clear
-
 for n in /tmp/solr-8.2.0.tgz /tmp/log4j.properties /tmp/solr.service
  do
   if [ ! -f $n ]; then

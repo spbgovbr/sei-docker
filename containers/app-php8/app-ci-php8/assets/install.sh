@@ -16,5 +16,3 @@ mv /tmp/assets/conf/ConfiguracaoSEI.php /sei/files/conf
 mv /tmp/assets/conf/ConfiguracaoSip.php /sei/files/conf
 mv /tmp/assets/scripts-e-automatizadores/openldap /tmp/assets/scripts-e-automatizadores/misc /sei/files/scripts-e-automatizadores/
 mv /tmp/assets/scripts-e-automatizadores/modulos/* /sei/files/scripts-e-automatizadores/modulos/
-#todo tratar isso
-mv /tmp/assets/scripts-e-automatizadores/remi.tgz /

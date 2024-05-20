@@ -9,9 +9,9 @@ dnf install -y https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.
 
 dnf module install -y php:remi-8.2
 yum install --skip-broken -y httpd memcached openssl wget zip unzip gcc \
-                             java-1.8.0-openjdk libxml2 cabextract fontconfig mod_ssl vim
+                             java-1.8.0-openjdk libxml2 cabextract fontconfig mod_ssl vim procps
 
-dnf install --skip-broken -y php php-cli php-common php-mysql php-pear php-bcmath php-gd php-gmp php-imap php-intl     php-ldap     php-mbstring     php-odbc     php-pdo     php-pecl-apcu     php-pspell     php-zlib     php-snmp     php-soap     php-xml     php-xmlrpc     php-zts     php-devel     php-pecl-apcu-devel     php-pecl-memcache     php-calendar     php-shmop     php-intl     php-mcrypt     php-zip     php-pecl-zip
+dnf install --skip-broken -y php php-cli php-common php-pear php-bcmath php-gd php-gmp php-imap php-intl     php-ldap     php-mbstring     php-odbc     php-pdo     php-pecl-apcu     php-pspell     php-zlib     php-snmp     php-soap     php-xml     php-xmlrpc     php-zts     php-devel     php-pecl-apcu-devel     php-pecl-memcache     php-calendar     php-shmop     php-intl     php-mcrypt     php-zip     php-pecl-zip
 dnf install -y php-pecl-gearman
 dnf install --skip-broken -y libgearman libgearman-devel php-sodium  git gearmand libgearman-dev libgearman-devel
 
@@ -47,33 +47,58 @@ rpm -Uvh msttcore-fonts-2.0-3.noarch.rpm
 # wkhtml
 rpm -Uvh wkhtmltox-0.12.6.1-2.almalinux9.x86_64.rpm
 
-cp /tmp/assets/sei.ini /etc/php.d
-cp /tmp/assets/sei.conf /etc/httpd/conf.d/
+mkdir /opt2
+cd /opt && tar -cvzf remi.tgz remi
+mv remi.tgz /opt2
+cd -
 
-#mkdir -p /sei/certs/seiapp
-#cd /sei/certs/seiapp
-#openssl genrsa -out sei-ca-key.pem 2048
-#openssl req -x509 -new -nodes -key sei-ca-key.pem -days 10000 -out sei-ca.pem -subj "/CN=sei-dev"
-#openssl genrsa -out sei.key 2048
-#openssl req -new -key sei.key -out sei.csr -subj "/CN=myname"
-#openssl x509 -req -days 365 -CA sei-ca.pem -CAkey sei-ca-key.pem -in sei.csr  -out sei.crt
-#cat /sei/certs/seiapp/sei-ca.pem >> /etc/ssl/certs/cacert.pem
-#cp sei.crt /etc/pki/tls/certs/sei.crt
-#cp sei-ca.pem /etc/pki/tls/certs/sei-ca.pem
-#cp sei.key /etc/pki/tls/private/sei.key
-#cat sei.crt sei.key >> /etc/pki/tls/certs/sei.pem
-#cp sei-ca.pem /etc/pki/ca-trust/source/anchors/
-#openssl genrsa -out localhost.key 2048
-#openssl req -new -key localhost.key  -out localhost.csr -subj "/CN=myname"
-#openssl x509 -req -days 365 -in localhost.csr  -signkey localhost.key  -out localhost.crt
-#cp localhost.key /etc/pki/tls/private/
-#cp localhost.crt /etc/pki/tls/certs/
-#
-#update-ca-trust extract
-#update-ca-trust enable
-#
-#mkdir -p /opt/sei/temp
-#mkdir -p /opt/sip/temp
-#mkdir /dados
-#chown apache /dados
-#chown apache /opt/sei/temp /opt/sip/temp
+if [ "$IMAGEM_APP_PACOTEMYSQL_PRESENTE" == "true" ]; then
+
+  yum install -y php-mysql
+
+fi
+
+if [ "$IMAGEM_APP_PACOTESQLSERVER_PRESENTE" == "true" ]; then
+
+    curl https://packages.microsoft.com/config/rhel/9/prod.repo | tee /etc/yum.repos.d/mssql-release.repo
+    yum remove unixODBC-utf16 unixODBC-utf16-devel
+    ACCEPT_EULA=Y yum install -y msodbcsql18
+    ACCEPT_EULA=Y yum install -y mssql-tools18
+    echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+    source ~/.bashrc
+    yum install -y unixODBC-devel
+    yum install -y php-sqlsrv-5.12.0
+
+    # Ver issue #19
+    mv /opt/microsoft /opt2
+    ln -s /opt2/microsoft /opt/microsoft
+
+fi
+
+if [ "$IMAGEM_APP_PACOTEORACLE_PRESENTE" == "true" ]; then
+
+    # ORACLE oci
+
+    yum install -y oracle-instantclient-basic-21.12.0.0.0-1.el9.x86_64.rpm
+    yum install -y oracle-instantclient-devel-21.12.0.0.0-1.el9.x86_64.rpm
+
+    rm -rf oracle-instantclient-basic-21.12.0.0.0-1.el9.x86_64.rpm oracle-instantclient-devel-21.12.0.0.0-1.el9.x86_64.rpm
+
+    #yum install -y systemtap-sdt-devel
+    #pecl channel-update pecl.php.net
+    #export PHP_DTRACE=yes && echo "" | pecl install oci8-3.3.0 && unset PHP_DTRACE
+    #echo "extension=oci8.so" > /etc/php.d/oci8.ini
+    
+    yum install -y php-oci8
+
+fi
+
+if [ "$IMAGEM_APP_PACOTEPOSTGRES_PRESENTE" == "true" ]; then
+
+   yum install -y php-pgsql
+
+fi
+
+cd -
+
+sed -i 's/;clear_env = no/clear_env = no/g' /etc/php-fpm.d/www.conf

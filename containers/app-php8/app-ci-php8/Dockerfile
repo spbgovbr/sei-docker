@@ -6,8 +6,6 @@ ARG IMAGEM_BASE=processoeletronico/base-app-php8:latest
 
 FROM ${IMAGEM_BASE}
 
-ENV LANG="pt_BR.ISO-8859-1"
-
 ADD assets /tmp/assets
 
 ARG GITPASS_REPO_MODULOS

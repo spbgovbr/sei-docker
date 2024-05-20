@@ -26,6 +26,13 @@ COMMMADCOMPOSE = docker-compose -f orquestrators/docker-compose/docker-compose.y
 CMDMAKE = $(MAKE) -C ../
 MENSAGEM = Vamos tentar agora subir o SEI de várias formas diferentes para ver se o resultado bate com o esperado. Tenha em mente que iremos usar diversos recursos. Verifique se nao ha nada rodando em localhost ou nas urls de teste que possam impactar a subida. Pressione y para continuar [y/n]...
 
+ifndef VERSAOSPE
+VERSAOSPE:=$(shell echo $$( grep -o "const SEI_VERSAO = '.*';" $(LOCALIZACAO_FONTES_SEI)/sei/web/SEI.php | head -c 21 | tail -c 1 ))
+endif
+ifndef VERSAOSPE
+VERSAOSPE:=$(shell echo $$( grep "'SEI_VERSAO'" $(LOCALIZACAO_FONTES_SEI)/sei/web/SEI.php | head -c 22 | tail -c 1 ))
+endif
+
 ifndef BANCO
 BANCO = mysql
 endif
@@ -200,6 +207,7 @@ test_ambiente: test_confirmation
 	@echo "*****************************************************"
 	@echo "Modalidade dessa Execucao... $(MODALIDADE) ..."
 	@echo "Banco de Dados dessa Execucao... $(BANCO) ..."
+	@echo "Versao do SPE... $(VERSAOSPE) ..."	
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@echo "Vamos desligar o projeto atual, caso esteja rodando, e apagar os volumes... Aguarde..."
@@ -209,15 +217,15 @@ test_ambiente: test_confirmation
 
 	make -s test_verificar_volumes_nao_existe
 
-	@echo "Vamos copiar o envlocal de referencia para o $(BANCO)..."
+	@echo "Vamos copiar o envlocal de referencia para o $(BANCO)-sei$(VERSAOSPE)..."
 	@echo "*****************************************************"
 	@echo "*****************************************************"
+	cp -f ../envlocal-example-mysql-sei4.env ../envlocal.env
 ifeq ("$(MODALIDADE)",  "default")
-	cp -f ../envlocal-example-mysql.env ../envlocal.env
-	cat ../envlocal-example-$(BANCO).env >> ../envlocal.env
+	cat ../envlocal-example-$(BANCO)-sei$(VERSAOSPE).env >> ../envlocal.env
 else
-	cp -f ../envlocal-example-mysql.env ../envlocal.env
-	cat test-envlocal-$(MODALIDADE)-$(BANCO).env >> ../envlocal.env
+	cat ../envlocal-example-$(BANCO)-sei$(VERSAOSPE).env >> ../envlocal.env
+	cat test-envlocal-$(MODALIDADE).env >> ../envlocal.env
 endif
 
 
@@ -411,7 +419,7 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@$(CMDMAKE) qtd=1 scale && sleep 5
-	@var=$$(echo $$(docker ps | grep "app-ci:" | grep Up | grep -v atualizador | wc -l | xargs)) \
+	@var=$$(echo $$(docker ps | grep "app-ci:\|app-ci-php8:" | grep Up | grep -v atualizador | wc -l | xargs)) \
 	&& \
 	if [ "$$var" = "1" ]; then \
 	echo 'Unico app encontrado.'; \
@@ -428,7 +436,7 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@echo "*****************************************************"
 	@$(CMDMAKE) scale && sleep 10
 	@$(CMDMAKE) qtd=3 scale
-	@var=$$(echo $$(docker ps | grep "app-ci:" | grep Up | grep -v atualizador | wc -l | xargs)) \
+	@var=$$(echo $$(docker ps | grep "app-ci:\|app-ci-php8:" | grep Up | grep -v atualizador | wc -l | xargs)) \
 	&& \
 	if [ ! "$$var" = "3" ]; then \
 	echo 'Apps nao disponiveis. Saindo do teste'; exit 1; \
@@ -446,7 +454,7 @@ ifeq ("$(BALANCEADOR_PRESENTE)",  "true")
 	@echo "*****************************************************"
 	@echo "*****************************************************"
 	@$(CMDMAKE) qtd=1 scale && sleep 5
-	@var=$$(echo $$(docker ps | grep "app-ci:" | grep Up | grep -v atualizador | wc -l | xargs)) \
+	@var=$$(echo $$(docker ps | grep "app-ci:\|app-ci-php8:" | grep Up | grep -v atualizador | wc -l | xargs)) \
 	&& \
 	if [ "$$var" = "1" ]; then \
 	echo 'Unico app encontrado.'; \
