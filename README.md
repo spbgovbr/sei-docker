@@ -7,7 +7,7 @@ Atenção. Mudanças Importantes
 Incluído suporte ao SEI5
 Algumas mudanças estruturais nos arquivos envlocal.env para o ecossitema de dev e infra.
 Verifique os detalhes na nota de release:
-https://github.com/spbgovbr/sei-docker/releases/tag/3.0.1
+https://github.com/spbgovbr/sei-docker/releases/tag/3.5.0
 
 Considere essas alterações ao ler os manuais e Readme(s), pois os mesmos ainda não foram atualizados.
 
