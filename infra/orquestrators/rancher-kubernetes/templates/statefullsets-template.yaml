@@ -139,26 +139,26 @@ spec:
       - image: ${DOCKER_IMAGE_SOLR}
         imagePullPolicy: Always
         name: solr
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /solr/admin/info/system
-            port: 8983
-            scheme: HTTP
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 10
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /solr/admin/info/system
-            port: 8983
-            scheme: HTTP
-          initialDelaySeconds: 20
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 10
+        #livenessProbe:
+        #  failureThreshold: 3
+        #  httpGet:
+        #    path: /solr/admin/info/system
+        #    port: 8983
+        #    scheme: HTTP
+        #  initialDelaySeconds: 20
+        #  periodSeconds: 10
+        #  successThreshold: 1
+        #  timeoutSeconds: 10
+        #readinessProbe:
+        #  failureThreshold: 3
+        #  httpGet:
+        #    path: /solr/admin/info/system
+        #    port: 8983
+        #    scheme: HTTP
+        #  initialDelaySeconds: 20
+        #  periodSeconds: 10
+        #  successThreshold: 1
+        #  timeoutSeconds: 10
         #resources: #kb_resources
         #  limits: #kb_resources
         #    cpu: ${KUBERNETES_LIMITS_CPU_SOLR} #kb_resources
@@ -184,8 +184,7 @@ spec:
             /t/ && echo "Dados copiados!"; else echo "Diretorio nao esta vazio. " ;
             echo "Arquivos encontrados"; echo $(ls -lha /t); echo "Nao vamos alterar
             nada. " ; echo "Caso o solr nao suba, verifique se nesse dir existe um
-            solr e que as permissoes do arquivo estejam com o Solr (id 1000)" ; fi;  exit
-            0
+            solr e que as permissoes do arquivo estejam com o Solr (id 1000)" ; fi;  exit 0
           image: ${DOCKER_IMAGE_SOLR}
           imagePullPolicy: Always
           name: solr-init
