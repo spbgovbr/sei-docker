@@ -2,7 +2,7 @@
 
 set -e
 
-yum -y update
+#yum -y update
 
 yum install -y --skip-broken \
 	cronie \

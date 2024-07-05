@@ -128,7 +128,7 @@ test_lineup_completa: test_confirmation
 	make CONFIRMACAO=y test_ambientes_full
 	make CONFIRMACAO=y  test_ambientes_http
 
-	cp -f ../envlocal-example-mysql.env ../envlocal.env
+	cp -f ../envlocal-example-mysql-sei4.env ../envlocal.env
 
 	@echo "*****************************************************"
 	@echo "*****************************************************"

@@ -201,7 +201,7 @@ if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 	require_once '/opt/sip/web/Sip.php';
 	\$conexao = BancoSip::getInstance();
 	\$conexao->abrirConexao();
-	\$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'\");
+	\$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO' where id_orgao=0\");
 	\$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sip' where sigla='SIP'\");
 	\$conexao->executarSql(\"update sistema set pagina_inicial='$APP_HOST_URL/sei/inicializar.php', web_service='$APP_HOST_URL/sei/controlador_ws.php?servico=sip' where sigla='SEI'\");"
 
@@ -719,7 +719,7 @@ if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
         fi
 
     else
-
+        sed -i "s#/\*novomodulo\*/#'MdGestaoDocumentalIntegracao' => 'gestao-documental', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
         echo "Arquivo de controle do Modulo GESTAO DOCUMENTAL encontrado pulando configuracao do modulo"
 
     fi
