@@ -7,7 +7,10 @@ ARG IMAGEM_BASE=processoeletronico/base-centos7:latest
 FROM ${IMAGEM_BASE}
 
 ############################# INÍCIO DA INSTALAÇÃO #############################
-ENV TERM xterm
+ENV TERM=xterm
+
+RUN groupadd jodconverter && \
+    useradd --create-home --home-dir /home/jodconverter --shell /bin/bash --gid jodconverter --groups jodconverter --uid 1001 jodconverter
 
 ADD assets/install.sh \
     assets/entrypoint.sh \
@@ -16,6 +19,8 @@ ADD assets/install.sh \
 
 RUN sh /install.sh && rm -rf /install.sh
 ############################## FIM DA INSTALACAO ###############################
+
+USER jodconverter
 
 ENTRYPOINT ["/entrypoint.sh"]
 EXPOSE 8080

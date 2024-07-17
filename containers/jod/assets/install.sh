@@ -9,6 +9,7 @@ yum -y install unzip java-1.7.0-openjdk wget unzip libreoffice libreoffice-headl
 # Instalação da api de serviços de conversão de documentos
 unzip /jodconverter-tomcat-2.2.2.zip -d /opt
 rm -rf /jodconverter-tomcat-2.2.2.zip
+chown -R jodconverter:jodconverter /opt/jodconverter-tomcat-2.2.2
 
 # Remover arquivos temporários
 yum clean all
