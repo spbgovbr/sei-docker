@@ -209,7 +209,7 @@ if [ ! -f /sei/controlador-instalacoes/instalado.ok ]; then
 	require_once '/opt/sei/web/SEI.php';
 	\$conexao = BancoSEI::getInstance();
 	\$conexao->abrirConexao();
-	\$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO'\");"
+	\$conexao->executarSql(\"update orgao set sigla='$APP_ORGAO', descricao='$APP_ORGAO_DESCRICAO' where id_orgao=0\");"
 fi
 
 echo "***************************************************"
