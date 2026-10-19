@@ -401,7 +401,6 @@ if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
             echo "Verificando existencia do modulo gestao documental"
             if [ -d "/opt/sei/web/modulos/gestao-documental" ]; then
                 echo "Ja existe um diretorio para o modulo gestao documental. Vamos assumir que o codigo la esteja integro"
-                sed -i "s#/\*novomodulo\*/#'MdGestaoDocumentalIntegracao' => 'gestao-documental', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
 
             else
 
@@ -441,7 +440,6 @@ if [ "$MODULO_GESTAODOCUMENTAL_INSTALAR" == "true" ]; then
 
     else
 
-        sed -i "s#/\*novomodulo\*/#'MdGestaoDocumentalIntegracao' => 'gestao-documental', /\*novomodulo\*/#g" config/ConfiguracaoSEI.php
         echo "Arquivo de controle do Modulo GESTAO DOCUMENTAL encontrado pulando configuracao do modulo"
 
     fi
