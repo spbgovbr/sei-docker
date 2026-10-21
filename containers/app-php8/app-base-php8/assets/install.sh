@@ -7,6 +7,9 @@ dnf install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarc
 dnf install -y https://rpms.remirepo.net/enterprise/remi-release-9.rpm
 dnf install -y https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
 
+# Usando diretamente o repositório oficial do Remi, pois o mirrorlist retornou metadados indisponíveis ou desatualizados.
+sed -i '/^\[remi-modular\]/,/^\[/{ s|^#baseurl=.*|baseurl=https://rpms.remirepo.net/enterprise/$releasever_major/modular/$basearch/|; s|^mirrorlist=.*|#&|; }' /etc/yum.repos.d/remi-modular.repo
+
 dnf module install -y php:remi-8.2
 yum install --skip-broken -y httpd memcached openssl wget zip unzip gcc \
                              java-1.8.0-openjdk libxml2 cabextract fontconfig mod_ssl vim procps
